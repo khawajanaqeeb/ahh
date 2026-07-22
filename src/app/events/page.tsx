@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -58,8 +58,8 @@ export default function Events() {
                   <span className="event-date-badge">{ev.date}</span>
                   <h3>{ev.title}</h3>
                   <div className="event-details">
-                    <div>🕒 {ev.time}</div>
-                    <div>📍 {ev.location}</div>
+                    <div>ðŸ•’ {ev.time}</div>
+                    <div>ðŸ“ {ev.location}</div>
                   </div>
                   <p>{ev.desc}</p>
                   <Link href="/contact" className="btn-gold" style={{ marginTop: "1rem", alignSelf: "flex-start" }}>
@@ -71,82 +71,6 @@ export default function Events() {
           </div>
         </div>
       </section>
-
-      <style>{`
-        .event-list {
-          display: flex;
-          flex-direction: column;
-          gap: 2.5rem;
-          max-width: 900px;
-          margin: 0 auto;
-        }
-        .event-row {
-          display: grid;
-          grid-template-columns: 0.8fr 1.2fr;
-          overflow: hidden;
-          border-radius: var(--radius-md);
-        }
-        .event-img-side {
-          height: 100%;
-          min-height: 220px;
-        }
-        :global(.event-img) {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .event-text-side {
-          padding: 2rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-        }
-        .event-date-badge {
-          background: rgba(212, 175, 55, 0.1);
-          border: 1px solid var(--gold);
-          color: var(--gold);
-          padding: 0.25rem 0.75rem;
-          border-radius: 4px;
-          font-size: 0.78rem;
-          font-weight: 600;
-          align-self: flex-start;
-          margin-bottom: 0.75rem;
-        }
-        .event-text-side h3 {
-          font-size: 1.3rem;
-          font-weight: 600;
-          color: var(--white-pure);
-          margin-bottom: 0.5rem;
-        }
-        .event-details {
-          display: flex;
-          gap: 1.5rem;
-          font-size: 0.85rem;
-          color: var(--gray-200);
-          margin-bottom: 1rem;
-        }
-        .event-text-side p {
-          color: var(--gray-400);
-          font-size: 0.9rem;
-          line-height: 1.6;
-          margin-bottom: 1rem;
-        }
-        @media (max-width: 640px) {
-          .event-row {
-            grid-template-columns: 1fr;
-          }
-          .event-img-side {
-            min-height: 180px;
-          }
-          .event-text-side {
-            padding: 1.5rem;
-          }
-          .event-details {
-            flex-direction: column;
-            gap: 0.35rem;
-          }
-        }
-      `}</style>
     </>
   );
 }

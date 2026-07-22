@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -61,7 +61,7 @@ export default function Blogs() {
                   <h3>{post.title}</h3>
                   <p>{post.summary}</p>
                   <Link href="/contact" className="read-more">
-                    Read Full Article →
+                    Read Full Article â†’
                   </Link>
                 </div>
               </div>
@@ -69,64 +69,6 @@ export default function Blogs() {
           </div>
         </div>
       </section>
-
-      <style>{`
-        .blog-card {
-          overflow: hidden;
-          border-radius: var(--radius-md);
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-        }
-        .blog-img-wrapper {
-          position: relative;
-          height: 200px;
-        }
-        :global(.blog-img) {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .blog-date {
-          position: absolute;
-          bottom: 10px;
-          right: 10px;
-          background: rgba(10, 10, 26, 0.85);
-          color: var(--white);
-          padding: 0.25rem 0.75rem;
-          border-radius: 4px;
-          font-size: 0.75rem;
-        }
-        .blog-content {
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          flex-grow: 1;
-        }
-        .blog-content h3 {
-          font-size: 1.15rem;
-          font-weight: 600;
-          color: var(--white-pure);
-          margin-bottom: 0.75rem;
-          line-height: 1.4;
-        }
-        .blog-content p {
-          color: var(--gray-400);
-          font-size: 0.88rem;
-          line-height: 1.6;
-          margin-bottom: 1.25rem;
-        }
-        .read-more {
-          color: var(--gold);
-          font-size: 0.9rem;
-          font-weight: 600;
-          transition: color 0.2s;
-        }
-        .read-more:hover {
-          color: var(--gold-light);
-        }
-      `}</style>
     </>
   );
 }

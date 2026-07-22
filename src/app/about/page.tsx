@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -31,17 +31,17 @@ const values = [
   {
     title: "Unity",
     desc: "Consistent with our motto 'Our Power Is Our Unity', we work cohesively to deliver excellence.",
-    icon: "🤝",
+    icon: "ðŸ¤",
   },
   {
     title: "Quality Construction",
     desc: "No compromise on building materials, infrastructure development, and engineering integrity.",
-    icon: "🏗️",
+    icon: "ðŸ—ï¸",
   },
   {
     title: "Commitment",
     desc: "We stay true to our promises on delivery schedules, documentation, and pricing plans.",
-    icon: "📜",
+    icon: "ðŸ“œ",
   },
 ];
 
@@ -69,7 +69,7 @@ export default function About() {
               <div className="gold-line-left" />
               <p className="intro-text">
                 AHH Brothers & Developers is a close-knit family of housebuilders, developers, and contractors. 
-                With the unique ability to wear multiple hats – developer and contractor – we bring flexibility, 
+                With the unique ability to wear multiple hats â€“ developer and contractor â€“ we bring flexibility, 
                 uncompromising quality, and deep-seated commitment to every project.
               </p>
               <p className="normal-text">
@@ -134,150 +134,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
-      <style>{`
-        .about-details-grid {
-          display: grid;
-          grid-template-columns: 1.2fr 0.8fr;
-          gap: 4rem;
-          align-items: center;
-        }
-        .section-title {
-          font-size: 2.5rem;
-          font-weight: 700;
-          margin-bottom: 1rem;
-        }
-        .intro-text {
-          color: var(--white);
-          font-size: 1.15rem;
-          line-height: 1.8;
-          margin-bottom: 1.5rem;
-        }
-        .normal-text {
-          color: var(--gray-400);
-          font-size: 1rem;
-          line-height: 1.7;
-        }
-        .about-details-logo {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 2.5rem;
-        }
-        :global(.about-large-logo) {
-          border-radius: 12px;
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-        }
-        
-        /* Value Card */
-        .value-card {
-          padding: 2.5rem 2rem;
-          text-align: center;
-        }
-        .value-icon {
-          font-size: 2.5rem;
-          margin-bottom: 1rem;
-        }
-        .value-card h3 {
-          font-size: 1.3rem;
-          font-weight: 600;
-          color: var(--white);
-          margin-bottom: 0.75rem;
-        }
-        .value-card p {
-          color: var(--gray-400);
-          font-size: 0.95rem;
-          line-height: 1.6;
-        }
-
-        /* Timeline styling */
-        .timeline-container {
-          position: relative;
-          max-width: 800px;
-          margin: 0 auto;
-          padding: 2rem 0;
-        }
-        .timeline-container::after {
-          content: '';
-          position: absolute;
-          width: 2px;
-          background: linear-gradient(180deg, var(--gold) 0%, transparent 100%);
-          top: 0;
-          bottom: 0;
-          left: 50%;
-          margin-left: -1px;
-        }
-        .timeline-item {
-          padding: 10px 40px;
-          position: relative;
-          background-color: inherit;
-          width: 50%;
-        }
-        .timeline-item::after {
-          content: '';
-          position: absolute;
-          width: 16px;
-          height: 16px;
-          right: -8px;
-          background-color: var(--black);
-          border: 3px solid var(--gold);
-          top: 30px;
-          border-radius: 50%;
-          z-index: 1;
-        }
-        .left {
-          left: 0;
-        }
-        .right {
-          left: 50%;
-        }
-        .right::after {
-          left: -8px;
-        }
-        .timeline-content {
-          padding: 2rem;
-          position: relative;
-        }
-        .timeline-year {
-          font-family: var(--font-heading);
-          font-size: 1.8rem;
-          font-weight: 700;
-          color: var(--gold);
-          margin-bottom: 0.5rem;
-        }
-        .timeline-content h3 {
-          font-size: 1.2rem;
-          font-weight: 600;
-          margin-bottom: 0.5rem;
-        }
-        .timeline-content p {
-          color: var(--gray-400);
-          font-size: 0.92rem;
-          line-height: 1.6;
-        }
-
-        @media (max-width: 768px) {
-          .about-details-grid {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-          }
-          .timeline-container::after {
-            left: 31px;
-          }
-          .timeline-item {
-            width: 100%;
-            padding-left: 70px;
-            padding-right: 25px;
-          }
-          .timeline-item::after {
-            left: 23px;
-            right: auto;
-          }
-          .left, .right {
-            left: 0;
-          }
-        }
-      `}</style>
     </>
   );
 }

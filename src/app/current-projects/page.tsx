@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -97,24 +97,24 @@ export default function CurrentProjects() {
                   
                   <div className="p-meta">
                     <div className="p-meta-item">
-                      <strong>📍 Location:</strong> {p.location}
+                      <strong>ðŸ“ Location:</strong> {p.location}
                     </div>
                     <div className="p-meta-item">
-                      <strong>📏 Plot Sizes:</strong> {p.size}
+                      <strong>ðŸ“ Plot Sizes:</strong> {p.size}
                     </div>
                   </div>
 
                   <p className="p-desc">{p.description}</p>
 
                   <div className="p-payment-highlight">
-                    <strong>💳 Payment Terms:</strong> {p.payment}
+                    <strong>ðŸ’³ Payment Terms:</strong> {p.payment}
                   </div>
 
                   <div className="p-amenities">
-                    <h4>🏗️ Included Amenities:</h4>
+                    <h4>ðŸ—ï¸ Included Amenities:</h4>
                     <div className="amenity-grid">
                       {p.amenities.map((a, i) => (
-                        <span key={i} className="amenity-tag">✓ {a}</span>
+                        <span key={i} className="amenity-tag">âœ“ {a}</span>
                       ))}
                     </div>
                   </div>
@@ -133,7 +133,7 @@ export default function CurrentProjects() {
                       className="btn-outline"
                       style={{ color: "#25D366", borderColor: "#25D366" }}
                     >
-                      💬 WhatsApp Inquiry
+                      ðŸ’¬ WhatsApp Inquiry
                     </a>
                   </div>
                 </div>
@@ -142,129 +142,6 @@ export default function CurrentProjects() {
           </div>
         </div>
       </section>
-
-      <style>{`
-        .project-detail-list {
-          display: flex;
-          flex-direction: column;
-          gap: 4rem;
-        }
-        .project-detail-row {
-          display: grid;
-          grid-template-columns: 1fr 1.2fr;
-          overflow: hidden;
-          border-radius: var(--radius-lg);
-          transition: all var(--transition-base);
-        }
-        .project-detail-row:hover {
-          transform: translateY(-5px);
-        }
-        .p-image-side {
-          position: relative;
-          min-height: 350px;
-        }
-        :global(.p-detail-img) {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .p-badge {
-          position: absolute;
-          top: 20px;
-          left: 20px;
-          padding: 0.5rem 1.25rem;
-          border-radius: 30px;
-          font-size: 0.85rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        .p-badge-active {
-          background: var(--green);
-          color: white;
-          box-shadow: 0 4px 15px var(--green-glow);
-        }
-        .p-badge-upcoming {
-          background: var(--gold);
-          color: var(--black);
-          box-shadow: 0 4px 15px var(--gold-glow);
-        }
-        .p-content-side {
-          padding: 3rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-        }
-        .p-type {
-          color: var(--gold);
-          font-size: 0.85rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          margin-bottom: 0.5rem;
-        }
-        .p-content-side h2 {
-          font-size: 2.25rem;
-          margin-bottom: 1.25rem;
-        }
-        .p-meta {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          margin-bottom: 1.5rem;
-          font-size: 0.95rem;
-          color: var(--gray-200);
-        }
-        .p-desc {
-          color: var(--gray-400);
-          line-height: 1.7;
-          margin-bottom: 1.5rem;
-          font-size: 0.95rem;
-        }
-        .p-payment-highlight {
-          background: rgba(212, 175, 55, 0.08);
-          border-left: 4px solid var(--gold);
-          padding: 0.8rem 1.2rem;
-          border-radius: 0 8px 8px 0;
-          font-size: 0.92rem;
-          margin-bottom: 1.5rem;
-          color: var(--white);
-        }
-        .p-amenities {
-          margin-bottom: 2rem;
-        }
-        .p-amenities h4 {
-          font-size: 1rem;
-          color: var(--white);
-          margin-bottom: 0.75rem;
-        }
-        .amenity-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 0.5rem;
-        }
-        .amenity-tag {
-          font-size: 0.88rem;
-          color: var(--gray-400);
-        }
-        .p-action-row {
-          display: flex;
-          gap: 1rem;
-          flex-wrap: wrap;
-        }
-
-        @media (max-width: 1024px) {
-          .project-detail-row {
-            grid-template-columns: 1fr;
-          }
-          .p-image-side {
-            min-height: 280px;
-          }
-          .p-content-side {
-            padding: 2rem;
-          }
-        }
-      `}</style>
     </>
   );
 }

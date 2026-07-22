@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -71,9 +71,9 @@ export default function DeliveredProjects() {
                     <h3 style={{ fontSize: "1.6rem", margin: "0.5rem 0" }}>{p.name}</h3>
                     
                     <div className="d-meta">
-                      <div>📍 {p.location}</div>
-                      <div>📏 Size: {p.size}</div>
-                      <div>📅 Delivered Year: {p.deliveryYear}</div>
+                      <div>ðŸ“ {p.location}</div>
+                      <div>ðŸ“ Size: {p.size}</div>
+                      <div>ðŸ“… Delivered Year: {p.deliveryYear}</div>
                     </div>
 
                     <p style={{ color: "var(--gray-400)", fontSize: "0.92rem", margin: "1rem 0 1.5rem", lineHeight: 1.6 }}>
@@ -83,10 +83,10 @@ export default function DeliveredProjects() {
 
                   <div className="d-stats-row">
                     <div className="d-stat">
-                      <strong>👨‍👩‍👧‍👦 {p.stats.families}</strong>
+                      <strong>ðŸ‘¨â€ðŸ‘©â€ðŸ‘§â€ðŸ‘¦ {p.stats.families}</strong>
                     </div>
                     <div className="d-stat">
-                      <strong>🌳 {p.stats.parks}</strong>
+                      <strong>ðŸŒ³ {p.stats.parks}</strong>
                     </div>
                   </div>
 
@@ -105,40 +105,6 @@ export default function DeliveredProjects() {
           </div>
         </div>
       </section>
-
-      <style>{`
-        .d-type {
-          font-size: 0.8rem;
-          color: var(--gold);
-          text-transform: uppercase;
-          letter-spacing: 1.5px;
-          font-weight: 600;
-        }
-        .d-meta {
-          display: flex;
-          flex-direction: column;
-          gap: 0.35rem;
-          font-size: 0.85rem;
-          color: var(--gray-200);
-          margin-top: 0.5rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-          padding-bottom: 0.75rem;
-        }
-        .d-stats-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-          background: rgba(212, 175, 55, 0.05);
-          border: 1px solid rgba(212, 175, 55, 0.1);
-          padding: 0.75rem;
-          border-radius: 8px;
-          text-align: center;
-        }
-        .d-stat {
-          font-size: 0.85rem;
-          color: var(--gold-light);
-        }
-      `}</style>
     </>
   );
 }

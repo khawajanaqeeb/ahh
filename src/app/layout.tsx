@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -22,8 +22,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "AHH Brothers — Builders & Developers | Premium Real Estate in Karachi",
-    template: "%s | AHH Brothers — Builders & Developers",
+    default: "AHH Brothers â€” Builders & Developers | Premium Real Estate in Karachi",
+    template: "%s | AHH Brothers â€” Builders & Developers",
   },
   description:
     "Since 1977, AHH Brothers Builders & Developers has been delivering premium residential and commercial projects in Karachi. Explore Hooria Villas, Summer Farm Houses, Labour City, and AHH-City.",
@@ -40,12 +40,12 @@ export const metadata: Metadata = {
     "Gulshan-e-Maymar",
   ],
   openGraph: {
-    title: "AHH Brothers — Builders & Developers",
+    title: "AHH Brothers â€” Builders & Developers",
     description:
       "Premium real estate developer in Karachi since 1977. Residential plots, villas, farm houses, and township projects.",
     type: "website",
     locale: "en_PK",
-    siteName: "AHH Brothers — Builders & Developers",
+    siteName: "AHH Brothers â€” Builders & Developers",
   },
 };
 

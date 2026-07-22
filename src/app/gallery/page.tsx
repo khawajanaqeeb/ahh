@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -53,48 +53,6 @@ export default function Gallery() {
           </div>
         </div>
       </section>
-
-      <style>{`
-        .gallery-card {
-          overflow: hidden;
-          border-radius: var(--radius-md);
-        }
-        .gallery-img-wrapper {
-          position: relative;
-          height: 220px;
-          overflow: hidden;
-        }
-        :global(.gallery-img) {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s ease;
-        }
-        .gallery-card:hover :global(.gallery-img) {
-          transform: scale(1.08);
-        }
-        .gallery-category {
-          position: absolute;
-          top: 15px;
-          left: 15px;
-          background: rgba(10, 10, 26, 0.85);
-          color: var(--gold);
-          border: 1px solid var(--gold);
-          padding: 0.3rem 0.8rem;
-          border-radius: 20px;
-          font-size: 0.75rem;
-          font-weight: 600;
-          text-transform: uppercase;
-        }
-        .gallery-content {
-          padding: 1.25rem;
-        }
-        .gallery-content h3 {
-          font-size: 1rem;
-          color: var(--white);
-          font-weight: 500;
-        }
-      `}</style>
     </>
   );
 }

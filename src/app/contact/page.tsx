@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -48,7 +48,7 @@ function ContactFormSection() {
 
         <div className="contact-info-cards">
           <div className="glass-card contact-detail-card">
-            <div className="card-icon">📍</div>
+            <div className="card-icon">ðŸ“</div>
             <div>
               <h3>Office Address</h3>
               <p>Near Gulshan-e-Maymar, Northern Bypass, Karachi, Pakistan</p>
@@ -56,7 +56,7 @@ function ContactFormSection() {
           </div>
 
           <div className="glass-card contact-detail-card">
-            <div className="card-icon">📞</div>
+            <div className="card-icon">ðŸ“ž</div>
             <div>
               <h3>Call & Support</h3>
               <p>
@@ -66,7 +66,7 @@ function ContactFormSection() {
           </div>
 
           <div className="glass-card contact-detail-card">
-            <div className="card-icon">✉️</div>
+            <div className="card-icon">âœ‰ï¸</div>
             <div>
               <h3>Email Queries</h3>
               <p>
@@ -76,7 +76,7 @@ function ContactFormSection() {
           </div>
 
           <div className="glass-card contact-detail-card">
-            <div className="card-icon">💬</div>
+            <div className="card-icon">ðŸ’¬</div>
             <div>
               <h3>WhatsApp Chat</h3>
               <p>
@@ -93,7 +93,7 @@ function ContactFormSection() {
       <div className="contact-form-col glass-card">
         {submitted ? (
           <div className="success-message">
-            <div className="success-icon">✓</div>
+            <div className="success-icon">âœ“</div>
             <h3>Thank You!</h3>
             <p>Your inquiry has been successfully sent. A representative from AHH Brothers & Developers will contact you shortly.</p>
             <button className="btn-gold" onClick={() => setSubmitted(false)}>Send Another Message</button>
@@ -182,128 +182,6 @@ function ContactFormSection() {
           </form>
         )}
       </div>
-
-      <style>{`
-        .contact-container {
-          display: grid;
-          grid-template-columns: 1.1fr 0.9fr;
-          gap: 4rem;
-        }
-        .section-title {
-          font-size: 2.25rem;
-          font-weight: 700;
-          margin-bottom: 0.5rem;
-        }
-        .contact-subtitle {
-          color: var(--gray-400);
-          font-size: 1rem;
-          line-height: 1.6;
-          margin-bottom: 2.5rem;
-        }
-        .contact-info-cards {
-          display: flex;
-          flex-direction: column;
-          gap: 1.25rem;
-        }
-        .contact-detail-card {
-          display: flex;
-          gap: 1.25rem;
-          padding: 1.5rem;
-          align-items: center;
-          transition: all var(--transition-base);
-        }
-        .contact-detail-card:hover {
-          transform: translateX(5px);
-          border-color: var(--glass-border-gold);
-        }
-        .card-icon {
-          font-size: 2rem;
-          width: 50px;
-          height: 50px;
-          background: rgba(212, 175, 55, 0.08);
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-        .contact-detail-card h3 {
-          font-size: 1.05rem;
-          color: var(--white-pure);
-          margin-bottom: 0.25rem;
-          font-weight: 600;
-        }
-        .contact-detail-card p {
-          color: var(--gray-400);
-          font-size: 0.9rem;
-        }
-        .hover-gold {
-          transition: color 0.2s;
-        }
-        .hover-gold:hover {
-          color: var(--gold);
-        }
-        .text-green {
-          color: #25D366;
-        }
-
-        /* Form styling */
-        .contact-form-col {
-          padding: 3rem 2.5rem;
-        }
-        .form-title {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: var(--white);
-          margin-bottom: 0.25rem;
-        }
-        .form-sub {
-          color: var(--gray-400);
-          font-size: 0.88rem;
-          margin-bottom: 2rem;
-        }
-        
-        /* Success Message styling */
-        .success-message {
-          text-align: center;
-          padding: 2rem 1rem;
-        }
-        .success-icon {
-          width: 60px;
-          height: 60px;
-          background: var(--green);
-          color: white;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 2rem;
-          font-weight: 700;
-          margin: 0 auto 1.5rem;
-          box-shadow: 0 4px 15px var(--green-glow);
-        }
-        .success-message h3 {
-          font-size: 1.5rem;
-          margin-bottom: 0.75rem;
-          color: var(--white);
-        }
-        .success-message p {
-          color: var(--gray-400);
-          font-size: 0.95rem;
-          line-height: 1.6;
-          margin-bottom: 2rem;
-        }
-
-        @media (max-width: 900px) {
-          .contact-container {
-            grid-template-columns: 1fr;
-            gap: 3rem;
-          }
-          .contact-form-col {
-            padding: 2rem 1.5rem;
-          }
-        }
-      `}</style>
     </div>
   );
 }
@@ -340,19 +218,6 @@ export default function Contact() {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
-        <style>{`
-          .map-iframe-container {
-            width: 100%;
-            height: 450px;
-            filter: grayscale(1) invert(0.9) contrast(1.2);
-            opacity: 0.85;
-            transition: all 0.5s;
-          }
-          .map-iframe-container:hover {
-            filter: none;
-            opacity: 1;
-          }
-        `}</style>
       </section>
     </>
   );

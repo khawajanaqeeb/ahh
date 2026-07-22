@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -9,10 +9,10 @@ import { useEffect, useRef, useState } from "react";
    ============================================ */
 
 const stats = [
-  { number: 47, suffix: "+", label: "Years of Experience", icon: "🏗️" },
-  { number: 4, suffix: "+", label: "Active Projects", icon: "📐" },
-  { number: 500, suffix: "+", label: "Happy Families", icon: "🏠" },
-  { number: 10000, suffix: "+", label: "Sq Yards Developed", icon: "📏" },
+  { number: 47, suffix: "+", label: "Years of Experience", icon: "ðŸ—ï¸" },
+  { number: 4, suffix: "+", label: "Active Projects", icon: "ðŸ“" },
+  { number: 500, suffix: "+", label: "Happy Families", icon: "ðŸ " },
+  { number: 10000, suffix: "+", label: "Sq Yards Developed", icon: "ðŸ“" },
 ];
 
 const projects = [
@@ -60,7 +60,7 @@ const projects = [
     size: "120-500 Sq Yards",
     status: "Coming Soon",
     badge: "upcoming",
-    payment: "Launching Soon — Register Interest",
+    payment: "Launching Soon â€” Register Interest",
     image: "/h1.jpg",
     description: "A complete township with residential, commercial, and recreational facilities.",
   },
@@ -243,7 +243,7 @@ export default function Home() {
             <br />Into Reality
           </h1>
           <p className="hero-subtitle">
-            AHH Brothers — Builders & Developers. Delivering premium residential
+            AHH Brothers â€” Builders & Developers. Delivering premium residential
             and commercial projects across Karachi for over 47 years.
           </p>
           <div className="hero-tagline">&ldquo;Our Power Is Our Unity&rdquo;</div>
@@ -270,123 +270,6 @@ export default function Home() {
             <span>Scroll to explore</span>
           </div>
         </div>
-
-        <style>{`
-          .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-          }
-          .hero-bg {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-          }
-          .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(10,10,10,0.65) 0%, rgba(13,13,26,0.88) 100%);
-          }
-          .hero-content {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            padding: 2rem 1.5rem;
-            max-width: 850px;
-            animation: fadeInUp 1s ease-out;
-          }
-          .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 1.25rem;
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 30px;
-            margin-bottom: 2rem;
-            animation: fadeInDown 0.8s ease-out;
-          }
-          .hero-badge span {
-            color: #D4AF37;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-          }
-          .hero-title {
-            font-family: var(--font-heading);
-            font-size: clamp(3rem, 7vw, 5.5rem);
-            font-weight: 800;
-            line-height: 1.08;
-            margin-bottom: 1.5rem;
-            color: #FFFFFF;
-          }
-          .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            color: #C5C5D3;
-            max-width: 650px;
-            margin: 0 auto 1rem;
-            line-height: 1.7;
-          }
-          .hero-tagline {
-            font-family: var(--font-heading);
-            font-style: italic;
-            color: #D4AF37;
-            font-size: 1.15rem;
-            margin-bottom: 2.5rem;
-            opacity: 0.9;
-          }
-          .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-          }
-          .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            animation: float 2.5s ease-in-out infinite;
-          }
-          .scroll-indicator span {
-            color: #4A4A5E;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-          }
-          .scroll-mouse {
-            width: 24px;
-            height: 38px;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            padding-top: 6px;
-          }
-          .scroll-dot {
-            width: 4px;
-            height: 8px;
-            background: #D4AF37;
-            border-radius: 2px;
-            animation: scrollAnim 1.8s infinite;
-          }
-          @keyframes scrollAnim {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(14px); }
-          }
-          @media (max-width: 640px) {
-            .hero { min-height: 90vh; }
-            .scroll-indicator { display: none; }
-          }
-        `}</style>
       </section>
 
       {/* ===== STATS SECTION ===== */}
@@ -398,20 +281,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-
-        <style>{`
-          .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-          }
-          @media (max-width: 1024px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-          }
-          @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
-          }
-        `}</style>
       </section>
 
       {/* ===== ABOUT PREVIEW ===== */}
@@ -449,12 +318,12 @@ export default function Home() {
               <p style={{ color: "#C5C5D3", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "1.5rem" }}>
                 Established in 1977, AHH Brothers & Developers is a close-knit family of
                 housebuilders, developers, and contractors. With the unique ability to wear
-                multiple hats — developer and contractor — we bring flexibility to every project.
+                multiple hats â€” developer and contractor â€” we bring flexibility to every project.
               </p>
               <p style={{ color: "#8A8A9E", fontSize: "0.95rem", lineHeight: 1.8, marginBottom: "2rem" }}>
                 From affordable housing to premium villas and mega townships, we are committed
                 to delivering exceptional living spaces that families can call home. Our power
-                is our unity — and our unity builds your future.
+                is our unity â€” and our unity builds your future.
               </p>
               <Link href="/about" className="btn-gold">
                 Learn More About Us
@@ -465,64 +334,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        <style>{`
-          .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 4rem;
-            align-items: center;
-          }
-          .about-image-col {
-            position: relative;
-          }
-          .about-image-wrapper {
-            padding: 1.5rem;
-            position: relative;
-          }
-          .about-exp-badge {
-            position: absolute;
-            bottom: -20px;
-            right: -20px;
-            background: linear-gradient(135deg, #D4AF37 0%, #B8942E 100%);
-            color: #0A0A0A;
-            padding: 1.25rem;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
-          }
-          .exp-number {
-            display: block;
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            font-weight: 800;
-            line-height: 1;
-          }
-          .exp-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-          }
-          .section-label {
-            color: #D4AF37;
-            font-weight: 600;
-            font-size: 0.88rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
-          }
-          @media (max-width: 768px) {
-            .about-grid {
-              grid-template-columns: 1fr;
-              gap: 2.5rem;
-            }
-            .about-exp-badge {
-              right: 10px;
-              bottom: -15px;
-            }
-          }
-        `}</style>
       </section>
 
       {/* ===== PROJECTS SECTION ===== */}
@@ -571,14 +382,14 @@ export default function Home() {
                     {project.location}
                   </div>
                   <div className="card-details">
-                    <span>🏷️ {project.type}</span>
-                    <span>📐 {project.size}</span>
+                    <span>ðŸ·ï¸ {project.type}</span>
+                    <span>ðŸ“ {project.size}</span>
                   </div>
                   <p style={{ color: "#8A8A9E", fontSize: "0.88rem", marginBottom: "1rem", lineHeight: 1.6 }}>
                     {project.description}
                   </p>
                   <div style={{ fontSize: "0.82rem", color: "#D4AF37", marginBottom: "1rem", padding: "0.5rem 0.75rem", background: "rgba(212,175,55,0.06)", borderRadius: "8px", borderLeft: "3px solid #D4AF37" }}>
-                    💳 {project.payment}
+                    ðŸ’³ {project.payment}
                   </div>
                   <Link href={`/current-projects#${project.id}`} className="card-link">
                     View Details
@@ -600,17 +411,6 @@ export default function Home() {
             </Link>
           </div>
         </div>
-
-        <style>{`
-          .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-          }
-          @media (max-width: 768px) {
-            .projects-grid { grid-template-columns: 1fr; }
-          }
-        `}</style>
       </section>
 
       {/* ===== WHY CHOOSE US ===== */}
@@ -641,54 +441,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-
-        <style>{`
-          .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-          }
-          .feature-card {
-            padding: 2rem;
-            text-align: center;
-            cursor: default;
-          }
-          .feature-icon {
-            width: 72px;
-            height: 72px;
-            margin: 0 auto 1.25rem;
-            border-radius: 16px;
-            background: rgba(212, 175, 55, 0.08);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #D4AF37;
-            transition: all 0.3s;
-          }
-          .feature-card:hover .feature-icon {
-            background: rgba(212, 175, 55, 0.15);
-            transform: scale(1.08);
-          }
-          .feature-title {
-            font-family: var(--font-heading);
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            color: #F5F5F5;
-          }
-          .feature-desc {
-            color: #8A8A9E;
-            font-size: 0.9rem;
-            line-height: 1.7;
-          }
-          @media (max-width: 1024px) {
-            .features-grid { grid-template-columns: repeat(2, 1fr); }
-          }
-          @media (max-width: 640px) {
-            .features-grid { grid-template-columns: 1fr; }
-          }
-        `}</style>
       </section>
 
       {/* ===== TESTIMONIALS ===== */}
@@ -727,70 +479,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-
-        <style>{`
-          .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-          }
-          .testimonial-card {
-            padding: 2rem;
-            cursor: default;
-            position: relative;
-          }
-          .testimonial-quote {
-            font-family: var(--font-heading);
-            font-size: 4rem;
-            color: #D4AF37;
-            line-height: 1;
-            opacity: 0.3;
-            position: absolute;
-            top: 12px;
-            left: 20px;
-          }
-          .testimonial-text {
-            color: #C5C5D3;
-            font-size: 0.95rem;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            margin-top: 1.5rem;
-            font-style: italic;
-          }
-          .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            padding-top: 1rem;
-          }
-          .testimonial-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #D4AF37, #B8942E);
-            color: #0A0A0A;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-          }
-          .testimonial-name {
-            font-family: var(--font-heading);
-            font-size: 1rem;
-            font-weight: 600;
-            color: #F5F5F5;
-          }
-          .testimonial-role {
-            font-size: 0.82rem;
-            color: #D4AF37;
-          }
-          @media (max-width: 1024px) {
-            .testimonials-grid { grid-template-columns: 1fr; max-width: 600px; margin: 0 auto; }
-          }
-        `}</style>
       </section>
 
       {/* ===== CTA SECTION ===== */}
@@ -814,45 +502,6 @@ export default function Home() {
             </a>
           </div>
         </div>
-
-        <style>{`
-          .cta-section {
-            position: relative;
-            padding: 6rem 1.5rem;
-            background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(13,13,26,1) 50%, rgba(45,140,60,0.05) 100%);
-            overflow: hidden;
-            text-align: center;
-          }
-          .cta-overlay {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at center, rgba(212,175,55,0.06) 0%, transparent 70%);
-            pointer-events: none;
-          }
-          .cta-content {
-            position: relative;
-            z-index: 1;
-          }
-          .cta-content h2 {
-            font-family: var(--font-heading);
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 700;
-            margin-bottom: 1.25rem;
-          }
-          .cta-content p {
-            color: #8A8A9E;
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto 2.5rem;
-            line-height: 1.7;
-          }
-          .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-          }
-        `}</style>
       </section>
     </>
   );
@@ -880,31 +529,6 @@ function StatCard({ stat, delay, visible }: { stat: typeof stats[0]; delay: numb
         {count.toLocaleString()}{stat.suffix}
       </div>
       <div className="stat-label">{stat.label}</div>
-
-      <style>{`
-        .stat-card {
-          padding: 2rem;
-          text-align: center;
-          cursor: default;
-        }
-        .stat-icon {
-          font-size: 2rem;
-          margin-bottom: 0.75rem;
-        }
-        .stat-number {
-          font-family: var(--font-heading);
-          font-size: 2.75rem;
-          font-weight: 800;
-          color: #D4AF37;
-          line-height: 1;
-          margin-bottom: 0.5rem;
-        }
-        .stat-label {
-          color: #8A8A9E;
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
-      `}</style>
     </div>
   );
 }

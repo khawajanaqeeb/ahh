@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -25,7 +25,7 @@ export default function ProjectsRedirect() {
 
           <div className="grid-2">
             <div className="glass-card project-choice-card">
-              <div className="choice-icon">🏗️</div>
+              <div className="choice-icon">ðŸ—ï¸</div>
               <h3>Current Projects</h3>
               <p>Explore Hooria Villas, Summer Farm Houses, Labour City, and AHH-City. Active booking slots and development details.</p>
               <Link href="/current-projects" className="btn-gold" style={{ marginTop: "1rem" }}>
@@ -34,7 +34,7 @@ export default function ProjectsRedirect() {
             </div>
 
             <div className="glass-card project-choice-card">
-              <div className="choice-icon">✅</div>
+              <div className="choice-icon">âœ…</div>
               <h3>Delivered Projects</h3>
               <p>Browse our successfully completed enclaves, transferred societies, and past resident community highlights.</p>
               <Link href="/delivered-projects" className="btn-outline" style={{ marginTop: "1rem" }}>
@@ -44,41 +44,6 @@ export default function ProjectsRedirect() {
           </div>
         </div>
       </section>
-
-      <style>{`
-        .project-choice-card {
-          padding: 3rem 2rem;
-          text-align: center;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: space-between;
-          height: 100%;
-        }
-        .choice-icon {
-          font-size: 3rem;
-          margin-bottom: 1rem;
-          width: 70px;
-          height: 70px;
-          background: rgba(212, 175, 55, 0.08);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .project-choice-card h3 {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: var(--white-pure);
-          margin-bottom: 0.75rem;
-        }
-        .project-choice-card p {
-          color: var(--gray-400);
-          font-size: 0.95rem;
-          line-height: 1.6;
-          margin-bottom: 1.5rem;
-        }
-      `}</style>
     </>
   );
 }

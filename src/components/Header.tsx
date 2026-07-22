@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 // src/components/Header.tsx
 // Premium top bar with contact info & social media links
@@ -51,80 +51,6 @@ const Header = () => {
           </a>
         </div>
       </div>
-
-      <style>{`
-        .header-topbar {
-          background: linear-gradient(90deg, #0A0A0A 0%, #161622 100%);
-          border-bottom: 1px solid rgba(212, 175, 55, 0.15);
-          font-size: 0.85rem;
-          position: relative;
-          z-index: 51;
-        }
-        .topbar-inner {
-          max-width: 1280px;
-          margin: 0 auto;
-          padding: 0.5rem 1.5rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .topbar-left {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          flex-wrap: wrap;
-        }
-        .topbar-item {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.4rem;
-          color: #C5C5D3;
-          transition: color 0.2s;
-        }
-        .topbar-item:hover {
-          color: #D4AF37;
-        }
-        .topbar-whatsapp {
-          color: #25D366;
-        }
-        .topbar-whatsapp:hover {
-          color: #2EE675;
-        }
-        .topbar-divider {
-          color: #4A4A5E;
-          user-select: none;
-        }
-        .topbar-right {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-        .topbar-social {
-          color: #8A8A9E;
-          transition: all 0.2s;
-          display: flex;
-          align-items: center;
-        }
-        .topbar-social:hover {
-          color: #D4AF37;
-          transform: translateY(-1px);
-        }
-        @media (max-width: 768px) {
-          .topbar-inner {
-            flex-direction: column;
-            gap: 0.4rem;
-            padding: 0.4rem 1rem;
-          }
-          .topbar-left {
-            gap: 0.5rem;
-            justify-content: center;
-            font-size: 0.78rem;
-          }
-          .topbar-divider {
-            display: none;
-          }
-        }
-      `}</style>
     </div>
   );
 };
