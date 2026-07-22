@@ -271,7 +271,7 @@ export default function Home() {
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           .hero {
             position: relative;
             min-height: 100vh;
@@ -399,7 +399,7 @@ export default function Home() {
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -466,7 +466,7 @@ export default function Home() {
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           .about-grid {
             display: grid;
             grid-template-columns: 1fr 1.2fr;
@@ -601,7 +601,7 @@ export default function Home() {
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           .projects-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -642,7 +642,7 @@ export default function Home() {
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -728,7 +728,7 @@ export default function Home() {
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           .testimonials-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -815,7 +815,7 @@ export default function Home() {
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           .cta-section {
             position: relative;
             padding: 6rem 1.5rem;
@@ -881,7 +881,7 @@ function StatCard({ stat, delay, visible }: { stat: typeof stats[0]; delay: numb
       </div>
       <div className="stat-label">{stat.label}</div>
 
-      <style jsx>{`
+      <style>{`
         .stat-card {
           padding: 2rem;
           text-align: center;

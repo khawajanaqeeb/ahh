@@ -72,7 +72,7 @@ export default function Events() {
         </div>
       </section>
 
-      <style jsx>{`
+      <style>{`
         .event-list {
           display: flex;
           flex-direction: column;

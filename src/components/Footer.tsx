@@ -137,7 +137,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .site-footer {
           background: #0A0A0A;
           position: relative;

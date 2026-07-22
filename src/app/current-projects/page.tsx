@@ -143,7 +143,7 @@ export default function CurrentProjects() {
         </div>
       </section>
 
-      <style jsx>{`
+      <style>{`
         .project-detail-list {
           display: flex;
           flex-direction: column;

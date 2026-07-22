@@ -45,7 +45,7 @@ export default function ProjectsRedirect() {
         </div>
       </section>
 
-      <style jsx>{`
+      <style>{`
         .project-choice-card {
           padding: 3rem 2rem;
           text-align: center;

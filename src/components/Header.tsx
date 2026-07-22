@@ -52,7 +52,7 @@ const Header = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .header-topbar {
           background: linear-gradient(90deg, #0A0A0A 0%, #161622 100%);
           border-bottom: 1px solid rgba(212, 175, 55, 0.15);

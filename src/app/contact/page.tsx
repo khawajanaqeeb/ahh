@@ -183,7 +183,7 @@ function ContactFormSection() {
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .contact-container {
           display: grid;
           grid-template-columns: 1.1fr 0.9fr;
@@ -340,7 +340,7 @@ export default function Contact() {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
-        <style jsx>{`
+        <style>{`
           .map-iframe-container {
             width: 100%;
             height: 450px;

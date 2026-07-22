@@ -237,7 +237,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .navbar {
           position: sticky;
           top: 0;

@@ -135,7 +135,7 @@ export default function About() {
         </div>
       </section>
 
-      <style jsx>{`
+      <style>{`
         .about-details-grid {
           display: grid;
           grid-template-columns: 1.2fr 0.8fr;

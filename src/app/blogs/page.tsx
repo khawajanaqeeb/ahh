@@ -70,7 +70,7 @@ export default function Blogs() {
         </div>
       </section>
 
-      <style jsx>{`
+      <style>{`
         .blog-card {
           overflow: hidden;
           border-radius: var(--radius-md);

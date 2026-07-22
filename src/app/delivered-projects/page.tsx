@@ -106,7 +106,7 @@ export default function DeliveredProjects() {
         </div>
       </section>
 
-      <style jsx>{`
+      <style>{`
         .d-type {
           font-size: 0.8rem;
           color: var(--gold);

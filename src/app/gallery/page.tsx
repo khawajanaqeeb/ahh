@@ -54,7 +54,7 @@ export default function Gallery() {
         </div>
       </section>
 
-      <style jsx>{`
+      <style>{`
         .gallery-card {
           overflow: hidden;
           border-radius: var(--radius-md);
