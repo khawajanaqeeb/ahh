@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -9,10 +9,10 @@ import { useEffect, useRef, useState } from "react";
    ============================================ */
 
 const stats = [
-  { number: 47, suffix: "+", label: "Years of Experience", icon: "ðŸ—ï¸" },
-  { number: 4, suffix: "+", label: "Active Projects", icon: "ðŸ“" },
-  { number: 500, suffix: "+", label: "Happy Families", icon: "ðŸ " },
-  { number: 10000, suffix: "+", label: "Sq Yards Developed", icon: "ðŸ“" },
+  { number: 6, suffix: "+", label: "Years of Excellence", icon: "🏗️" },
+  { number: 4, suffix: "+", label: "Active Projects", icon: "📍" },
+  { number: 500, suffix: "+", label: "Happy Families", icon: "🏠" },
+  { number: 10000, suffix: "+", label: "Sq Yards Developed", icon: "📐" },
 ];
 
 const projects = [
@@ -25,7 +25,7 @@ const projects = [
     status: "Under Development",
     badge: "active",
     payment: "8% Down Payment | 36 Monthly Installments",
-    image: "/h1.jpg",
+    image: "/hooria-villas-logo.jpg",
     description: "Premium residential plots at a prime location with speedy development work underway.",
   },
   {
@@ -37,7 +37,7 @@ const projects = [
     status: "Now Booking",
     badge: "active",
     payment: "Flexible Payment Plans Available",
-    image: "/h2.jpg",
+    image: "/summer-farmhouses-logo.jpg",
     description: "Escape to your own countryside retreat with our premium farm house community.",
   },
   {
@@ -49,7 +49,7 @@ const projects = [
     status: "Now Booking",
     badge: "upcoming",
     payment: "Easy Installment Plans",
-    image: "/h2.jpg",
+    image: "/labour-city-logo.jpg",
     description: "Affordable residential plots designed for the working class with easy payment options.",
   },
   {
@@ -60,8 +60,8 @@ const projects = [
     size: "120-500 Sq Yards",
     status: "Coming Soon",
     badge: "upcoming",
-    payment: "Launching Soon â€” Register Interest",
-    image: "/h1.jpg",
+    payment: "Launching Soon — Register Interest",
+    image: "/ahh-city-logo.jpg",
     description: "A complete township with residential, commercial, and recreational facilities.",
   },
 ];
@@ -236,15 +236,15 @@ export default function Home() {
 
         <div className="hero-content">
           <div className="hero-badge">
-            <span>Established 1977</span>
+            <span>Established 2018</span>
           </div>
           <h1 className="hero-title">
             Building <span className="text-gradient-gold">Dreams</span>
             <br />Into Reality
           </h1>
           <p className="hero-subtitle">
-            AHH Brothers â€” Builders & Developers. Delivering premium residential
-            and commercial projects across Karachi for over 47 years.
+            AHH Brothers — Builders &amp; Developers. Delivering premium residential
+            and commercial projects across Karachi since 2018.
           </p>
           <div className="hero-tagline">&ldquo;Our Power Is Our Unity&rdquo;</div>
           <div className="hero-buttons">
@@ -297,7 +297,7 @@ export default function Home() {
             <div className="about-image-col">
               <div className="about-image-wrapper glass-card-static">
                 <Image
-                  src="/ahh-logo.jpg"
+                  src="/ahh-logo.png"
                   alt="AHH Brothers Logo"
                   width={400}
                   height={400}
@@ -305,7 +305,7 @@ export default function Home() {
                 />
               </div>
               <div className="about-exp-badge">
-                <span className="exp-number">47+</span>
+                <span className="exp-number">6+</span>
                 <span className="exp-label">Years of<br/>Excellence</span>
               </div>
             </div>
@@ -316,14 +316,14 @@ export default function Home() {
               </h2>
               <div className="gold-line-left" />
               <p style={{ color: "#C5C5D3", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "1.5rem" }}>
-                Established in 1977, AHH Brothers & Developers is a close-knit family of
+                Founded in 2018, AHH Brothers Builders &amp; Developers is a close-knit family of
                 housebuilders, developers, and contractors. With the unique ability to wear
-                multiple hats â€” developer and contractor â€” we bring flexibility to every project.
+                multiple hats — developer and contractor — we bring flexibility to every project.
               </p>
               <p style={{ color: "#8A8A9E", fontSize: "0.95rem", lineHeight: 1.8, marginBottom: "2rem" }}>
                 From affordable housing to premium villas and mega townships, we are committed
                 to delivering exceptional living spaces that families can call home. Our power
-                is our unity â€” and our unity builds your future.
+                is our unity — and our unity builds your future.
               </p>
               <Link href="/about" className="btn-gold">
                 Learn More About Us
@@ -367,7 +367,7 @@ export default function Home() {
                     alt={project.name}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: "contain", padding: "1.25rem", background: "linear-gradient(135deg, rgba(20,20,25,0.95), rgba(10,10,12,0.98))" }}
                   />
                   <span className={`card-badge badge-${project.badge}`}>
                     {project.status}
@@ -382,14 +382,14 @@ export default function Home() {
                     {project.location}
                   </div>
                   <div className="card-details">
-                    <span>ðŸ·ï¸ {project.type}</span>
-                    <span>ðŸ“ {project.size}</span>
+                    <span>🏷️ {project.type}</span>
+                    <span>📐 {project.size}</span>
                   </div>
                   <p style={{ color: "#8A8A9E", fontSize: "0.88rem", marginBottom: "1rem", lineHeight: 1.6 }}>
                     {project.description}
                   </p>
                   <div style={{ fontSize: "0.82rem", color: "#D4AF37", marginBottom: "1rem", padding: "0.5rem 0.75rem", background: "rgba(212,175,55,0.06)", borderRadius: "8px", borderLeft: "3px solid #D4AF37" }}>
-                    ðŸ’³ {project.payment}
+                    💳 {project.payment}
                   </div>
                   <Link href={`/current-projects#${project.id}`} className="card-link">
                     View Details
@@ -494,7 +494,7 @@ export default function Home() {
                 <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
               </svg>
             </Link>
-            <a href="https://wa.me/923701335365" target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ borderColor: "#25D366", color: "#25D366" }}>
+            <a href="https://wa.me/923111123160" target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ borderColor: "#25D366", color: "#25D366" }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
               </svg>

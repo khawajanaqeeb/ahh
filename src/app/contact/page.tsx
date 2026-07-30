@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -48,7 +48,7 @@ function ContactFormSection() {
 
         <div className="contact-info-cards">
           <div className="glass-card contact-detail-card">
-            <div className="card-icon">ðŸ“</div>
+            <div className="card-icon">📍</div>
             <div>
               <h3>Office Address</h3>
               <p>Near Gulshan-e-Maymar, Northern Bypass, Karachi, Pakistan</p>
@@ -56,34 +56,68 @@ function ContactFormSection() {
           </div>
 
           <div className="glass-card contact-detail-card">
-            <div className="card-icon">ðŸ“ž</div>
+            <div className="card-icon">📞</div>
             <div>
-              <h3>Call & Support</h3>
+              <h3>UAN & Support</h3>
               <p>
-                <a href="tel:+923701335365" className="hover-gold">0370-1335365</a>
+                <a href="tel:+923111123160" className="hover-gold">03111-123-160</a>
               </p>
+              <p style={{ fontSize: "0.8rem", color: "#8A8A9E", marginTop: "0.25rem" }}>UAN — Mon to Sat, 9am–6pm</p>
             </div>
           </div>
 
           <div className="glass-card contact-detail-card">
-            <div className="card-icon">âœ‰ï¸</div>
+            <div className="card-icon">✉️</div>
             <div>
               <h3>Email Queries</h3>
               <p>
-                <a href="mailto:info@ahhbrothers.com" className="hover-gold">info@ahhbrothers.com</a>
+                <a href="mailto:ahhbrothers.developers@gmail.com" className="hover-gold">ahhbrothers.developers@gmail.com</a>
               </p>
             </div>
           </div>
 
           <div className="glass-card contact-detail-card">
-            <div className="card-icon">ðŸ’¬</div>
+            <div className="card-icon">💬</div>
             <div>
               <h3>WhatsApp Chat</h3>
               <p>
-                <a href="https://wa.me/923701335365" target="_blank" rel="noopener noreferrer" className="hover-gold text-green">
+                <a href="https://wa.me/923111123160" target="_blank" rel="noopener noreferrer" className="hover-gold text-green">
                   Open WhatsApp Chat
                 </a>
               </p>
+            </div>
+          </div>
+
+          <div className="glass-card contact-detail-card">
+            <div className="card-icon">🌐</div>
+            <div>
+              <h3>Website</h3>
+              <p>
+                <a href="https://www.ahhbrothers.com" target="_blank" rel="noopener noreferrer" className="hover-gold">www.ahhbrothers.com</a>
+              </p>
+            </div>
+          </div>
+
+          <div className="glass-card contact-detail-card">
+            <div className="card-icon">👍</div>
+            <div>
+              <h3>Facebook Page</h3>
+              <p>
+                <a href="https://www.facebook.com/profile.php?id=61567886021312" target="_blank" rel="noopener noreferrer" className="hover-gold">
+                  AHH Brothers Builders &amp; Developers
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <div className="glass-card contact-detail-card" style={{ borderColor: "rgba(239,68,68,0.25)" }}>
+            <div className="card-icon">🚨</div>
+            <div>
+              <h3 style={{ color: "#ef4444" }}>Complaint No.</h3>
+              <p>
+                <a href="tel:+9203701335365" className="hover-gold" style={{ color: "#ef4444" }}>0370-1335365</a>
+              </p>
+              <p style={{ fontSize: "0.8rem", color: "#8A8A9E", marginTop: "0.25rem" }}>For complaints &amp; escalations only</p>
             </div>
           </div>
         </div>
@@ -93,7 +127,7 @@ function ContactFormSection() {
       <div className="contact-form-col glass-card">
         {submitted ? (
           <div className="success-message">
-            <div className="success-icon">âœ“</div>
+            <div className="success-icon">✓</div>
             <h3>Thank You!</h3>
             <p>Your inquiry has been successfully sent. A representative from AHH Brothers & Developers will contact you shortly.</p>
             <button className="btn-gold" onClick={() => setSubmitted(false)}>Send Another Message</button>

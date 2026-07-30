@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -13,11 +13,12 @@ const Footer = () => {
 
       <div className="footer-main">
         <div className="footer-grid">
+
           {/* Column 1 - Company Info */}
           <div className="footer-col footer-brand">
             <div className="footer-logo-row">
               <Image
-                src="/ahh-logo.jpg"
+                src="/ahh-logo.png"
                 alt="AHH Brothers"
                 width={55}
                 height={55}
@@ -25,18 +26,18 @@ const Footer = () => {
               />
               <div>
                 <h3 className="footer-brand-name">AHH Brothers</h3>
-                <p className="footer-brand-sub">Builders & Developers</p>
+                <p className="footer-brand-sub">Builders &amp; Developers</p>
               </div>
             </div>
             <p className="footer-brand-tagline">&ldquo;Our Power Is Our Unity&rdquo;</p>
             <p className="footer-description">
-              Since 1977, AHH Brothers has been delivering quality residential and
-              commercial projects across Karachi. We are a family of housebuilders,
-              developers, and contractors committed to excellence.
+              Founded in 2018, AHH Brothers Builders &amp; Developers is a trusted
+              real estate firm delivering quality residential and commercial projects
+              across Karachi. Committed to excellence, transparency, and unity.
             </p>
             {/* Social Icons */}
             <div className="footer-socials">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="social-icon">
+              <a href="https://www.facebook.com/profile.php?id=61567886021312" target="_blank" rel="noopener noreferrer" aria-label="AHH Brothers Builders & Developers Facebook" title="AHH Brothers Builders & Developers" className="social-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
@@ -51,7 +52,7 @@ const Footer = () => {
                   <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                 </svg>
               </a>
-              <a href="https://wa.me/923701335365" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="social-icon social-whatsapp">
+              <a href="https://wa.me/923111123160" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="social-icon social-whatsapp">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                 </svg>
@@ -67,6 +68,7 @@ const Footer = () => {
               <li><Link href="/about">About Us</Link></li>
               <li><Link href="/current-projects">Current Projects</Link></li>
               <li><Link href="/delivered-projects">Delivered Projects</Link></li>
+              <li><Link href="/gallery">Gallery</Link></li>
               <li><Link href="/contact">Contact Us</Link></li>
             </ul>
           </div>
@@ -79,6 +81,7 @@ const Footer = () => {
               <li><Link href="/current-projects#summer-farm-houses">Summer Farm Houses</Link></li>
               <li><Link href="/current-projects#labour-city">Labour City</Link></li>
               <li><Link href="/current-projects#ahh-city">AHH-City</Link></li>
+              <li><Link href="/delivered-projects">Delivered Projects</Link></li>
             </ul>
           </div>
 
@@ -86,6 +89,8 @@ const Footer = () => {
           <div className="footer-col">
             <h4 className="footer-heading">Contact Us</h4>
             <div className="footer-contact-list">
+
+              {/* Address */}
               <div className="footer-contact-item">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
@@ -96,34 +101,64 @@ const Footer = () => {
                   <p>Northern Bypass, Karachi</p>
                 </div>
               </div>
+
+              {/* UAN */}
               <div className="footer-contact-item">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                 </svg>
-                <a href="tel:+923701335365">0370-1335365</a>
+                <div>
+                  <a href="tel:+923111123160">03111-123-160</a>
+                  <span style={{ display: "block", fontSize: "0.72rem", color: "#8A8A9E" }}>UAN &amp; WhatsApp</span>
+                </div>
               </div>
+
+              {/* Email */}
               <div className="footer-contact-item">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="4" width="20" height="16" rx="2"/>
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                 </svg>
-                <a href="mailto:info@ahhbrothers.com">info@ahhbrothers.com</a>
+                <a href="mailto:ahhbrothers.developers@gmail.com">ahhbrothers.developers@gmail.com</a>
               </div>
+
+              {/* WhatsApp */}
               <div className="footer-contact-item">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                 </svg>
-                <a href="https://wa.me/923701335365" target="_blank" rel="noopener noreferrer">WhatsApp Chat</a>
+                <a href="https://wa.me/923111123160" target="_blank" rel="noopener noreferrer">WhatsApp Chat</a>
               </div>
+
+              {/* Website */}
+              <div className="footer-contact-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                <a href="https://www.ahhbrothers.com" target="_blank" rel="noopener noreferrer">www.ahhbrothers.com</a>
+              </div>
+
+              {/* Complaint No */}
+              <div className="footer-contact-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                <div>
+                  <a href="tel:+9203701335365" style={{ color: "#ef4444" }}>0370-1335365</a>
+                  <span style={{ display: "block", fontSize: "0.72rem", color: "#8A8A9E" }}>Complaint No.</span>
+                </div>
+              </div>
+
             </div>
           </div>
+
         </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="footer-bottom">
         <div className="footer-bottom-inner">
-          <p>&copy; {currentYear} AHH Brothers â€” Builders & Developers. All rights reserved.</p>
+          <p>&copy; {currentYear} AHH Brothers — Builders &amp; Developers. All rights reserved.</p>
           <button
             className="back-to-top"
             onClick={() => typeof window !== "undefined" && window.scrollTo({ top: 0, behavior: "smooth" })}

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +13,7 @@ const currentProjects = [
     status: "Under Development",
     badge: "active",
     payment: "8% Down Payment | 36 Monthly Installments",
-    image: "/h1.jpg",
+    image: "/hooria-villas-logo.jpg",
     description: "Premium residential plots located at a highly sought-after location in Northern Bypass. Features speedy development work, wide paved roads, boundary walls, sewage lines, electricity, and clean water networks. Highly secure investment opportunity with legal NOC clearance.",
     amenities: ["Gated Community", "24/7 Security", "Wide Asphalt Roads", "Mosque", "Public Park & Play Area", "Commercial Zone"],
   },
@@ -26,7 +26,7 @@ const currentProjects = [
     status: "Now Booking",
     badge: "active",
     payment: "15% Down Payment | 24 Month Installment Plan",
-    image: "/h2.jpg",
+    image: "/summer-farmhouses-logo.jpg",
     description: "A luxury escape from the hustle and bustle of Karachi city. Summer Farm Houses offers scenic natural views, private spaces, custom swimming pool construction options, modern fencing, and fully integrated utilities. The perfect farmhouse retreat for your family weekends.",
     amenities: ["Fruit Orchards", "Private Swimming Pools", "Boundary Wall Security", "Lush Green Landscapes", "Continuous Electricity Backup", "Modern Club House"],
   },
@@ -39,7 +39,7 @@ const currentProjects = [
     status: "Now Booking",
     badge: "active",
     payment: "Easy Monthly Installments from PKR 6,000/month",
-    image: "/h2.jpg",
+    image: "/labour-city-logo.jpg",
     description: "Designed specifically to bring affordable land and housing within reach of Karachi's hardworking professionals. Labour City features highly subsidised down payments, easy verification systems, and simple monthly payment terms. Located near industrial hubs for easy daily commutes.",
     amenities: ["Proximity to Industrial Area", "Public Transport Links", "Primary School", "Medical Clinic", "Community Center", "Basic Utilities Guarantee"],
   },
@@ -52,7 +52,7 @@ const currentProjects = [
     status: "Launching Soon / Coming Soon",
     badge: "upcoming",
     payment: "Pre-Launch Bookings Open - Register Interest",
-    image: "/h1.jpg",
+    image: "/ahh-city-logo.jpg",
     description: "Our flagship mega township vision features high-end infrastructure, multi-lane main avenues, smart waste management, modern security towers, school divisions, medical hospitals, and custom commercial centers. Register your interest today for premium pre-launch rates.",
     amenities: ["Smart City Infrastructure", "International Schools", "Hospital & Emergency Care", "Theme Park", "Modern Sports Complex", "Dedicated Utility Stations"],
   },
@@ -88,6 +88,7 @@ export default function CurrentProjects() {
                     width={600}
                     height={400}
                     className="p-detail-img"
+                    style={{ objectFit: "contain", padding: "1.5rem", background: "linear-gradient(135deg, rgba(20,20,25,0.95), rgba(10,10,12,0.98))", borderRadius: "12px", width: "100%", height: "auto", maxHeight: "320px" }}
                   />
                   <div className={`p-badge p-badge-${p.badge}`}>{p.status}</div>
                 </div>
@@ -97,24 +98,24 @@ export default function CurrentProjects() {
                   
                   <div className="p-meta">
                     <div className="p-meta-item">
-                      <strong>ðŸ“ Location:</strong> {p.location}
+                      <strong>📍 Location:</strong> {p.location}
                     </div>
                     <div className="p-meta-item">
-                      <strong>ðŸ“ Plot Sizes:</strong> {p.size}
+                      <strong>📏 Plot Sizes:</strong> {p.size}
                     </div>
                   </div>
 
                   <p className="p-desc">{p.description}</p>
 
                   <div className="p-payment-highlight">
-                    <strong>ðŸ’³ Payment Terms:</strong> {p.payment}
+                    <strong>💳 Payment Terms:</strong> {p.payment}
                   </div>
 
                   <div className="p-amenities">
-                    <h4>ðŸ—ï¸ Included Amenities:</h4>
+                    <h4>🏗️ Included Amenities:</h4>
                     <div className="amenity-grid">
                       {p.amenities.map((a, i) => (
-                        <span key={i} className="amenity-tag">âœ“ {a}</span>
+                        <span key={i} className="amenity-tag">✓ {a}</span>
                       ))}
                     </div>
                   </div>
@@ -127,13 +128,13 @@ export default function CurrentProjects() {
                       Book Now / Inquiry
                     </Link>
                     <a
-                      href={`https://wa.me/923701335365?text=Hello%20AHH%20Brothers%2C%20I%20am%20interested%20in%20booking%20a%20plot%20in%20${encodeURIComponent(p.name)}`}
+                      href={`https://wa.me/923111123160?text=Hello%20AHH%20Brothers%2C%20I%20am%20interested%20in%20booking%20a%20plot%20in%20${encodeURIComponent(p.name)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-outline"
                       style={{ color: "#25D366", borderColor: "#25D366" }}
                     >
-                      ðŸ’¬ WhatsApp Inquiry
+                      💬 WhatsApp Inquiry
                     </a>
                   </div>
                 </div>

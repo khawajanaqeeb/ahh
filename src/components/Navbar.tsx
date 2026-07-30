@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -68,7 +68,7 @@ const Navbar = () => {
           <Link href="/" className="navbar-logo">
             <div className="logo-img-wrapper">
               <Image
-                src="/ahh-logo.jpg"
+                src="/ahh-logo.png"
                 alt="AHH Brothers"
                 width={46}
                 height={46}
@@ -133,6 +133,15 @@ const Navbar = () => {
             ))}
           </ul>
 
+          {/* Book Now CTA */}
+          <Link href="/booking" className={`navbar-booking-btn ${pathname === '/booking' ? 'navbar-booking-btn-active' : ''}`}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+              <polyline points="9,22 9,12 15,12 15,22"/>
+            </svg>
+            <span>Book Now</span>
+          </Link>
+
           {/* CTA Button */}
           <Link href="/contact" className="navbar-cta-pill">
             <span>Get In Touch</span>
@@ -161,7 +170,7 @@ const Navbar = () => {
       <div className={`mobile-drawer ${mobileOpen ? "mobile-drawer-open" : ""}`}>
         <div className="mobile-drawer-header">
           <Image
-            src="/ahh-logo.jpg"
+            src="/ahh-logo.png"
             alt="AHH Brothers"
             width={40}
             height={40}
@@ -221,17 +230,22 @@ const Navbar = () => {
         </ul>
 
         <div className="mobile-drawer-footer">
+          <Link href="/booking" className={`mobile-link ${pathname === '/booking' ? 'mobile-link-active' : ''}`}
+            onClick={() => setMobileOpen(false)}
+          >
+            🏠 Book Now — AHH City
+          </Link>
           <Link href="/contact" className="btn-gold" onClick={() => setMobileOpen(false)} style={{ width: "100%", justifyContent: "center" }}>
             Get In Touch
           </Link>
           <div className="mobile-contact">
-            <a href="tel:+923701335365">
+            <a href="tel:+923111123160">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              0370-1335365
+              03111-123-160
             </a>
-            <a href="mailto:info@ahhbrothers.com">
+            <a href="mailto:ahhbrothers.developers@gmail.com">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-              info@ahhbrothers.com
+              ahhbrothers.developers@gmail.com
             </a>
           </div>
         </div>

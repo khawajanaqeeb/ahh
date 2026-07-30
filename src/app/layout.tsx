@@ -1,5 +1,5 @@
-﻿import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import type { Metadata } from "next";
+import { Playfair_Display, Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
@@ -20,13 +20,20 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
+
 export const metadata: Metadata = {
   title: {
-    default: "AHH Brothers â€” Builders & Developers | Premium Real Estate in Karachi",
-    template: "%s | AHH Brothers â€” Builders & Developers",
+    default: "AHH Brothers — Builders & Developers | Premium Real Estate in Karachi",
+    template: "%s | AHH Brothers — Builders & Developers",
   },
   description:
-    "Since 1977, AHH Brothers Builders & Developers has been delivering premium residential and commercial projects in Karachi. Explore Hooria Villas, Summer Farm Houses, Labour City, and AHH-City.",
+    "Founded in 2018, AHH Brothers Builders & Developers has been delivering premium residential and commercial projects in Karachi. Explore Hooria Villas, Summer Farm Houses, Labour City, and AHH-City.",
   keywords: [
     "AHH Brothers",
     "Builders and Developers",
@@ -40,12 +47,12 @@ export const metadata: Metadata = {
     "Gulshan-e-Maymar",
   ],
   openGraph: {
-    title: "AHH Brothers â€” Builders & Developers",
+    title: "AHH Brothers — Builders & Developers",
     description:
-      "Premium real estate developer in Karachi since 1977. Residential plots, villas, farm houses, and township projects.",
+      "Premium real estate developer in Karachi since 2018. Residential plots, villas, farm houses, and township projects.",
     type: "website",
     locale: "en_PK",
-    siteName: "AHH Brothers â€” Builders & Developers",
+    siteName: "AHH Brothers — Builders & Developers",
   },
 };
 
@@ -57,7 +64,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${playfair.variable} ${inter.variable}`}
+        className={`${playfair.variable} ${inter.variable} ${outfit.variable}`}
         style={{ fontFamily: "var(--font-body)" }}
       >
         {/* Top Bar */}

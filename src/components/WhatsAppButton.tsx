@@ -1,9 +1,9 @@
-﻿"use client";
+"use client";
 
 const WhatsAppButton = () => {
   return (
     <a
-      href="https://wa.me/923701335365?text=Hello%20AHH%20Brothers%2C%20I%20am%20interested%20in%20your%20projects."
+      href="https://wa.me/923111123160?text=Hello%20AHH%20Brothers%2C%20I%20am%20interested%20in%20your%20projects."
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float"

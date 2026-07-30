@@ -1,29 +1,80 @@
-﻿"use client";
+"use client";
 
-import Image from "next/image";
 import Link from "next/link";
 
+const directors = [
+  {
+    name: "Haroon",
+    title: "Director & Partner",
+    initials: "H",
+    desc: "A visionary leader with a passion for real estate development, Haroon has been instrumental in shaping AHH Brothers' strategic direction. His entrepreneurial drive and deep understanding of Karachi's property market have been key to the firm's continued expansion and success.",
+    gradient: "linear-gradient(135deg, #D4AF37, #B8942E)",
+  },
+  {
+    name: "Hassan Memon",
+    title: "Director & Partner",
+    initials: "HM",
+    desc: "Hassan Memon brings unparalleled expertise in construction management and project execution to AHH Brothers. His hands-on approach ensures every project meets the highest standards of engineering integrity and timely delivery, earning the trust of hundreds of families.",
+    gradient: "linear-gradient(135deg, #C5A028, #9A7820)",
+  },
+  {
+    name: "Abbas",
+    title: "Director",
+    initials: "A",
+    desc: "Abbas oversees the legal, documentation, and compliance framework of all AHH Brothers projects. His meticulous attention to regulatory processes and land acquisition ensures complete transparency and security for every investor and homeowner who partners with us.",
+    gradient: "linear-gradient(135deg, #E8CC6E, #D4AF37)",
+  },
+];
+
+const managers = [
+  {
+    name: "Khawaja Naqeeb Uddin",
+    title: "Manager Operations",
+    initials: "KN",
+    desc: "Khawaja Naqeeb Uddin is the operational backbone of AHH Brothers, coordinating day-to-day site activities, vendor relations, and project workflows. His systematic approach ensures every development phase runs smoothly from groundbreaking to handover.",
+    color: "#D4AF37",
+  },
+  {
+    name: "Mirza Adeel Baig",
+    title: "Sales & Marketing Manager",
+    initials: "MA",
+    desc: "Mirza Adeel Baig drives the sales strategy and marketing campaigns that have positioned AHH Brothers as a trusted name in Karachi real estate. His customer-first philosophy and deep market knowledge help buyers find the right investment every time.",
+    color: "#C5A028",
+  },
+  {
+    name: "Mirza Khalil Baig",
+    title: "Sales & Accounts Manager",
+    initials: "MK",
+    desc: "Mirza Khalil Baig manages the financial records, installment plans, and sales accounts with precision and integrity. His transparent handling of transactions gives buyers and investors complete peace of mind throughout the purchase process.",
+    color: "#E8CC6E",
+  },
+];
 
 const timelineEvents = [
   {
-    year: "1977",
-    title: "Foundation of AHH Brothers",
-    desc: "Established as a family-run construction and contracting firm in Karachi, laying the groundwork for decades of quality building.",
+    year: "2018",
+    title: "AHH Brothers Established",
+    desc: "Founded as a professional builders and developers firm in Karachi, bringing together a team united by a shared vision: delivering quality, affordable real estate for every family.",
   },
   {
-    year: "1995",
-    title: "Expanding to Land Development",
-    desc: "Began acquiring and developing prime land residential societies, expanding our role from builders to full-scale developers.",
+    year: "2019",
+    title: "First Delivered Projects",
+    desc: "Successfully delivered ANBAN Mega City and City Housing Society, establishing our reputation for on-time delivery and reliable development.",
   },
   {
-    year: "2010",
-    title: "Affordable Housing Milestone",
-    desc: "Launched several residential plot initiatives aimed at providing low-cost, high-value living options for families in Karachi.",
+    year: "2021",
+    title: "Vertical Expansion",
+    desc: "Launched Gul Heights — our first high-rise residential project in Nazimabad — marking our entry into the vertical development segment of Karachi's real estate market.",
+  },
+  {
+    year: "2022",
+    title: "Four Seasons Farm Houses",
+    desc: "Successfully delivered Phase 1 of Four Seasons Farm Houses in Gadap Town, offering premium countryside living to discerning buyers.",
   },
   {
     year: "2024",
-    title: "Hooria Villas & Modern Projects",
-    desc: "Initiated key residential plot schemes like Hooria Villas near Gulshan-e-Maymar, incorporating modern design layouts and speedy development.",
+    title: "Hooria Villas & Mega Pipeline",
+    desc: "Launched Hooria Villas near Gulshan-e-Maymar and unveiled the AHH-City mega township — our most ambitious project to date, offering 120–500 sq yard plots with world-class amenities.",
   },
 ];
 
@@ -31,17 +82,17 @@ const values = [
   {
     title: "Unity",
     desc: "Consistent with our motto 'Our Power Is Our Unity', we work cohesively to deliver excellence.",
-    icon: "ðŸ¤",
+    icon: "🤝",
   },
   {
     title: "Quality Construction",
     desc: "No compromise on building materials, infrastructure development, and engineering integrity.",
-    icon: "ðŸ—ï¸",
+    icon: "🏗️",
   },
   {
     title: "Commitment",
     desc: "We stay true to our promises on delivery schedules, documentation, and pricing plans.",
-    icon: "ðŸ“œ",
+    icon: "📜",
   },
 ];
 
@@ -58,40 +109,77 @@ export default function About() {
         </div>
       </div>
 
-      {/* Legacy / History Section */}
+      {/* ===== ATTRACTIVE INTRO SECTION ===== */}
       <section className="section">
         <div className="container">
           <div className="about-details-grid">
             <div className="about-details-text">
+              <div className="section-label">Who We Are</div>
               <h2 className="section-title">
-                Building Trust Since <span className="text-gradient-gold">1977</span>
+                AHH Brothers —{" "}
+                <span className="text-gradient-gold">Builders & Developers</span>
               </h2>
               <div className="gold-line-left" />
               <p className="intro-text">
-                AHH Brothers & Developers is a close-knit family of housebuilders, developers, and contractors. 
-                With the unique ability to wear multiple hats â€“ developer and contractor â€“ we bring flexibility, 
-                uncompromising quality, and deep-seated commitment to every project.
+                AHH Brothers Builders & Developers was founded in 2018 with a singular
+                mission: to make premium real estate accessible to every family in Karachi.
+                What started as a bold vision has grown into one of the city&apos;s most
+                trusted names in residential and commercial development.
               </p>
               <p className="normal-text">
-                Over the past four decades, we have established ourselves as one of the trusted names in {"Karachi's"} 
-                real estate landscape. Our primary focus is creating secure, premium, yet highly affordable 
-                residential developments where families can live safely and investors can grow their capital.
+                Guided by our core motto — <strong style={{ color: "#D4AF37" }}>&ldquo;Our Power Is Our Unity&rdquo;</strong> —
+                we operate as more than just a developer. We are a close-knit family of
+                engineers, planners, and visionaries who wear multiple hats: developer,
+                contractor, and trusted partner to every investor and homeowner who
+                chooses us.
               </p>
+              <p className="normal-text" style={{ marginTop: "1rem" }}>
+                From high-rise projects in Nazimabad to farmhouse communities in Gadap Town,
+                from affordable housing to mega townships — AHH Brothers has proven time
+                and again that quality, transparency, and commitment are not just promises.
+                They are our legacy.
+              </p>
+              <div style={{ display: "flex", gap: "2rem", marginTop: "2rem", flexWrap: "wrap" }}>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: "2.5rem", fontWeight: 800, color: "#D4AF37", fontFamily: "var(--font-heading)" }}>2018</div>
+                  <div style={{ fontSize: "0.85rem", color: "#8A8A9E", textTransform: "uppercase", letterSpacing: "0.1em" }}>Founded</div>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: "2.5rem", fontWeight: 800, color: "#D4AF37", fontFamily: "var(--font-heading)" }}>4+</div>
+                  <div style={{ fontSize: "0.85rem", color: "#8A8A9E", textTransform: "uppercase", letterSpacing: "0.1em" }}>Delivered Projects</div>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: "2.5rem", fontWeight: 800, color: "#D4AF37", fontFamily: "var(--font-heading)" }}>500+</div>
+                  <div style={{ fontSize: "0.85rem", color: "#8A8A9E", textTransform: "uppercase", letterSpacing: "0.1em" }}>Happy Families</div>
+                </div>
+              </div>
             </div>
-            <div className="about-details-logo glass-card">
-              <Image
-                src="/ahh-logo.jpg"
-                alt="AHH Brothers Logo Logo"
-                width={300}
-                height={300}
-                className="about-large-logo"
-              />
+            <div className="about-details-logo glass-card" style={{ display: "flex", flexDirection: "column", gap: "1.5rem", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+              {/* Decorative emblem */}
+              <div style={{
+                width: 160,
+                height: 160,
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05))",
+                border: "2px solid rgba(212,175,55,0.3)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "4rem",
+              }}>
+                🏢
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <h3 style={{ color: "#D4AF37", fontSize: "1.4rem", fontFamily: "var(--font-heading)", marginBottom: "0.5rem" }}>AHH Brothers</h3>
+                <p style={{ color: "#8A8A9E", fontSize: "0.9rem" }}>Builders & Developers</p>
+                <p style={{ color: "#D4AF37", fontSize: "0.85rem", marginTop: "0.75rem", fontStyle: "italic" }}>&ldquo;Our Power Is Our Unity&rdquo;</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Mission / Vision / Values Section */}
+      {/* ===== MISSION / VALUES ===== */}
       <section className="section section-alt">
         <div className="container">
           <div className="section-header">
@@ -112,7 +200,102 @@ export default function About() {
         </div>
       </section>
 
-      {/* Timeline Section */}
+      {/* ===== DIRECTORS SECTION ===== */}
+      <section className="section">
+        <div className="container">
+          <div className="section-header">
+            <div className="section-label">Leadership</div>
+            <h2>Meet Our <span className="gold-text">Directors</span></h2>
+            <div className="gold-line" />
+            <p>The visionary partners who guide AHH Brothers&apos; strategy, growth, and values.</p>
+          </div>
+
+          <div className="grid-3">
+            {directors.map((d, i) => (
+              <div key={i} className="glass-card" style={{ padding: "2rem", textAlign: "center", transition: "transform 0.3s, box-shadow 0.3s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-6px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 20px 60px rgba(212,175,55,0.15)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLDivElement).style.boxShadow = ""; }}
+              >
+                <div style={{
+                  width: 80, height: 80, borderRadius: "50%",
+                  background: d.gradient,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 1.25rem",
+                  fontSize: "1.5rem", fontWeight: 800,
+                  color: "#0A0A0A",
+                  fontFamily: "var(--font-heading)",
+                  boxShadow: "0 8px 30px rgba(212,175,55,0.25)",
+                }}>
+                  {d.initials}
+                </div>
+                <h3 style={{ color: "#F5F5F7", fontSize: "1.2rem", marginBottom: "0.4rem" }}>{d.name}</h3>
+                <span style={{
+                  display: "inline-block", padding: "0.3rem 1rem",
+                  background: "rgba(212,175,55,0.1)", color: "#D4AF37",
+                  borderRadius: "20px", fontSize: "0.78rem",
+                  textTransform: "uppercase", letterSpacing: "0.08em",
+                  border: "1px solid rgba(212,175,55,0.2)",
+                  marginBottom: "1rem",
+                }}>
+                  {d.title}
+                </span>
+                <p style={{ color: "#8A8A9E", fontSize: "0.9rem", lineHeight: 1.7 }}>{d.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== MANAGERS SECTION ===== */}
+      <section className="section section-alt">
+        <div className="container">
+          <div className="section-header">
+            <div className="section-label">Our Team</div>
+            <h2>Our <span className="gold-text">Management Team</span></h2>
+            <div className="gold-line" />
+            <p>The dedicated professionals who execute our vision and serve our clients every day.</p>
+          </div>
+
+          <div className="grid-3">
+            {managers.map((m, i) => (
+              <div key={i} className="glass-card" style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1rem", transition: "transform 0.3s, box-shadow 0.3s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-6px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 20px 60px rgba(212,175,55,0.12)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLDivElement).style.boxShadow = ""; }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                  <div style={{
+                    width: 56, height: 56, borderRadius: "14px",
+                    background: `linear-gradient(135deg, ${m.color}33, ${m.color}11)`,
+                    border: `1px solid ${m.color}44`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "1rem", fontWeight: 700,
+                    color: m.color,
+                    fontFamily: "var(--font-heading)",
+                    flexShrink: 0,
+                  }}>
+                    {m.initials}
+                  </div>
+                  <div>
+                    <h3 style={{ color: "#F5F5F7", fontSize: "1rem", marginBottom: "0.2rem", lineHeight: 1.3 }}>{m.name}</h3>
+                    <span style={{
+                      display: "inline-block", padding: "0.2rem 0.75rem",
+                      background: `${m.color}15`, color: m.color,
+                      borderRadius: "20px", fontSize: "0.72rem",
+                      textTransform: "uppercase", letterSpacing: "0.07em",
+                      border: `1px solid ${m.color}30`,
+                    }}>
+                      {m.title}
+                    </span>
+                  </div>
+                </div>
+                <p style={{ color: "#8A8A9E", fontSize: "0.88rem", lineHeight: 1.7, borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1rem" }}>{m.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== TIMELINE SECTION ===== */}
       <section className="section">
         <div className="container">
           <div className="section-header">
