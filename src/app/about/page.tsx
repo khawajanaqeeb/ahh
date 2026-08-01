@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const directors = [
   {
-    name: "Haroon",
+    name: "Haroon Ansari",
     title: "Director & Partner",
     initials: "H",
     desc: "A visionary leader with a passion for real estate development, Haroon has been instrumental in shaping AHH Brothers' strategic direction. His entrepreneurial drive and deep understanding of Karachi's property market have been key to the firm's continued expansion and success.",
@@ -18,7 +18,7 @@ const directors = [
     gradient: "linear-gradient(135deg, #C5A028, #9A7820)",
   },
   {
-    name: "Abbas",
+    name: "Abbas Malik",
     title: "Director",
     initials: "A",
     desc: "Abbas oversees the legal, documentation, and compliance framework of all AHH Brothers projects. His meticulous attention to regulatory processes and land acquisition ensures complete transparency and security for every investor and homeowner who partners with us.",
