@@ -2103,26 +2103,53 @@ select.form-input {
         .navbar-logo {
           display: flex;
           align-items: center;
-          gap: 0.85rem;
+          gap: 1.1rem;
           text-decoration: none;
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .navbar-logo:hover {
+          transform: translateY(-1px);
         }
 
         .logo-img-wrapper {
           position: relative;
-          padding: 2px;
-          border: 1px solid rgba(212, 175, 55, 0.2);
-          border-radius: 10px;
-          background: rgba(10, 10, 10, 0.8);
-          transition: border-color 0.3s;
+          padding: 4px;
+          border: 1px solid rgba(212, 175, 55, 0.4);
+          border-radius: 14px;
+          background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.18), rgba(12, 12, 24, 0.95));
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+
+        .logo-img-wrapper::after {
+          content: '';
+          position: absolute;
+          inset: -50%;
+          background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.25) 50%, transparent 60%);
+          transform: translateX(-100%);
+          transition: transform 0.8s ease;
+        }
+
+        .navbar-logo:hover .logo-img-wrapper::after {
+          transform: translateX(100%);
         }
         
         .navbar-logo:hover .logo-img-wrapper {
-          border-color: #D4AF37;
+          border-color: rgba(212, 175, 55, 0.8);
+          box-shadow: 0 0 25px rgba(212, 175, 55, 0.45), 0 8px 25px rgba(0, 0, 0, 0.6);
         }
 
         .navbar-logo-img {
-          border-radius: 8px;
+          border-radius: 10px;
           object-fit: cover;
+          display: block;
         }
 
         .navbar-logo-text {
@@ -2131,26 +2158,45 @@ select.form-input {
         }
 
         .logo-title {
-          font-family: var(--font-heading);
-          font-size: 1.35rem;
+          font-family: var(--font-outfit), var(--font-heading);
+          font-size: 1.55rem;
           font-weight: 800;
-          color: #ffffff;
+          background: linear-gradient(135deg, #FFFFFF 30%, #F5F5F7 60%, #E8CC6E 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
           line-height: 1.1;
-          letter-spacing: 0.2px;
-          transition: color 0.3s;
+          letter-spacing: 0.5px;
+          transition: all 0.35s ease;
         }
         
         .navbar-logo:hover .logo-title {
-          color: #D4AF37;
+          background: linear-gradient(135deg, #FFFFFF 0%, #E8CC6E 50%, #D4AF37 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
 
         .logo-subtitle {
-          font-size: 0.65rem;
-          color: #8A8A9E;
-          letter-spacing: 2px;
+          font-size: 0.68rem;
+          color: #D4AF37;
+          letter-spacing: 2.8px;
           text-transform: uppercase;
-          font-weight: 600;
-          margin-top: 1px;
+          font-weight: 700;
+          margin-top: 3px;
+          opacity: 0.9;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .logo-subtitle::after {
+          content: '';
+          display: inline-block;
+          width: 14px;
+          height: 1.5px;
+          background: linear-gradient(90deg, #D4AF37, transparent);
+          border-radius: 1px;
         }
 
         .navbar-links {

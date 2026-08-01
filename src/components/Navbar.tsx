@@ -14,17 +14,31 @@ const navLinks = [
     dropdown: [
       { name: "Current Projects", href: "/current-projects" },
       { name: "Delivered Projects", href: "/delivered-projects" },
+      { name: "Construction Updates", href: "/construction-updates" },
     ],
   },
+  {
+    name: "Investors",
+    href: "/overseas-investors",
+    dropdown: [
+      { name: "Overseas Investors Hub", href: "/overseas-investors" },
+      { name: "Payment Calculator", href: "/calculator" },
+      { name: "Legal Buyer's Guide", href: "/legal-compliance" },
+      { name: "Schedule Site Visit", href: "/site-visit" },
+    ],
+  },
+  { name: "Gallery", href: "/gallery" },
   { name: "Contact", href: "/contact" },
 ];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState<string | null>(null);
   const pathname = usePathname();
+  // Keep deprecated alias for single dropdown check compatibility
+  const dropdownOpen = openDropdown !== null;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +51,7 @@ const Navbar = () => {
   // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
-    setMobileDropdownOpen(false);
+    setMobileDropdownOpen(null);
   }, [pathname]);
 
   // Prevent body scroll when mobile menu is open
@@ -70,8 +84,8 @@ const Navbar = () => {
               <Image
                 src="/ahh-logo.png"
                 alt="AHH Brothers"
-                width={46}
-                height={46}
+                width={64}
+                height={64}
                 className="navbar-logo-img"
                 priority
               />
@@ -88,8 +102,8 @@ const Navbar = () => {
               <li
                 key={link.name}
                 className={link.dropdown ? "dropdown-trigger" : ""}
-                onMouseEnter={() => link.dropdown && setDropdownOpen(true)}
-                onMouseLeave={() => link.dropdown && setDropdownOpen(false)}
+                onMouseEnter={() => link.dropdown && setOpenDropdown(link.name)}
+                onMouseLeave={() => link.dropdown && setOpenDropdown(null)}
               >
                 {link.dropdown ? (
                   <div className="nav-link-with-icon">
@@ -102,13 +116,13 @@ const Navbar = () => {
                       height="6"
                       viewBox="0 0 10 6"
                       fill="none"
-                      className={`dropdown-arrow ${dropdownOpen ? "arrow-rotate" : ""}`}
+                      className={`dropdown-arrow ${openDropdown === link.name ? "arrow-rotate" : ""}`}
                     >
                       <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
 
                     {/* Dropdown Menu */}
-                    <div className={`dropdown-menu-glass ${dropdownOpen ? "dropdown-visible" : ""}`}>
+                    <div className={`dropdown-menu-glass ${openDropdown === link.name ? "dropdown-visible" : ""}`}>
                       {link.dropdown.map((subItem) => (
                         <Link
                           key={subItem.name}
@@ -189,7 +203,7 @@ const Navbar = () => {
                 <div className="mobile-accordion">
                   <button
                     className={`mobile-link mobile-link-toggle ${isLinkActive(link.href, link.dropdown) ? "mobile-link-active" : ""}`}
-                    onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+                    onClick={() => setMobileDropdownOpen(mobileDropdownOpen === link.name ? null : link.name)}
                   >
                     <span>{link.name}</span>
                     <svg
@@ -197,13 +211,13 @@ const Navbar = () => {
                       height="8"
                       viewBox="0 0 10 6"
                       fill="none"
-                      className={`accordion-arrow ${mobileDropdownOpen ? "arrow-rotate" : ""}`}
+                      className={`accordion-arrow ${mobileDropdownOpen === link.name ? "arrow-rotate" : ""}`}
                     >
                       <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </button>
 
-                  <div className={`mobile-accordion-content ${mobileDropdownOpen ? "accordion-open" : ""}`}>
+                  <div className={`mobile-accordion-content ${mobileDropdownOpen === link.name ? "accordion-open" : ""}`}>
                     {link.dropdown.map((subItem) => (
                       <Link
                         key={subItem.name}
@@ -232,8 +246,13 @@ const Navbar = () => {
         <div className="mobile-drawer-footer">
           <Link href="/booking" className={`mobile-link ${pathname === '/booking' ? 'mobile-link-active' : ''}`}
             onClick={() => setMobileOpen(false)}
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
           >
-            🏠 Book Now — AHH City
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="rgba(212,175,55,0.1)"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            Book Now — AHH City
           </Link>
           <Link href="/contact" className="btn-gold" onClick={() => setMobileOpen(false)} style={{ width: "100%", justifyContent: "center" }}>
             Get In Touch

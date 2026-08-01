@@ -11,7 +11,13 @@ const deliveredProjects = [
     type: "Mega Residential Township",
     status: "100% Delivered",
     badge: "completed",
-    icon: "🏙️",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="4" y="2" width="16" height="20" rx="2" fill="rgba(212,175,55,0.12)"/>
+        <path d="M9 22v-4h6v4"/>
+        <path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01"/>
+      </svg>
+    ),
     description:
       "A landmark mega residential city project successfully delivered at Sujani Town near the W-11 last bus stop. ANBAN Mega City provided affordable plot options in a fully planned community with proper infrastructure, road networks, and essential utilities.",
     highlights: ["Fully Developed Roads", "Underground Utilities", "Complete Handover"],
@@ -23,7 +29,12 @@ const deliveredProjects = [
     type: "Residential Housing Society",
     status: "100% Delivered",
     badge: "completed",
-    icon: "🏘️",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="rgba(212,175,55,0.12)"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    ),
     description:
       "City Housing Society in Ahsanabad, Gulshan-e-Maymar was developed as a well-planned residential society offering secure, legally documented plots. All units were successfully handed over to satisfied owners who have since built thriving homes in this vibrant community.",
     highlights: ["Prime Gulshan-e-Maymar Location", "Legal Documentation", "Fully Handed Over"],
@@ -35,7 +46,17 @@ const deliveredProjects = [
     type: "High-Rise Residential Project",
     status: "Delivered",
     badge: "completed",
-    icon: "🏢",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2" fill="rgba(212,175,55,0.12)"/>
+        <line x1="9" y1="6" x2="9" y2="6.01"/>
+        <line x1="15" y1="6" x2="15" y2="6.01"/>
+        <line x1="9" y1="10" x2="9" y2="10.01"/>
+        <line x1="15" y1="10" x2="15" y2="10.01"/>
+        <line x1="9" y1="14" x2="9" y2="14.01"/>
+        <line x1="15" y1="14" x2="15" y2="14.01"/>
+      </svg>
+    ),
     description:
       "Gul Heights stands as AHH Brothers' prestigious high-rise residential project in the heart of Nazimabad. This vertical development delivered modern apartments with quality finishes, offering families a premium urban living experience in one of Karachi's most sought-after neighborhoods.",
     highlights: ["High-Rise Construction", "Modern Finishes", "Central Nazimabad Location"],
@@ -48,7 +69,12 @@ const deliveredProjects = [
     status: "Phase 1 Delivered",
     badge: "completed",
     image: "/four-seasons-farmhouses-logo.png",
-    icon: "🌿",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2a10 10 0 0 0-10 10c0 5.5 4.5 10 10 10s10-4.5 10-10A10 10 0 0 0 12 2z" fill="rgba(212,175,55,0.12)"/>
+        <path d="M12 6v12M8 10l4-4 4 4"/>
+      </svg>
+    ),
     description:
       "Four Seasons Farm Houses Phase 1 in Gadap Town brought the dream of countryside living to Karachi. With spacious farmhouse plots surrounded by greenery, buyers enjoyed a serene escape from the city. Phase 1 was fully developed and handed over, with buyers customizing their own private retreats.",
     highlights: ["Gadap Town Green Belt", "Spacious Farm Plots", "Phase 1 Complete"],

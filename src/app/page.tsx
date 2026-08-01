@@ -9,10 +9,51 @@ import { useEffect, useRef, useState } from "react";
    ============================================ */
 
 const stats = [
-  { number: 6, suffix: "+", label: "Years of Excellence", icon: "🏗️" },
-  { number: 4, suffix: "+", label: "Active Projects", icon: "📍" },
-  { number: 500, suffix: "+", label: "Happy Families", icon: "🏠" },
-  { number: 10000, suffix: "+", label: "Sq Yards Developed", icon: "📐" },
+  {
+    number: 6,
+    suffix: "+",
+    label: "Years of Excellence",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="4" y="2" width="16" height="20" rx="2" stroke="#D4AF37" fill="rgba(212,175,55,0.12)"/>
+        <path d="M9 22v-4h6v4" stroke="#D4AF37"/>
+        <path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01" stroke="#D4AF37" strokeWidth="2.5"/>
+      </svg>
+    ),
+  },
+  {
+    number: 4,
+    suffix: "+",
+    label: "Active Projects",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 21.7C17.3 17 20 13 20 9a8 8 0 1 0-16 0c0 4 2.7 8 8 12.7z" stroke="#D4AF37" fill="rgba(212,175,55,0.12)"/>
+        <circle cx="12" cy="9" r="3" stroke="#D4AF37"/>
+      </svg>
+    ),
+  },
+  {
+    number: 500,
+    suffix: "+",
+    label: "Happy Families",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="#D4AF37" fill="rgba(212,175,55,0.12)"/>
+        <polyline points="9 22 9 12 15 12 15 22" stroke="#D4AF37"/>
+      </svg>
+    ),
+  },
+  {
+    number: 10000,
+    suffix: "+",
+    label: "Sq Yards Developed",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" stroke="#D4AF37" fill="rgba(212,175,55,0.12)"/>
+        <path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="#D4AF37" strokeWidth="1"/>
+      </svg>
+    ),
+  },
 ];
 
 const projects = [
@@ -206,6 +247,16 @@ function useScrollReveal() {
   return { ref, visible };
 }
 
+const officeImages = [
+  "/off-1.jpeg",
+  "/off-2.jpeg",
+  "/off-3.jpeg",
+  "/off-4.jpeg",
+  "/off-5.jpeg",
+  "/off-6.jpeg",
+  "/off-7.jpeg",
+];
+
 /* ============================================
    HOME PAGE
    ============================================ */
@@ -217,21 +268,75 @@ export default function Home() {
   const featuresSection = useScrollReveal();
   const testimonialsSection = useScrollReveal();
 
+  const [currentBgIndex, setCurrentBgIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentBgIndex((prev) => (prev + 1) % officeImages.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <>
       {/* ===== HERO SECTION ===== */}
       <section className="hero">
-        <div className="hero-bg">
-          <Image
-            src="/h2.jpg"
-            alt="AHH Brothers Premium Development"
-            fill
-            sizes="100vw"
-            style={{ objectFit: "cover" }}
-            priority
-            quality={90}
-          />
-          <div className="hero-overlay" />
+        <div className="hero-bg" style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+          {officeImages.map((src, index) => (
+            <div
+              key={src}
+              style={{
+                position: "absolute",
+                inset: 0,
+                opacity: index === currentBgIndex ? 1 : 0,
+                transition: "opacity 1.5s ease-in-out, transform 6s ease-out",
+                transform: index === currentBgIndex ? "scale(1.06)" : "scale(1)",
+                pointerEvents: "none",
+              }}
+            >
+              <Image
+                src={src}
+                alt={`AHH Brothers Office Picture ${index + 1}`}
+                fill
+                sizes="100vw"
+                style={{ objectFit: "cover" }}
+                priority={index === 0}
+                quality={90}
+              />
+            </div>
+          ))}
+          <div className="hero-overlay" style={{ zIndex: 2 }} />
+
+          {/* Slideshow Progress Dots */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "2rem",
+              right: "2.5rem",
+              zIndex: 10,
+              display: "flex",
+              gap: "0.5rem",
+              alignItems: "center",
+            }}
+          >
+            {officeImages.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentBgIndex(idx)}
+                aria-label={`Switch to office background picture ${idx + 1}`}
+                style={{
+                  width: idx === currentBgIndex ? "28px" : "8px",
+                  height: "8px",
+                  borderRadius: "4px",
+                  backgroundColor: idx === currentBgIndex ? "#D4AF37" : "rgba(255, 255, 255, 0.35)",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                  boxShadow: idx === currentBgIndex ? "0 0 10px rgba(212, 175, 55, 0.6)" : "none",
+                }}
+              />
+            ))}
+          </div>
         </div>
 
         <div className="hero-content">
@@ -381,15 +486,22 @@ export default function Home() {
                     </svg>
                     {project.location}
                   </div>
-                  <div className="card-details">
-                    <span>🏷️ {project.type}</span>
-                    <span>📐 {project.size}</span>
+                  <div className="card-details" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                      {project.type}
+                    </span>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" strokeWidth="1"/></svg>
+                      {project.size}
+                    </span>
                   </div>
                   <p style={{ color: "#8A8A9E", fontSize: "0.88rem", marginBottom: "1rem", lineHeight: 1.6 }}>
                     {project.description}
                   </p>
-                  <div style={{ fontSize: "0.82rem", color: "#D4AF37", marginBottom: "1rem", padding: "0.5rem 0.75rem", background: "rgba(212,175,55,0.06)", borderRadius: "8px", borderLeft: "3px solid #D4AF37" }}>
-                    💳 {project.payment}
+                  <div style={{ fontSize: "0.82rem", color: "#D4AF37", marginBottom: "1rem", padding: "0.5rem 0.75rem", background: "rgba(212,175,55,0.06)", borderRadius: "8px", borderLeft: "3px solid #D4AF37", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    {project.payment}
                   </div>
                   <Link href={`/current-projects#${project.id}`} className="card-link">
                     View Details

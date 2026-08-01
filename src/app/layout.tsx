@@ -62,10 +62,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body
         className={`${playfair.variable} ${inter.variable} ${outfit.variable}`}
         style={{ fontFamily: "var(--font-body)" }}
+        suppressHydrationWarning
       >
         {/* Top Bar */}
         <Header />

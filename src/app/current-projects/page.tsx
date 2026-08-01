@@ -97,22 +97,28 @@ export default function CurrentProjects() {
                   <h2>{p.name}</h2>
                   
                   <div className="p-meta">
-                    <div className="p-meta-item">
-                      <strong>📍 Location:</strong> {p.location}
+                    <div className="p-meta-item" style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <strong>Location:</strong> {p.location}
                     </div>
-                    <div className="p-meta-item">
-                      <strong>📏 Plot Sizes:</strong> {p.size}
+                    <div className="p-meta-item" style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" strokeWidth="1"/></svg>
+                      <strong>Plot Sizes:</strong> {p.size}
                     </div>
                   </div>
 
                   <p className="p-desc">{p.description}</p>
 
-                  <div className="p-payment-highlight">
-                    <strong>💳 Payment Terms:</strong> {p.payment}
+                  <div className="p-payment-highlight" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    <strong>Payment Terms:</strong> {p.payment}
                   </div>
 
                   <div className="p-amenities">
-                    <h4>🏗️ Included Amenities:</h4>
+                    <h4 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/></svg>
+                      Included Amenities:
+                    </h4>
                     <div className="amenity-grid">
                       {p.amenities.map((a, i) => (
                         <span key={i} className="amenity-tag">✓ {a}</span>
@@ -132,9 +138,10 @@ export default function CurrentProjects() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-outline"
-                      style={{ color: "#25D366", borderColor: "#25D366" }}
+                      style={{ color: "#25D366", borderColor: "#25D366", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}
                     >
-                      💬 WhatsApp Inquiry
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" fill="rgba(37,211,102,0.15)"/></svg>
+                      WhatsApp Inquiry
                     </a>
                   </div>
                 </div>

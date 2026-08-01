@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 const directors = [
@@ -7,6 +8,8 @@ const directors = [
     name: "Haroon Ansari",
     title: "Director & Partner",
     initials: "H",
+    image: "/haroon-ansari.png",
+    objectPosition: "center 10%",
     desc: "A visionary leader with a passion for real estate development, Haroon has been instrumental in shaping AHH Brothers' strategic direction. His entrepreneurial drive and deep understanding of Karachi's property market have been key to the firm's continued expansion and success.",
     gradient: "linear-gradient(135deg, #D4AF37, #B8942E)",
   },
@@ -14,14 +17,18 @@ const directors = [
     name: "Hassan Memon",
     title: "Director & Partner",
     initials: "HM",
+    image: "/hassaan-memon.jpeg",
+    objectPosition: "center top",
     desc: "Hassan Memon brings unparalleled expertise in construction management and project execution to AHH Brothers. His hands-on approach ensures every project meets the highest standards of engineering integrity and timely delivery, earning the trust of hundreds of families.",
     gradient: "linear-gradient(135deg, #C5A028, #9A7820)",
   },
   {
     name: "Abbas Malik",
-    title: "Director",
+    title: "Director & Partner",
     initials: "A",
-    desc: "Abbas oversees the legal, documentation, and compliance framework of all AHH Brothers projects. His meticulous attention to regulatory processes and land acquisition ensures complete transparency and security for every investor and homeowner who partners with us.",
+    image: "/abbas-malik.jpeg",
+    objectPosition: "center top",
+    desc: "Abbas leads the strategic marketing vision and brand expansion for AHH Brothers. He spearheads innovative marketing strategies, data-driven promotional campaigns, and target market positioning that accelerate project outreach, drive investor engagement, and strengthen the company's presence across Karachi's real estate sector.",
     gradient: "linear-gradient(135deg, #E8CC6E, #D4AF37)",
   },
 ];
@@ -82,17 +89,38 @@ const values = [
   {
     title: "Unity",
     desc: "Consistent with our motto 'Our Power Is Our Unity', we work cohesively to deliver excellence.",
-    icon: "🤝",
+    icon: (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    ),
   },
   {
     title: "Quality Construction",
     desc: "No compromise on building materials, infrastructure development, and engineering integrity.",
-    icon: "🏗️",
+    icon: (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="4" y="2" width="16" height="20" rx="2" fill="rgba(212,175,55,0.1)"/>
+        <path d="M9 22v-4h6v4"/>
+        <path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01" strokeWidth="2.5"/>
+      </svg>
+    ),
   },
   {
     title: "Commitment",
     desc: "We stay true to our promises on delivery schedules, documentation, and pricing plans.",
-    icon: "📜",
+    icon: (
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="rgba(212,175,55,0.1)"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10 9 9 9 8 9"/>
+      </svg>
+    ),
   },
 ];
 
@@ -160,14 +188,18 @@ export default function About() {
                 width: 160,
                 height: 160,
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05))",
-                border: "2px solid rgba(212,175,55,0.3)",
+                background: "linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.05))",
+                border: "2px solid rgba(212,175,55,0.4)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "4rem",
+                boxShadow: "0 0 40px rgba(212, 175, 55, 0.2)",
               }}>
-                🏢
+                <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="4" y="2" width="16" height="20" rx="2" fill="rgba(212,175,55,0.15)"/>
+                  <path d="M9 22v-4h6v4"/>
+                  <path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01" strokeWidth="2.5"/>
+                </svg>
               </div>
               <div style={{ textAlign: "center" }}>
                 <h3 style={{ color: "#D4AF37", fontSize: "1.4rem", fontFamily: "var(--font-heading)", marginBottom: "0.5rem" }}>AHH Brothers</h3>
@@ -217,16 +249,32 @@ export default function About() {
                 onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLDivElement).style.boxShadow = ""; }}
               >
                 <div style={{
-                  width: 80, height: 80, borderRadius: "50%",
-                  background: d.gradient,
-                  display: "flex", alignItems: "center", justifyContent: "center",
+                  width: 110, height: 110, borderRadius: "50%",
                   margin: "0 auto 1.25rem",
-                  fontSize: "1.5rem", fontWeight: 800,
-                  color: "#0A0A0A",
-                  fontFamily: "var(--font-heading)",
-                  boxShadow: "0 8px 30px rgba(212,175,55,0.25)",
+                  position: "relative",
+                  overflow: "hidden",
+                  border: "3px solid #D4AF37",
+                  boxShadow: "0 8px 30px rgba(212,175,55,0.3)",
+                  background: d.gradient,
                 }}>
-                  {d.initials}
+                  {d.image ? (
+                    <Image
+                      src={d.image}
+                      alt={d.name}
+                      fill
+                      sizes="110px"
+                      style={{ objectFit: "cover", objectPosition: d.objectPosition || "center top" }}
+                    />
+                  ) : (
+                    <div style={{
+                      width: "100%", height: "100%",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: "1.8rem", fontWeight: 800, color: "#0A0A0A",
+                      fontFamily: "var(--font-heading)",
+                    }}>
+                      {d.initials}
+                    </div>
+                  )}
                 </div>
                 <h3 style={{ color: "#F5F5F7", fontSize: "1.2rem", marginBottom: "0.4rem" }}>{d.name}</h3>
                 <span style={{
