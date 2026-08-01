@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { MEDIA } from "@/lib/media";
+
 const deliveredProjects = [
   {
     id: "anban-mega-city",
@@ -68,7 +70,7 @@ const deliveredProjects = [
     type: "Farm House Community",
     status: "Phase 1 Delivered",
     badge: "completed",
-    image: "/four-seasons-farmhouses-logo.png",
+    image: MEDIA.fourSeasonsLogo,
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2a10 10 0 0 0-10 10c0 5.5 4.5 10 10 10s10-4.5 10-10A10 10 0 0 0 12 2z" fill="rgba(212,175,55,0.12)"/>

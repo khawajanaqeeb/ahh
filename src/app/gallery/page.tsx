@@ -3,44 +3,45 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
+import { MEDIA } from "@/lib/media";
 
 const galleryItems = [
   // Office & Team
-  { src: "/off-1.jpeg", title: "AHH Brothers Office", category: "Office", size: "wide" },
-  { src: "/off-2.jpeg", title: "Office Meeting Room", category: "Office", size: "normal" },
-  { src: "/off-3.jpeg", title: "Sales & Operations Floor", category: "Office", size: "normal" },
-  { src: "/off-4.jpeg", title: "Executive Office Setup", category: "Office", size: "normal" },
-  { src: "/off-5.jpeg", title: "Office Entrance & Reception", category: "Office", size: "wide" },
-  { src: "/off-6.jpeg", title: "Team Discussion Area", category: "Office", size: "normal" },
-  { src: "/off-7.jpeg", title: "Administration Wing", category: "Office", size: "normal" },
+  { src: MEDIA.off1, title: "AHH Brothers Office", category: "Office", size: "wide" },
+  { src: MEDIA.off2, title: "Office Meeting Room", category: "Office", size: "normal" },
+  { src: MEDIA.off3, title: "Sales & Operations Floor", category: "Office", size: "normal" },
+  { src: MEDIA.off4, title: "Executive Office Setup", category: "Office", size: "normal" },
+  { src: MEDIA.off5, title: "Office Entrance & Reception", category: "Office", size: "wide" },
+  { src: MEDIA.off6, title: "Team Discussion Area", category: "Office", size: "normal" },
+  { src: MEDIA.off7, title: "Administration Wing", category: "Office", size: "normal" },
   // Projects
-  { src: "/h1.jpg", title: "Hooria Villas Site Plan Overview", category: "Projects", size: "wide" },
-  { src: "/h2.jpg", title: "Summer Farm Houses Aerial View", category: "Projects", size: "normal" },
-  { src: "/h1.jpg", title: "AHH-City Master Layout", category: "Projects", size: "normal" },
-  { src: "/h2.jpg", title: "Labour City Plot Layout", category: "Projects", size: "normal" },
+  { src: MEDIA.h1, title: "Hooria Villas Site Plan Overview", category: "Projects", size: "wide" },
+  { src: MEDIA.h2, title: "Summer Farm Houses Aerial View", category: "Projects", size: "normal" },
+  { src: MEDIA.h1, title: "AHH-City Master Layout", category: "Projects", size: "normal" },
+  { src: MEDIA.h2, title: "Labour City Plot Layout", category: "Projects", size: "normal" },
   // Construction
-  { src: "/off-1.jpeg", title: "Boundary Wall Construction", category: "Construction", size: "normal" },
-  { src: "/off-2.jpeg", title: "Road Leveling Work", category: "Construction", size: "wide" },
-  { src: "/off-3.jpeg", title: "Site Machinery Deployment", category: "Construction", size: "normal" },
-  { src: "/off-4.jpeg", title: "Plot Demarcation Process", category: "Construction", size: "normal" },
+  { src: MEDIA.off1, title: "Boundary Wall Construction", category: "Construction", size: "normal" },
+  { src: MEDIA.off2, title: "Road Leveling Work", category: "Construction", size: "wide" },
+  { src: MEDIA.off3, title: "Site Machinery Deployment", category: "Construction", size: "normal" },
+  { src: MEDIA.off4, title: "Plot Demarcation Process", category: "Construction", size: "normal" },
   // Delivered
-  { src: "/h1.jpg", title: "Hooria Hills — Delivered", category: "Delivered", size: "normal" },
-  { src: "/h2.jpg", title: "AHH City Phase 1 — Handover", category: "Delivered", size: "wide" },
-  { src: "/h1.jpg", title: "Completed Townhouse Project", category: "Delivered", size: "normal" },
+  { src: MEDIA.h1, title: "Hooria Hills — Delivered", category: "Delivered", size: "normal" },
+  { src: MEDIA.h2, title: "AHH City Phase 1 — Handover", category: "Delivered", size: "wide" },
+  { src: MEDIA.h1, title: "Completed Townhouse Project", category: "Delivered", size: "normal" },
 ];
 
 const categories = ["All", "Office", "Projects", "Construction", "Delivered"];
 
 const videos = [
   {
-    thumbnail: "/off-1.jpeg",
+    thumbnail: MEDIA.off1,
     title: "Hooria Villas — Site Walkthrough",
     description: "A guided video tour of the Hooria Villas development site, showcasing the complete boundary wall, road infrastructure, and plot demarcation.",
     ytId: "dQw4w9WgXcQ", // Replace with actual YouTube video ID
     duration: "3:42",
   },
   {
-    thumbnail: "/off-5.jpeg",
+    thumbnail: MEDIA.off5,
     title: "AHH Brothers Office Tour",
     description: "Take a look inside the AHH Brothers headquarters — our professional workspace where we manage all your property investments.",
     ytId: "dQw4w9WgXcQ", // Replace with actual YouTube video ID

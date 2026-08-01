@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { MEDIA } from "@/lib/media";
 
 const directors = [
   {
     name: "Haroon Ansari",
     title: "Director & Partner",
     initials: "H",
-    image: "/haroon-ansari.png",
+    image: MEDIA.haroonAnsari,
     objectPosition: "center 10%",
     desc: "A visionary leader with a passion for real estate development, Haroon has been instrumental in shaping AHH Brothers' strategic direction. His entrepreneurial drive and deep understanding of Karachi's property market have been key to the firm's continued expansion and success.",
     gradient: "linear-gradient(135deg, #D4AF37, #B8942E)",
@@ -17,7 +18,7 @@ const directors = [
     name: "Hassan Memon",
     title: "Director & Partner",
     initials: "HM",
-    image: "/hassaan-memon.jpeg",
+    image: MEDIA.hassaanMemon,
     objectPosition: "center top",
     desc: "Hassan Memon brings unparalleled expertise in construction management and project execution to AHH Brothers. His hands-on approach ensures every project meets the highest standards of engineering integrity and timely delivery, earning the trust of hundreds of families.",
     gradient: "linear-gradient(135deg, #C5A028, #9A7820)",
@@ -26,7 +27,7 @@ const directors = [
     name: "Abbas Malik",
     title: "Director & Partner",
     initials: "A",
-    image: "/abbas-malik.jpeg",
+    image: MEDIA.abbasMalik,
     objectPosition: "center top",
     desc: "Abbas leads the strategic marketing vision and brand expansion for AHH Brothers. He spearheads innovative marketing strategies, data-driven promotional campaigns, and target market positioning that accelerate project outreach, drive investor engagement, and strengthen the company's presence across Karachi's real estate sector.",
     gradient: "linear-gradient(135deg, #E8CC6E, #D4AF37)",

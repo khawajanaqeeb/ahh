@@ -247,14 +247,16 @@ function useScrollReveal() {
   return { ref, visible };
 }
 
+import { MEDIA } from "@/lib/media";
+
 const officeImages = [
-  "/off-1.jpeg",
-  "/off-2.jpeg",
-  "/off-3.jpeg",
-  "/off-4.jpeg",
-  "/off-5.jpeg",
-  "/off-6.jpeg",
-  "/off-7.jpeg",
+  MEDIA.off1,
+  MEDIA.off2,
+  MEDIA.off3,
+  MEDIA.off4,
+  MEDIA.off5,
+  MEDIA.off6,
+  MEDIA.off7,
 ];
 
 /* ============================================
@@ -402,7 +404,7 @@ export default function Home() {
             <div className="about-image-col">
               <div className="about-image-wrapper glass-card-static">
                 <Image
-                  src="/ahh-logo.png"
+                  src={MEDIA.ahhLogoPng}
                   alt="AHH Brothers Logo"
                   width={400}
                   height={400}

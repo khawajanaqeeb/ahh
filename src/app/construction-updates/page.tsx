@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { MEDIA } from "@/lib/media";
 
 const projects = [
   {
@@ -11,26 +12,26 @@ const projects = [
     status: "Active Development",
     overallProgress: 62,
     description: "120 Sq Yd residential plots in a gated township on Northern Bypass, Karachi.",
-    image: "/off-3.jpeg",
+    image: MEDIA.off3,
     color: "#D4AF37",
     updates: [
       {
         month: "July 2025",
-        image: "/off-1.jpeg",
+        image: MEDIA.off1,
         title: "Boundary Wall — 100% Complete",
         desc: "Entire perimeter boundary wall completed with main entrance gate structure erected.",
         milestones: ["Perimeter wall complete", "Main gate structure installed", "Security cabin established"],
       },
       {
         month: "May 2025",
-        image: "/off-2.jpeg",
+        image: MEDIA.off2,
         title: "Road Infrastructure",
         desc: "Main boulevard and street road leveling completed. Drainage channels under progress.",
         milestones: ["Main boulevard leveled", "Street roads marked", "Drainage channels 40% done"],
       },
       {
         month: "March 2025",
-        image: "/off-4.jpeg",
+        image: MEDIA.off4,
         title: "Site Clearing & Demarcation",
         desc: "Full site clearing completed. Plot demarcation and block division marked.",
         milestones: ["Site 100% cleared", "Blocks A–D demarcated", "Survey stones installed"],
@@ -43,19 +44,19 @@ const projects = [
     status: "Foundation Phase",
     overallProgress: 38,
     description: "Affordable housing project for Karachi's workforce with easy installments.",
-    image: "/off-5.jpeg",
+    image: MEDIA.off5,
     color: "#C5A028",
     updates: [
       {
         month: "July 2025",
-        image: "/off-6.jpeg",
+        image: MEDIA.off6,
         title: "Approval & Registration",
         desc: "Sindh Building Control Authority (SBCA) registration completed. NOC received.",
         milestones: ["SBCA registration done", "NOC received", "Legal clearance obtained"],
       },
       {
         month: "April 2025",
-        image: "/off-7.jpeg",
+        image: MEDIA.off7,
         title: "Land Acquisition",
         desc: "Complete land acquisition and title deed transfer completed. Site preparation begun.",
         milestones: ["Land acquisition complete", "Title deed transferred", "Survey completed"],
@@ -68,12 +69,12 @@ const projects = [
     status: "Pre-Launch",
     overallProgress: 18,
     description: "Premium township with farmhouse, residential, and commercial components.",
-    image: "/off-2.jpeg",
+    image: MEDIA.off2,
     color: "#E8CC6E",
     updates: [
       {
         month: "July 2025",
-        image: "/off-3.jpeg",
+        image: MEDIA.off3,
         title: "Master Plan Approved",
         desc: "Full master plan design approved by architectural board. Environmental clearance pending.",
         milestones: ["Master plan approved", "Architect board sign-off", "Environmental clearance filed"],

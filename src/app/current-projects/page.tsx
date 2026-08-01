@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { MEDIA } from "@/lib/media";
 
 const currentProjects = [
   {
@@ -13,7 +14,7 @@ const currentProjects = [
     status: "Under Development",
     badge: "active",
     payment: "8% Down Payment | 36 Monthly Installments",
-    image: "/hooria-villas-logo.jpg",
+    image: MEDIA.hooriaVillasLogo,
     description: "Premium residential plots located at a highly sought-after location in Northern Bypass. Features speedy development work, wide paved roads, boundary walls, sewage lines, electricity, and clean water networks. Highly secure investment opportunity with legal NOC clearance.",
     amenities: ["Gated Community", "24/7 Security", "Wide Asphalt Roads", "Mosque", "Public Park & Play Area", "Commercial Zone"],
   },
@@ -26,7 +27,7 @@ const currentProjects = [
     status: "Now Booking",
     badge: "active",
     payment: "15% Down Payment | 24 Month Installment Plan",
-    image: "/summer-farmhouses-logo.jpg",
+    image: MEDIA.summerFarmhousesLogo,
     description: "A luxury escape from the hustle and bustle of Karachi city. Summer Farm Houses offers scenic natural views, private spaces, custom swimming pool construction options, modern fencing, and fully integrated utilities. The perfect farmhouse retreat for your family weekends.",
     amenities: ["Fruit Orchards", "Private Swimming Pools", "Boundary Wall Security", "Lush Green Landscapes", "Continuous Electricity Backup", "Modern Club House"],
   },
@@ -39,7 +40,7 @@ const currentProjects = [
     status: "Now Booking",
     badge: "active",
     payment: "Easy Monthly Installments from PKR 6,000/month",
-    image: "/labour-city-logo.jpg",
+    image: MEDIA.labourCityLogo,
     description: "Designed specifically to bring affordable land and housing within reach of Karachi's hardworking professionals. Labour City features highly subsidised down payments, easy verification systems, and simple monthly payment terms. Located near industrial hubs for easy daily commutes.",
     amenities: ["Proximity to Industrial Area", "Public Transport Links", "Primary School", "Medical Clinic", "Community Center", "Basic Utilities Guarantee"],
   },
@@ -52,7 +53,7 @@ const currentProjects = [
     status: "Launching Soon / Coming Soon",
     badge: "upcoming",
     payment: "Pre-Launch Bookings Open - Register Interest",
-    image: "/ahh-city-logo.jpg",
+    image: MEDIA.ahhCityLogo,
     description: "Our flagship mega township vision features high-end infrastructure, multi-lane main avenues, smart waste management, modern security towers, school divisions, medical hospitals, and custom commercial centers. Register your interest today for premium pre-launch rates.",
     amenities: ["Smart City Infrastructure", "International Schools", "Hospital & Emergency Care", "Theme Park", "Modern Sports Complex", "Dedicated Utility Stations"],
   },

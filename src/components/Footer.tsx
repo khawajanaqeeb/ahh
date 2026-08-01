@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 
+import { MEDIA } from "@/lib/media";
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -18,7 +20,7 @@ const Footer = () => {
           <div className="footer-col footer-brand">
             <div className="footer-logo-row">
               <Image
-                src="/ahh-logo.png"
+                src={MEDIA.ahhLogoPng}
                 alt="AHH Brothers"
                 width={55}
                 height={55}

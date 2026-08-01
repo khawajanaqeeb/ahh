@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
+import { MEDIA } from "@/lib/media";
+
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
@@ -82,7 +84,7 @@ const Navbar = () => {
           <Link href="/" className="navbar-logo">
             <div className="logo-img-wrapper">
               <Image
-                src="/ahh-logo.png"
+                src={MEDIA.ahhLogoPng}
                 alt="AHH Brothers"
                 width={64}
                 height={64}
@@ -184,7 +186,7 @@ const Navbar = () => {
       <div className={`mobile-drawer ${mobileOpen ? "mobile-drawer-open" : ""}`}>
         <div className="mobile-drawer-header">
           <Image
-            src="/ahh-logo.png"
+            src={MEDIA.ahhLogoPng}
             alt="AHH Brothers"
             width={40}
             height={40}
