@@ -152,6 +152,11 @@ export default function BookingForm({
   const handlePlotTypeChange = (e) => {
     const newType = e.target.value;
     setPlotType(newType);
+    if (newType === 'Residential 60SQY') { setTotalPrice(200000); setPaidAmount(50000); }
+    else if (newType === 'Residential 120SQY') { setTotalPrice(350000); setPaidAmount(100000); }
+    else if (newType === 'Commercial Shop 100SQFT') { setTotalPrice(350000); setPaidAmount(200000); }
+    else if (newType === 'Residential 150SQY') { setTotalPrice(1000000); setPaidAmount(200000); }
+    else if (newType === 'Commercial 150SQY') { setTotalPrice(1500000); setPaidAmount(300000); }
     const resolvedId = resolveTargetPlotId(plotIdInput, newType);
     if (onFormPreviewChange) onFormPreviewChange(resolvedId ? { plotId: resolvedId, status } : null);
   };
@@ -281,10 +286,11 @@ export default function BookingForm({
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Plot Dimension</label>
                 <select value={plotType} onChange={handlePlotTypeChange}
                   className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white cursor-pointer transition-all outline-none">
-                  <option value="Residential 60SQY">Res. 60 SQY (18x30)</option>
-                  <option value="Residential 120SQY">Res. 120 SQY (24x45)</option>
-                  <option value="Residential 150SQY">Res. 150 SQY (35x50)</option>
-                  <option value="Commercial 150SQY">Comm. 150 SQY (30x45)</option>
+                  <option value="Residential 60SQY">Res. 60 SQY (Total: Rs 200,000)</option>
+                  <option value="Residential 120SQY">Res. 120 SQY (Total: Rs 350,000)</option>
+                  <option value="Commercial Shop 100SQFT">Comm. Shop 100 SQFT (Total: Rs 350,000)</option>
+                  <option value="Residential 150SQY">Res. 150 SQY (Total: Rs 1,000,000)</option>
+                  <option value="Commercial 150SQY">Comm. 150 SQY (Total: Rs 1,500,000)</option>
                   <option value="Custom Size">Other / Custom</option>
                 </select>
               </div>

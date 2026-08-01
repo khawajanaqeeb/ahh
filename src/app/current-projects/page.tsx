@@ -21,8 +21,8 @@ const currentProjects = [
     amenities: ["99-Year Leasehold", "Biometric & QR Code Verification", "Prime Highway Location", "Rapid Development", "High Future Returns"],
     paymentBreakdown: {
       residential: [
-        { size: "60 SQ YARDS", booking: "Rs 50,000", confirmation: "Rs 25,000", allocation: "Rs 25,000", monthly: "Rs 10,000 × 10", totalCost: "Rs 200,000", todayRate: "Rs 350,000" },
-        { size: "120 SQ YARDS", booking: "Rs 100,000", confirmation: "Rs 50,000", allocation: "Rs 50,000", monthly: "Rs 15,000 × 10", totalCost: "Rs 350,000", todayRate: "Rs 500,000" },
+        { size: "60 SQ YARDS", booking: "Rs 50,000", confirmation: "Rs 25,000", allocation: "Rs 25,000", monthly: "Rs 10,000 × 10", possession: "—", totalCost: "Rs 200,000", todayRate: "Rs 350,000" },
+        { size: "120 SQ YARDS", booking: "Rs 100,000", confirmation: "Rs 50,000", allocation: "Rs 50,000", monthly: "Rs 15,000 × 10", possession: "—", totalCost: "Rs 350,000", todayRate: "Rs 500,000" },
       ],
       commercial: {
         title: "Commercial Shops (100 Sq Ft)",
@@ -160,23 +160,95 @@ export default function CurrentProjects() {
                     <span><strong>Payment Plan:</strong> {p.payment}</span>
                   </div>
 
-                  {/* Structured Payment Breakdown Table / Info */}
+                  {/* Detailed Payment Plan Tables */}
                   {p.paymentBreakdown?.residential && (
-                    <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: "10px", padding: "1rem", marginBottom: "1.25rem", border: "1px solid rgba(255,255,255,0.06)" }}>
-                      <h4 style={{ color: "#D4AF37", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.75rem" }}>Official Schedule Summary</h4>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                        {p.paymentBreakdown.residential.map((res, ri) => (
-                          <div key={ri} style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", fontSize: "0.83rem", color: "#C5C5D3", borderBottom: "1px dashed rgba(255,255,255,0.08)", paddingBottom: "0.4rem" }}>
-                            <span style={{ fontWeight: 600, color: "#F5F5F7" }}>{res.size}</span>
-                            <span>Booking: <strong style={{ color: "#D4AF37" }}>{res.booking}</strong> | Total Cost: <strong style={{ color: "#E8CC6E" }}>{res.totalCost}</strong></span>
-                          </div>
-                        ))}
+                    <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: "10px", padding: "1.25rem", marginBottom: "1.25rem", border: "1px solid rgba(212,175,55,0.25)" }}>
+                      <h4 style={{ color: "#D4AF37", fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.85rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        📊 Official Payment Schedule Breakdown
+                      </h4>
+
+                      {/* Residential Table */}
+                      <div style={{ overflowX: "auto", marginBottom: "1rem" }}>
+                        <table style={{ width: "100%", fontSize: "0.8rem", textAlign: "left", borderCollapse: "collapse" }}>
+                          <thead>
+                            <tr style={{ background: "rgba(212,175,55,0.15)", color: "#D4AF37", borderBottom: "1px solid rgba(212,175,55,0.3)" }}>
+                              <th style={{ padding: "0.5rem 0.6rem" }}>Description</th>
+                              {p.paymentBreakdown.residential.map((res, ri) => (
+                                <th key={ri} style={{ padding: "0.5rem 0.6rem" }}>{res.size}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                              <td style={{ padding: "0.45rem 0.6rem", color: "#8A8A9E" }}>Booking</td>
+                              {p.paymentBreakdown.residential.map((res, ri) => (
+                                <td key={ri} style={{ padding: "0.45rem 0.6rem", color: "#F5F5F7", fontWeight: 600 }}>{res.booking}</td>
+                              ))}
+                            </tr>
+                            <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                              <td style={{ padding: "0.45rem 0.6rem", color: "#8A8A9E" }}>Confirmation</td>
+                              {p.paymentBreakdown.residential.map((res, ri) => (
+                                <td key={ri} style={{ padding: "0.45rem 0.6rem", color: "#F5F5F7" }}>{res.confirmation}</td>
+                              ))}
+                            </tr>
+                            <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                              <td style={{ padding: "0.45rem 0.6rem", color: "#8A8A9E" }}>Allocation</td>
+                              {p.paymentBreakdown.residential.map((res, ri) => (
+                                <td key={ri} style={{ padding: "0.45rem 0.6rem", color: "#F5F5F7" }}>{res.allocation}</td>
+                              ))}
+                            </tr>
+                            <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                              <td style={{ padding: "0.45rem 0.6rem", color: "#8A8A9E" }}>Monthly Installments</td>
+                              {p.paymentBreakdown.residential.map((res, ri) => (
+                                <td key={ri} style={{ padding: "0.45rem 0.6rem", color: "#D4AF37", fontWeight: 600 }}>{res.monthly}</td>
+                              ))}
+                            </tr>
+                            {p.paymentBreakdown.residential.some(r => 'possession' in r && r.possession) && (
+                              <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                                <td style={{ padding: "0.45rem 0.6rem", color: "#8A8A9E" }}>Possession</td>
+                                {p.paymentBreakdown.residential.map((res, ri) => (
+                                  <td key={ri} style={{ padding: "0.45rem 0.6rem", color: "#F5F5F7" }}>{('possession' in res && res.possession) ? res.possession : "—"}</td>
+                                ))}
+                              </tr>
+                            )}
+                            <tr style={{ background: "rgba(212,175,55,0.1)", fontWeight: 700 }}>
+                              <td style={{ padding: "0.55rem 0.6rem", color: "#D4AF37" }}>TOTAL COST</td>
+                              {p.paymentBreakdown.residential.map((res, ri) => (
+                                <td key={ri} style={{ padding: "0.55rem 0.6rem", color: "#E8CC6E", fontSize: "0.88rem" }}>{res.totalCost}</td>
+                              ))}
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                      {p.paymentBreakdown.extraCharges && (
-                        <div style={{ fontSize: "0.76rem", color: "#8A8A9E", marginTop: "0.6rem" }}>
-                          ⚠️ {p.paymentBreakdown.extraCharges}
+
+                      {/* Commercial Shop / Unit Table if present */}
+                      {p.paymentBreakdown.commercial && (
+                        <div style={{ marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px dashed rgba(212,175,55,0.2)" }}>
+                          <div style={{ color: "#E8CC6E", fontWeight: 700, fontSize: "0.82rem", marginBottom: "0.5rem" }}>
+                            🏬 {p.paymentBreakdown.commercial.title} {p.paymentBreakdown.commercial.cashPrice ? `(Cash Price: ${p.paymentBreakdown.commercial.cashPrice})` : ''}
+                          </div>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", fontSize: "0.78rem", color: "#C5C5D3", background: "rgba(0,0,0,0.3)", padding: "0.6rem 0.8rem", borderRadius: "6px" }}>
+                            <span>Booking: <strong>{p.paymentBreakdown.commercial.installment?.booking}</strong></span>
+                            <span>Confirm: <strong>{p.paymentBreakdown.commercial.installment?.confirmation}</strong></span>
+                            <span>Alloc: <strong>{p.paymentBreakdown.commercial.installment?.allocation}</strong></span>
+                            {p.paymentBreakdown.commercial.installment?.monthly && <span>Monthly: <strong style={{ color: "#D4AF37" }}>{p.paymentBreakdown.commercial.installment.monthly}</strong></span>}
+                            {p.paymentBreakdown.commercial.installment?.possession && <span>Possession: <strong>{p.paymentBreakdown.commercial.installment.possession}</strong></span>}
+                            <span style={{ color: "#E8CC6E", fontWeight: 700 }}>Total: {p.paymentBreakdown.commercial.installment?.totalCost}</span>
+                          </div>
                         </div>
                       )}
+
+                      {/* Extra Charges & Document Fees */}
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "0.76rem" }}>
+                        <div style={{ color: "#8A8A9E" }}>
+                          <span style={{ color: "#D4AF37", fontWeight: 700, display: "block" }}>⚡ Extra Charges:</span>
+                          Corner, West-Open, Road, Park Facing: <strong>5% of Total Cost</strong>
+                        </div>
+                        <div style={{ color: "#8A8A9E" }}>
+                          <span style={{ color: "#D4AF37", fontWeight: 700, display: "block" }}>📝 Processing Fees:</span>
+                          Biometric: <strong>Rs 5,000</strong> | QR-Code: <strong>Rs 5,000</strong> | Site Plan: <strong>Rs 5,000</strong>
+                        </div>
+                      </div>
                     </div>
                   )}
 
