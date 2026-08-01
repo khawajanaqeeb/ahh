@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
+import { MEDIA } from "@/lib/media";
 
 const steps = [
   {
@@ -116,14 +118,18 @@ export default function OverseasInvestors() {
               <h2 className="section-title">Invest in Pakistan <span className="text-gradient-gold">From Anywhere</span></h2>
               <div className="gold-line-left" />
               <p className="intro-text">
-                Living abroad doesn&apos;t mean missing Pakistan&apos;s growing real estate opportunities. AHH Brothers has a dedicated overseas investor process — from remote booking to legal documentation — designed for Pakistanis in UAE, Saudi Arabia, UK, USA, and beyond.
+                Living abroad doesn&apos;t mean missing Pakistan&apos;s highest-yielding real estate opportunities. AHH Brothers offers dedicated <strong>Interest-Free Business Investment Plans</strong> designed specifically for Pakistanis in UAE, Saudi Arabia, UK, USA, and worldwide.
               </p>
               <p className="normal-text" style={{ marginTop: "1rem" }}>
-                Our experienced team handles all documentation, legalities, and plot registration on your behalf. You invest safely. We deliver on time.
+                Earn <strong>PKR 40,000 to 45,000 PER MONTH</strong> on a 1 Million PKR investment (1 to 5 years tenure), backed by a <strong>legally binding contract signed directly with AHH Brothers</strong> and a <strong>Full-Payment Post-Dated Cheque</strong> as ultimate security for your principal.
               </p>
-              <div style={{ display: "flex", gap: "1rem", marginTop: "2rem", flexWrap: "wrap" }}>
-                <a href="https://wa.me/923111123160?text=Hello%20AHH%20Brothers%2C%20I%20am%20an%20overseas%20Pakistani%20interested%20in%20investing." target="_blank" rel="noopener noreferrer" className="btn-gold">
-                  WhatsApp Our Overseas Team
+              <div style={{ background: "rgba(212,175,55,0.08)", borderLeft: "3px solid #D4AF37", padding: "0.85rem 1rem", borderRadius: "0 8px 8px 0", marginTop: "1.25rem" }}>
+                <span style={{ color: "#D4AF37", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", display: "block" }}>📈 Proven Track Record</span>
+                <span style={{ color: "#F5F5F7", fontSize: "0.85rem" }}>4 Active Projects delivering up to 212%+ peak return (Summer Farm Houses +212%, Hooria Villas +122%, Labour City +200%, AHH City +133%).</span>
+              </div>
+              <div style={{ display: "flex", gap: "1rem", marginTop: "1.75rem", flexWrap: "wrap" }}>
+                <a href="https://wa.me/923111123160?text=Hello%20AHH%20Brothers%2C%20I%20am%20an%20overseas%20Pakistani%20interested%20in%20the%20Monthly%20Profit%20Investment%20Plan." target="_blank" rel="noopener noreferrer" className="btn-gold">
+                  WhatsApp Overseas Investment Desk
                 </a>
                 <a href="#inquiry-form" className="btn-outline">Submit Inquiry</a>
               </div>
@@ -201,6 +207,35 @@ export default function OverseasInvestors() {
                   <h3 style={{ color: "#F5F5F7", fontSize: "1.05rem", marginBottom: "0.5rem" }}>{step.title}</h3>
                   <p style={{ color: "#8A8A9E", fontSize: "0.88rem", lineHeight: 1.7 }}>{step.desc}</p>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== OFFICIAL INVESTMENT POSTERS ===== */}
+      <section className="section" style={{ background: "rgba(10,10,22,0.8)", borderTop: "1px solid rgba(212,175,55,0.15)", borderBottom: "1px solid rgba(212,175,55,0.15)" }}>
+        <div className="container">
+          <div className="section-header">
+            <div className="section-label">Proven Performance</div>
+            <h2>Official Investment <span className="gold-text">Posters &amp; Rate Growth</span></h2>
+            <div className="gold-line" />
+            <p>Every AHH Brothers project delivers consistent compounding returns — outpacing inflation and conventional savings.</p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
+            {[
+              { title: "Monthly Profit Plan (1-5 Yrs)", desc: "Rs 40,000 to 45,000/mo per 1 Million PKR investment. Full payment post-dated cheque security.", image: MEDIA.posterInvestmentOpportunity },
+              { title: "Interest-Free Growth Record", desc: "Proven track record across 4 active projects delivering up to 212%+ peak return.", image: MEDIA.posterInterestFreeGrowth },
+              { title: "AHH City Rate Growth & Terms", desc: "Scheme 45, Northern Bypass. 60 Yds (Rs 2 Lacs → Rs 3.5 Lacs) & 120 Yds (Rs 3.5 Lacs → Rs 5 Lacs).", image: MEDIA.posterAhhCityGrowthTerms },
+              { title: "Hooria Villas Payment Plan", desc: "120 Sq Yd Res (Rs 10 Lacs total) & 150 Sq Yd Comm (Rs 15 Lacs total). 2.5x growth in 2 yrs.", image: MEDIA.posterHooriaVillasPaymentPlan },
+            ].map((p, idx) => (
+              <div key={idx} className="glass-card" style={{ padding: "1.25rem", borderRadius: "12px", border: "1px solid rgba(212,175,55,0.2)" }}>
+                <div style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", marginBottom: "1rem" }}>
+                  <Image src={p.image} alt={p.title} width={500} height={650} style={{ width: "100%", height: "auto", maxHeight: "350px", objectFit: "contain", background: "#0D0D1A" }} />
+                </div>
+                <h3 style={{ color: "#D4AF37", fontSize: "1.05rem", marginBottom: "0.4rem" }}>{p.title}</h3>
+                <p style={{ color: "#8A8A9E", fontSize: "0.85rem", lineHeight: 1.6 }}>{p.desc}</p>
               </div>
             ))}
           </div>

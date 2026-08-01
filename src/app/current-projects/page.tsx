@@ -2,34 +2,61 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { MEDIA } from "@/lib/media";
 
 const currentProjects = [
   {
-    id: "hooria-villas",
-    name: "Hooria Villas",
-    location: "Northern Bypass, Near Gulshan-e-Maymar, Karachi",
-    type: "Residential Plots",
-    size: "120 Sq Yards",
-    status: "Under Development",
+    id: "ahh-city",
+    name: "AHH-City",
+    location: "Scheme 45, Northern Bypass (Survey Number 297), Karachi",
+    type: "Residential & Commercial Units",
+    size: "60 & 120 Sq Yards | Commercial Shops 100 Sq Ft",
+    status: "Rapid Site Development (Rates Rising!)",
     badge: "active",
-    payment: "8% Down Payment | 36 Monthly Installments",
-    image: MEDIA.hooriaVillasLogo,
-    description: "Premium residential plots located at a highly sought-after location in Northern Bypass. Features speedy development work, wide paved roads, boundary walls, sewage lines, electricity, and clean water networks. Highly secure investment opportunity with legal NOC clearance.",
-    amenities: ["Gated Community", "24/7 Security", "Wide Asphalt Roads", "Mosque", "Public Park & Play Area", "Commercial Zone"],
+    payment: "60 YDS: Rs 200,000 (Today Rate: Rs 350,000) | 120 YDS: Rs 350,000 (Today Rate: Rs 500,000)",
+    image: MEDIA.posterAhhCityGrowthTerms,
+    poster: MEDIA.posterAhhCityGrowthTerms,
+    description: "Government Registered Project under 99-year lease scheme. Features rapid price appreciation (60 Yds up 133% in 2 months, 120 Yds up 100%). Monthly installments starting at Rs 10,000/month.",
+    amenities: ["99-Year Leasehold", "Biometric & QR Code Verification", "Prime Highway Location", "Rapid Development", "High Future Returns"],
+    paymentBreakdown: {
+      residential: [
+        { size: "60 SQ YARDS", booking: "Rs 50,000", confirmation: "Rs 25,000", allocation: "Rs 25,000", monthly: "Rs 10,000 × 10", totalCost: "Rs 200,000", todayRate: "Rs 350,000" },
+        { size: "120 SQ YARDS", booking: "Rs 100,000", confirmation: "Rs 50,000", allocation: "Rs 50,000", monthly: "Rs 15,000 × 10", totalCost: "Rs 350,000", todayRate: "Rs 500,000" },
+      ],
+      commercial: {
+        title: "Commercial Shops (100 Sq Ft)",
+        cashPrice: "Rs 350,000",
+        installment: { booking: "Rs 200,000", confirmation: "Rs 50,000", allocation: "Rs 50,000", possession: "Rs 50,000", totalCost: "Rs 350,000" }
+      },
+      extraCharges: "Corner, West-Open, Road-Facing, Park-Facing: 5% of Total Cost each",
+      processingCharges: "Biometric Verification: Rs 5,000 | QR-Code: Rs 5,000 | Site Plan: Rs 5,000"
+    }
   },
   {
-    id: "summer-farm-houses",
-    name: "Summer Farm Houses",
-    location: "Malir / Gadap Area, Karachi, Sindh",
-    type: "Farm Houses",
-    size: "2000 to 4000 Sq Yards",
-    status: "Now Booking",
+    id: "hooria-villas",
+    name: "Hooria Villas",
+    location: "Scheme 45, Northern Bypass (Survey Number 395, 396, 397), Karachi",
+    type: "Residential & Commercial Plots",
+    size: "120 Sq Yds (Residential) & 150 Sq Yds (Commercial)",
+    status: "Under Development (+122% Return)",
     badge: "active",
-    payment: "15% Down Payment | 24 Month Installment Plan",
-    image: MEDIA.summerFarmhousesLogo,
-    description: "A luxury escape from the hustle and bustle of Karachi city. Summer Farm Houses offers scenic natural views, private spaces, custom swimming pool construction options, modern fencing, and fully integrated utilities. The perfect farmhouse retreat for your family weekends.",
-    amenities: ["Fruit Orchards", "Private Swimming Pools", "Boundary Wall Security", "Lush Green Landscapes", "Continuous Electricity Backup", "Modern Club House"],
+    payment: "Res 120 YDS: Total Rs 1,000,000 | Comm 150 YDS: Total Rs 1,500,000",
+    image: MEDIA.posterHooriaVillasPaymentPlan,
+    poster: MEDIA.posterHooriaVillasPaymentPlan,
+    description: "Proven 2.5x growth in 2 years (+122% return). Premium gated community near Gulshan-e-Maymar with complete boundary wall and active street infrastructure.",
+    amenities: ["Gated Township", "24/7 Security", "Wide Asphalt Roads", "Mosque & Parks", "NOC Cleared"],
+    paymentBreakdown: {
+      residential: [
+        { size: "120 SQ YARDS (Residential)", booking: "Rs 200,000", confirmation: "Rs 50,000", allocation: "Rs 50,000", monthly: "Rs 25,000 × 24", possession: "Rs 100,000", totalCost: "Rs 1,000,000" }
+      ],
+      commercial: {
+        title: "Commercial Plots (150 Sq Yards)",
+        installment: { booking: "Rs 300,000", confirmation: "Rs 100,000", allocation: "Rs 100,000", monthly: "Rs 30,000 × 24", halfYearly: "Rs 50,000 × 4", possession: "Rs 80,000", totalCost: "Rs 1,500,000" }
+      },
+      extraCharges: "Corner, West-Open, Road-Facing, Park-Facing: 5% of Total Cost each",
+      processingCharges: "Biometric Verification: Rs 5,000 | QR-Code: Rs 5,000 | Site Plan: Rs 5,000"
+    }
   },
   {
     id: "labour-city",
@@ -37,29 +64,39 @@ const currentProjects = [
     location: "Industrial Corridor, Karachi",
     type: "Affordable Housing Plots",
     size: "80 & 120 Sq Yards",
-    status: "Now Booking",
+    status: "Now Booking (+200% Return)",
     badge: "active",
-    payment: "Easy Monthly Installments from PKR 6,000/month",
-    image: MEDIA.labourCityLogo,
-    description: "Designed specifically to bring affordable land and housing within reach of Karachi's hardworking professionals. Labour City features highly subsidised down payments, easy verification systems, and simple monthly payment terms. Located near industrial hubs for easy daily commutes.",
-    amenities: ["Proximity to Industrial Area", "Public Transport Links", "Primary School", "Medical Clinic", "Community Center", "Basic Utilities Guarantee"],
+    payment: "3x Growth in 1 Year (Rs 2 Lacs → Rs 6 Lacs) | Monthly from Rs 6,000",
+    image: MEDIA.posterInterestFreeGrowth,
+    poster: MEDIA.posterInterestFreeGrowth,
+    description: "Designed specifically to bring affordable land within reach of working professionals. Proven 3x growth in 1 year (+200% return). Subsidised down payments and flexible terms.",
+    amenities: ["Proximity to Industrial Hubs", "Public Transport Links", "Primary School & Clinic", "Community Center", "Basic Utilities"],
+    paymentBreakdown: {
+      note: "3x Price Growth in 1 Year (Rs 2,000,000 → Rs 6,000,000). Flexible monthly installment plans available from Rs 6,000/month."
+    }
   },
   {
-    id: "ahh-city",
-    name: "AHH-City",
-    location: "Karachi Highway, Near Toll Plaza",
-    type: "Mega Township Scheme",
-    size: "120, 240 & 500 Sq Yards",
-    status: "Launching Soon / Coming Soon",
-    badge: "upcoming",
-    payment: "Pre-Launch Bookings Open - Register Interest",
-    image: MEDIA.ahhCityLogo,
-    description: "Our flagship mega township vision features high-end infrastructure, multi-lane main avenues, smart waste management, modern security towers, school divisions, medical hospitals, and custom commercial centers. Register your interest today for premium pre-launch rates.",
-    amenities: ["Smart City Infrastructure", "International Schools", "Hospital & Emergency Care", "Theme Park", "Modern Sports Complex", "Dedicated Utility Stations"],
+    id: "summer-farm-houses",
+    name: "Summer Farm Houses",
+    location: "Gadap Town / Malir, Karachi, Sindh",
+    type: "Farm House Community",
+    size: "2000 to 4000 Sq Yards",
+    status: "Now Booking (+212% Return)",
+    badge: "active",
+    payment: "+212% Peak Return (Rs 8 Lacs → Rs 25 Lacs in 1.5 Years)",
+    image: MEDIA.summerFarmhousesLogo,
+    poster: MEDIA.posterInterestFreeGrowth,
+    description: "Luxury farmhouse community delivering 3x+ growth in just 1.5 years (+212% return). Escape to your private countryside retreat with lush greenery and private pool options.",
+    amenities: ["Fruit Orchards", "Private Swimming Pools", "Boundary Wall Security", "Lush Landscapes", "24/7 Power Backup"],
+    paymentBreakdown: {
+      note: "📌 Note: Updated payment schedule details will be uploaded soon as announced by developer."
+    }
   },
 ];
 
 export default function CurrentProjects() {
+  const [selectedPoster, setSelectedPoster] = useState<string | null>(null);
+
   return (
     <>
       <div className="page-hero">
@@ -74,25 +111,33 @@ export default function CurrentProjects() {
       <section className="section">
         <div className="container">
           <div className="section-header">
-            <h2>Active Developments & <span className="gold-text">Bookings</span></h2>
+            <h2>Active Developments & <span className="gold-text">Official Payment Schedules</span></h2>
             <div className="gold-line" />
-            <p>Select a project to explore layouts, sizes, payment schedules, and premium infrastructure amenities.</p>
+            <p>Explore updated government-approved payment plans, rate growth trends, and official project posters below.</p>
           </div>
 
           <div className="project-detail-list">
             {currentProjects.map((p) => (
-              <div key={p.id} id={p.id} className="project-detail-row glass-card">
-                <div className="p-image-side">
-                  <Image
-                    src={p.image}
-                    alt={p.name}
-                    width={600}
-                    height={400}
-                    className="p-detail-img"
-                    style={{ objectFit: "contain", padding: "1.5rem", background: "linear-gradient(135deg, rgba(20,20,25,0.95), rgba(10,10,12,0.98))", borderRadius: "12px", width: "100%", height: "auto", maxHeight: "320px" }}
-                  />
-                  <div className={`p-badge p-badge-${p.badge}`}>{p.status}</div>
+              <div key={p.id} id={p.id} className="project-detail-row glass-card" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "2rem" }}>
+                {/* Poster / Image side */}
+                <div className="p-image-side" style={{ padding: "1.25rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(10,10,22,0.6)" }}>
+                  <div style={{ position: "relative", width: "100%", height: "auto", cursor: "pointer", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.25)" }} onClick={() => setSelectedPoster(p.poster)}>
+                    <Image
+                      src={p.image}
+                      alt={p.name}
+                      width={600}
+                      height={750}
+                      className="p-detail-img"
+                      style={{ objectFit: "contain", width: "100%", height: "auto", maxHeight: "420px", display: "block" }}
+                    />
+                    <div style={{ position: "absolute", bottom: "10px", right: "10px", background: "rgba(10,10,26,0.9)", color: "#D4AF37", padding: "0.35rem 0.75rem", borderRadius: "6px", fontSize: "0.75rem", fontWeight: 700, border: "1px solid rgba(212,175,55,0.3)" }}>
+                      🔍 Tap to View Full Poster
+                    </div>
+                  </div>
+                  <div className={`p-badge p-badge-${p.badge}`} style={{ marginTop: "0.75rem" }}>{p.status}</div>
                 </div>
+
+                {/* Content Side */}
                 <div className="p-content-side">
                   <span className="p-type">{p.type}</span>
                   <h2>{p.name}</h2>
@@ -110,38 +155,48 @@ export default function CurrentProjects() {
 
                   <p className="p-desc">{p.description}</p>
 
-                  <div className="p-payment-highlight" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <div className="p-payment-highlight" style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(212,175,55,0.08)", borderLeft: "3px solid #D4AF37", padding: "0.85rem 1rem", borderRadius: "0 8px 8px 0", marginBottom: "1.25rem" }}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                    <strong>Payment Terms:</strong> {p.payment}
+                    <span><strong>Payment Plan:</strong> {p.payment}</span>
                   </div>
 
-                  <div className="p-amenities">
-                    <h4 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/></svg>
-                      Included Amenities:
-                    </h4>
-                    <div className="amenity-grid">
-                      {p.amenities.map((a, i) => (
-                        <span key={i} className="amenity-tag">✓ {a}</span>
-                      ))}
+                  {/* Structured Payment Breakdown Table / Info */}
+                  {p.paymentBreakdown?.residential && (
+                    <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: "10px", padding: "1rem", marginBottom: "1.25rem", border: "1px solid rgba(255,255,255,0.06)" }}>
+                      <h4 style={{ color: "#D4AF37", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.75rem" }}>Official Schedule Summary</h4>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                        {p.paymentBreakdown.residential.map((res, ri) => (
+                          <div key={ri} style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", fontSize: "0.83rem", color: "#C5C5D3", borderBottom: "1px dashed rgba(255,255,255,0.08)", paddingBottom: "0.4rem" }}>
+                            <span style={{ fontWeight: 600, color: "#F5F5F7" }}>{res.size}</span>
+                            <span>Booking: <strong style={{ color: "#D4AF37" }}>{res.booking}</strong> | Total Cost: <strong style={{ color: "#E8CC6E" }}>{res.totalCost}</strong></span>
+                          </div>
+                        ))}
+                      </div>
+                      {p.paymentBreakdown.extraCharges && (
+                        <div style={{ fontSize: "0.76rem", color: "#8A8A9E", marginTop: "0.6rem" }}>
+                          ⚠️ {p.paymentBreakdown.extraCharges}
+                        </div>
+                      )}
                     </div>
-                  </div>
+                  )}
 
-                  <div className="p-action-row">
-                    <Link
-                      href={`/contact?project=${encodeURIComponent(p.name)}`}
-                      className="btn-gold"
-                    >
+                  {p.paymentBreakdown?.note && (
+                    <div style={{ background: "rgba(212,175,55,0.06)", borderRadius: "8px", padding: "0.75rem 1rem", marginBottom: "1.25rem", border: "1px solid rgba(212,175,55,0.2)", fontSize: "0.85rem", color: "#D4AF37" }}>
+                      {p.paymentBreakdown.note}
+                    </div>
+                  )}
+
+                  <div className="p-action-row" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "1rem" }}>
+                    <Link href={`/contact?project=${encodeURIComponent(p.name)}`} className="btn-gold">
                       Book Now / Inquiry
                     </Link>
+                    <button onClick={() => setSelectedPoster(p.poster)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+                      📄 View Full Poster
+                    </button>
                     <a
-                      href={`https://wa.me/923111123160?text=Hello%20AHH%20Brothers%2C%20I%20am%20interested%20in%20booking%20a%20plot%20in%20${encodeURIComponent(p.name)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-outline"
-                      style={{ color: "#25D366", borderColor: "#25D366", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}
+                      href={`https://wa.me/923111123160?text=Hello%20AHH%20Brothers%2C%20I%20am%20interested%20in%20${encodeURIComponent(p.name)}`}
+                      target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ color: "#25D366", borderColor: "#25D366" }}
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" fill="rgba(37,211,102,0.15)"/></svg>
                       WhatsApp Inquiry
                     </a>
                   </div>
@@ -151,6 +206,16 @@ export default function CurrentProjects() {
           </div>
         </div>
       </section>
+
+      {/* Lightbox for Poster Images */}
+      {selectedPoster && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "1.5rem", backdropFilter: "blur(8px)" }} onClick={() => setSelectedPoster(null)}>
+          <div style={{ position: "relative", maxWidth: "90vw", maxHeight: "90vh" }} onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setSelectedPoster(null)} style={{ position: "absolute", top: "-15px", right: "-15px", width: 40, height: 40, borderRadius: "50%", background: "#D4AF37", border: "none", color: "#000", fontWeight: 800, cursor: "pointer", fontSize: "1.2rem", zIndex: 10000 }}>✕</button>
+            <Image src={selectedPoster} alt="Official Project Poster" width={900} height={1200} style={{ maxWidth: "90vw", maxHeight: "85vh", objectFit: "contain", borderRadius: "12px", border: "2px solid #D4AF37" }} />
+          </div>
+        </div>
+      )}
     </>
   );
 }

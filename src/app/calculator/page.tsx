@@ -5,52 +5,82 @@ import { useState } from "react";
 
 const projects = [
   {
-    id: "hooria-villas",
-    name: "Hooria Villas",
-    basePrice: 2800000,
-    minDown: 8,
-    maxDown: 30,
-    tenures: [24, 36, 48],
-    defaultTenure: 36,
+    id: "ahh-city-60",
+    name: "AHH-City (60 Yds)",
+    basePrice: 200000,
+    todayMarketRate: 350000,
+    minDown: 25, // 50k booking
+    maxDown: 50,
+    tenures: [10, 12],
+    defaultTenure: 10,
+    location: "Scheme 45, Northern Bypass (Survey 297)",
+    size: "60 Sq Yards Residential",
+    color: "#D4AF37",
+  },
+  {
+    id: "ahh-city-120",
+    name: "AHH-City (120 Yds)",
+    basePrice: 350000,
+    todayMarketRate: 500000,
+    minDown: 28, // 100k booking
+    maxDown: 50,
+    tenures: [10, 12],
+    defaultTenure: 10,
+    location: "Scheme 45, Northern Bypass (Survey 297)",
+    size: "120 Sq Yards Residential",
+    color: "#E8CC6E",
+  },
+  {
+    id: "hooria-villas-120",
+    name: "Hooria Villas (120 Yds)",
+    basePrice: 1000000,
+    todayMarketRate: 1000000,
+    minDown: 20, // 200k booking
+    maxDown: 40,
+    tenures: [24, 36],
+    defaultTenure: 24,
+    location: "Northern Bypass (Survey 395, 396, 397)",
+    size: "120 Sq Yards Residential",
+    color: "#C5A028",
+  },
+  {
+    id: "hooria-villas-150-comm",
+    name: "Hooria Villas (Commercial)",
+    basePrice: 1500000,
+    todayMarketRate: 1500000,
+    minDown: 20, // 300k booking
+    maxDown: 40,
+    tenures: [24, 36],
+    defaultTenure: 24,
     location: "Northern Bypass, Near Gulshan-e-Maymar",
-    size: "120 Sq Yards",
+    size: "150 Sq Yards Commercial",
+    color: "#B8942E",
+  },
+  {
+    id: "labour-city",
+    name: "Labour City",
+    basePrice: 600000,
+    todayMarketRate: 600000,
+    minDown: 15,
+    maxDown: 40,
+    tenures: [24, 36],
+    defaultTenure: 24,
+    location: "Industrial Corridor, Karachi",
+    size: "80 & 120 Sq Yards",
     color: "#D4AF37",
   },
   {
     id: "summer-farm-houses",
     name: "Summer Farm Houses",
-    basePrice: 4500000,
-    minDown: 10,
+    basePrice: 2500000,
+    todayMarketRate: 2500000,
+    minDown: 15,
     maxDown: 40,
-    tenures: [12, 24, 36],
+    tenures: [18, 24],
     defaultTenure: 24,
-    location: "Karachi, Sindh",
-    size: "Various Sizes",
-    color: "#C5A028",
-  },
-  {
-    id: "labour-city",
-    name: "Labour City",
-    basePrice: 1800000,
-    minDown: 10,
-    maxDown: 30,
-    tenures: [24, 36, 48],
-    defaultTenure: 36,
-    location: "Karachi, Sindh",
-    size: "80–120 Sq Yards",
+    location: "Gadap Town / Malir, Karachi",
+    size: "2000 - 4000 Sq Yards (Details Coming Soon)",
     color: "#E8CC6E",
-  },
-  {
-    id: "ahh-city",
-    name: "AHH-City",
-    basePrice: 3500000,
-    minDown: 10,
-    maxDown: 35,
-    tenures: [24, 36, 48],
-    defaultTenure: 48,
-    location: "Karachi, Sindh",
-    size: "120–500 Sq Yards",
-    color: "#B8942E",
   },
 ];
 
@@ -61,9 +91,9 @@ function formatPKR(amount: number) {
 }
 
 export default function Calculator() {
-  const [selectedProjectId, setSelectedProjectId] = useState("hooria-villas");
-  const [downPercent, setDownPercent] = useState(8);
-  const [tenure, setTenure] = useState(36);
+  const [selectedProjectId, setSelectedProjectId] = useState("ahh-city-60");
+  const [downPercent, setDownPercent] = useState(25);
+  const [tenure, setTenure] = useState(10);
 
   const project = projects.find((p) => p.id === selectedProjectId)!;
   const totalPrice = project.basePrice;

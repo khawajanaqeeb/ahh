@@ -169,6 +169,42 @@ export default function LegalCompliance() {
         </div>
       </section>
 
+      {/* ===== OFFICIAL TERMS & CONDITIONS ===== */}
+      <section className="section" style={{ background: "rgba(10,10,22,0.9)", borderTop: "1px solid rgba(212,175,55,0.15)", borderBottom: "1px solid rgba(212,175,55,0.15)" }}>
+        <div className="container" style={{ maxWidth: 900 }}>
+          <div className="section-header">
+            <div className="section-label">Official Documentation</div>
+            <h2>Terms &amp; <span className="gold-text">Conditions</span></h2>
+            <div className="gold-line" />
+            <p>Applicable to all bookings &amp; payment plans across AHH Brothers government-approved projects (99-Year Leasehold).</p>
+          </div>
+
+          <div className="glass-card" style={{ padding: "2rem", border: "1px solid rgba(212,175,55,0.25)" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1rem" }}>
+              {[
+                { num: 1, title: "Installment Payments", text: "Installments are payable by the 5th of each month via cash, cheque, pay order, or bank transfer in the company's designated account only." },
+                { num: 2, title: "Processing & Document Charges", text: "Bio-metric verification (Rs. 5,000), QR-code (Rs. 5,000), and site plan charges (Rs. 5,000) are one-time, non-refundable, and payable at the time of booking." },
+                { num: 3, title: "Required Documentation", text: "All applicants must submit CNIC copies, passport-size photographs, and next-of-kin / nominee details with the official booking form." },
+                { num: 4, title: "Government Taxes & Levies", text: "All applicable government taxes, duties, stamp duty, and registration/transfer charges are borne by the buyer, over and above the total cost shown in the payment plan." },
+                { num: 5, title: "Possession Eligibility", text: "Possession will be offered only after full payment of the total plot cost and documentation charges." },
+                { num: 6, title: "Utility Connections", text: "Possession charges (if any) and utility connection charges (gas, electricity, water) are separate and payable at the time of possession." },
+                { num: 7, title: "Cancellation Policy", text: "If the customer fails to pay two consecutive monthly installments without prior written information/discussion, the builder reserves the right to cancel his/her booking." },
+                { num: 8, title: "Plot Allocation & Site Plan Rights", text: "The builder has the right to change, alter, or replace the place of booking or plot if necessary according to the government's authorised department's instruction or land plan/site plan alteration." },
+                { num: 9, title: "99-Year Lease Leasehold Status", text: "This project is a 99-year leasehold project as per government-approved schemes (Scheme 45, Northern Bypass, Karachi)." },
+              ].map(({ num, title, text }) => (
+                <div key={num} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", padding: "0.85rem 1rem", borderRadius: "8px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#D4AF37", color: "#000", fontWeight: 800, fontSize: "0.82rem", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{num}</div>
+                  <div>
+                    <h4 style={{ color: "#F5F5F7", fontSize: "0.95rem", marginBottom: "0.2rem" }}>{title}</h4>
+                    <p style={{ color: "#8A8A9E", fontSize: "0.87rem", lineHeight: 1.6 }}>{text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQs */}
       <section className="section section-alt">
         <div className="container" style={{ maxWidth: 780 }}>

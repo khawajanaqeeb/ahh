@@ -37,4 +37,10 @@ export const MEDIA = {
   labourCityLogo: `${SUPABASE_STORAGE_BASE}/logos/labour-city-logo.jpg`,
   summerFarmhousesLogo: `${SUPABASE_STORAGE_BASE}/logos/summer-farmhouses-logo.jpg`,
   fourSeasonsLogo: `${SUPABASE_STORAGE_BASE}/logos/four-seasons-farmhouses-logo.png`,
+
+  // Official Project & Investment Posters
+  posterAhhCityGrowthTerms: `${SUPABASE_STORAGE_BASE}/projects/posters/ahh-city-growth-terms.jpg`,
+  posterInvestmentOpportunity: `${SUPABASE_STORAGE_BASE}/projects/posters/investment-opportunity.jpg`,
+  posterInterestFreeGrowth: `${SUPABASE_STORAGE_BASE}/projects/posters/interest-free-growth.jpg`,
+  posterHooriaVillasPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/hooria-villas-payment-plan.jpg`,
 };

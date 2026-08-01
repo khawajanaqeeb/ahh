@@ -150,23 +150,16 @@ export default function About() {
               </h2>
               <div className="gold-line-left" />
               <p className="intro-text">
-                AHH Brothers Builders & Developers was founded in 2018 with a singular
-                mission: to make premium real estate accessible to every family in Karachi.
-                What started as a bold vision has grown into one of the city&apos;s most
-                trusted names in residential and commercial development.
+                AHH Brothers Builders &amp; Developers was founded in 2018 with a singular
+                mission: to make premium real estate accessible and highly profitable for every family and investor in Karachi.
+                We specialize in <strong>Interest-Free Business</strong> investments and high-yield residential/commercial property developments.
               </p>
               <p className="normal-text">
-                Guided by our core motto — <strong style={{ color: "#D4AF37" }}>&ldquo;Our Power Is Our Unity&rdquo;</strong> —
-                we operate as more than just a developer. We are a close-knit family of
-                engineers, planners, and visionaries who wear multiple hats: developer,
-                contractor, and trusted partner to every investor and homeowner who
-                chooses us.
+                Guided by our motto — <strong style={{ color: "#D4AF37" }}>&ldquo;Our Power Is Our Unity&rdquo;</strong> —
+                every project we execute delivers consistent, compounding returns that outpace inflation and conventional savings. Across our <strong>4 Active Projects</strong>, we have established a proven track record of up to <strong>212%+ Peak Return</strong> (Summer Farm Houses +212%, Hooria Villas +122%, Labour City +200%, AHH City +133%).
               </p>
               <p className="normal-text" style={{ marginTop: "1rem" }}>
-                From high-rise projects in Nazimabad to farmhouse communities in Gadap Town,
-                from affordable housing to mega townships — AHH Brothers has proven time
-                and again that quality, transparency, and commitment are not just promises.
-                They are our legacy.
+                For investors seeking steady passive income, we offer short-term investment plans (1 to 5 years) with fixed monthly profit returns of <strong>PKR 40,000 to 45,000 per month on 1 Million PKR</strong>. All principal amounts are backed by legally binding contracts signed directly with AHH Brothers and backed by <strong>Full-Payment Post-Dated Cheques</strong> as ultimate security.
               </p>
               <div style={{ display: "flex", gap: "2rem", marginTop: "2rem", flexWrap: "wrap" }}>
                 <div style={{ textAlign: "center" }}>

@@ -60,50 +60,50 @@ const projects = [
   {
     id: "hooria-villas",
     name: "Hooria Villas",
-    location: "Northern Bypass, Near Gulshan-e-Maymar",
-    type: "Residential Plots",
-    size: "120 Sq Yards",
-    status: "Under Development",
+    location: "Northern Bypass, Near Gulshan-e-Maymar (Survey 395, 396, 397)",
+    type: "Residential & Commercial Plots",
+    size: "120 & 150 Sq Yards",
+    status: "Active Development",
     badge: "active",
-    payment: "8% Down Payment | 36 Monthly Installments",
-    image: "/hooria-villas-logo.jpg",
-    description: "Premium residential plots at a prime location with speedy development work underway.",
-  },
-  {
-    id: "summer-farm-houses",
-    name: "Summer Farm Houses",
-    location: "Karachi, Sindh",
-    type: "Farm Houses",
-    size: "Various Sizes",
-    status: "Now Booking",
-    badge: "active",
-    payment: "Flexible Payment Plans Available",
-    image: "/summer-farmhouses-logo.jpg",
-    description: "Escape to your own countryside retreat with our premium farm house community.",
-  },
-  {
-    id: "labour-city",
-    name: "Labour City",
-    location: "Karachi, Sindh",
-    type: "Affordable Housing",
-    size: "80-120 Sq Yards",
-    status: "Now Booking",
-    badge: "upcoming",
-    payment: "Easy Installment Plans",
-    image: "/labour-city-logo.jpg",
-    description: "Affordable residential plots designed for the working class with easy payment options.",
+    payment: "Res 120 YDS: Rs 10 Lacs | Comm 150 YDS: Rs 15 Lacs",
+    image: MEDIA.posterHooriaVillasPaymentPlan,
+    description: "2.5x growth in 2 years (+122% Return). 120 Sq Yd Res plots at Rs 10 Lacs total cost & 150 Sq Yd Commercial plots at Rs 15 Lacs total cost.",
   },
   {
     id: "ahh-city",
     name: "AHH-City",
-    location: "Karachi, Sindh",
-    type: "Mega Township",
-    size: "120-500 Sq Yards",
-    status: "Coming Soon",
-    badge: "upcoming",
-    payment: "Launching Soon — Register Interest",
-    image: "/ahh-city-logo.jpg",
-    description: "A complete township with residential, commercial, and recreational facilities.",
+    location: "Scheme 45, Northern Bypass (Survey 297)",
+    type: "Residential & Commercial Units",
+    size: "60 & 120 Sq Yards",
+    status: "Rapid Site Development",
+    badge: "active",
+    payment: "60 YDS: Rs 3.5 Lacs Today Rate | 120 YDS: Rs 5 Lacs Today Rate",
+    image: MEDIA.posterAhhCityGrowthTerms,
+    description: "+133% Growth in 2 Months! 60 Sq Yds total cost Rs 2 Lacs (Today Rate Rs 3.5 Lacs). 120 Sq Yds total cost Rs 3.5 Lacs (Today Rate Rs 5 Lacs).",
+  },
+  {
+    id: "labour-city",
+    name: "Labour City",
+    location: "Industrial Corridor, Karachi",
+    type: "Affordable Housing",
+    size: "80 & 120 Sq Yards",
+    status: "Now Booking",
+    badge: "active",
+    payment: "3x Growth in 1 Year (+200% Return) | Rs 6 Lacs Recent Rate",
+    image: MEDIA.posterInterestFreeGrowth,
+    description: "Affordable residential plots for working class. Price grew from Rs 2 Lacs to Rs 6 Lacs (+200%) in just 1 year.",
+  },
+  {
+    id: "summer-farm-houses",
+    name: "Summer Farm Houses",
+    location: "Malir / Gadap Town, Karachi",
+    type: "Farm House Community",
+    size: "2000 - 4000 Sq Yards",
+    status: "Now Booking",
+    badge: "active",
+    payment: "+212% Peak Return (Rs 8 Lacs → Rs 25 Lacs in 1.5 Yrs)",
+    image: MEDIA.summerFarmhousesLogo,
+    description: "Luxury farmhouse community. 3x+ growth in 1.5 years (+212%). (Updated payment plan details coming soon).",
   },
 ];
 
@@ -422,16 +422,16 @@ export default function Home() {
                 A Legacy of Trust &<br /><span className="text-gradient-gold">Building Excellence</span>
               </h2>
               <div className="gold-line-left" />
-              <p style={{ color: "#C5C5D3", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "1.5rem" }}>
-                Founded in 2018, AHH Brothers Builders &amp; Developers is a close-knit family of
-                housebuilders, developers, and contractors. With the unique ability to wear
-                multiple hats — developer and contractor — we bring flexibility to every project.
+              <p style={{ color: "#C5C5D3", fontSize: "1.05rem", lineHeight: 1.8, marginBottom: "1.25rem" }}>
+                Founded in 2018, AHH Brothers Builders &amp; Developers is a premier real estate developer operating across strategic locations in Karachi. We specialize in <strong>Interest-Free Business</strong> investments and high-yield property developments, delivering consistent compounding returns that outpace inflation.
               </p>
-              <p style={{ color: "#8A8A9E", fontSize: "0.95rem", lineHeight: 1.8, marginBottom: "2rem" }}>
-                From affordable housing to premium villas and mega townships, we are committed
-                to delivering exceptional living spaces that families can call home. Our power
-                is our unity — and our unity builds your future.
+              <p style={{ color: "#8A8A9E", fontSize: "0.95rem", lineHeight: 1.8, marginBottom: "1.25rem" }}>
+                With a proven track record across <strong>4 Active Projects</strong> (achieving up to <strong>212%+ Peak Return</strong>), we offer short-term investment opportunities (1 to 5 years) with fixed monthly profit returns of <strong>PKR 40,000 to 45,000 per month on 1 Million PKR</strong>.
               </p>
+              <div style={{ background: "rgba(212, 175, 55, 0.08)", borderLeft: "3px solid #D4AF37", padding: "0.85rem 1rem", borderRadius: "0 8px 8px 0", marginBottom: "1.75rem" }}>
+                <span style={{ color: "#D4AF37", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", display: "block" }}>🔒 Financial Guarantee & Security</span>
+                <span style={{ color: "#F5F5F7", fontSize: "0.88rem" }}>Official legally binding contract signed directly with AHH Brothers + Full-Payment Post-Dated Cheque delivered as ultimate security for your principal.</span>
+              </div>
               <Link href="/about" className="btn-gold">
                 Learn More About Us
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

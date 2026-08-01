@@ -49,7 +49,11 @@ const UPLOAD_MAP = [
   { file: 'hooria-villas-logo.jpg',       bucket: 'logos', remotePath: 'hooria-villas-logo.jpg',       contentType: 'image/jpeg' },
   { file: 'labour-city-logo.jpg',         bucket: 'logos', remotePath: 'labour-city-logo.jpg',         contentType: 'image/jpeg' },
   { file: 'summer-farmhouses-logo.jpg',   bucket: 'logos', remotePath: 'summer-farmhouses-logo.jpg',   contentType: 'image/jpeg' },
-  { file: 'four-seasons-farmhouses-logo.png', bucket: 'logos', remotePath: 'four-seasons-farmhouses-logo.png', contentType: 'image/png' },
+  // ── POSTERS IN PROJECTS BUCKET ─────────────────────────────────────────────
+  { file: 'posters/ahh-city-growth-terms.jpg',      bucket: 'projects', remotePath: 'posters/ahh-city-growth-terms.jpg',      contentType: 'image/jpeg' },
+  { file: 'posters/investment-opportunity.jpg',     bucket: 'projects', remotePath: 'posters/investment-opportunity.jpg',     contentType: 'image/jpeg' },
+  { file: 'posters/interest-free-growth.jpg',       bucket: 'projects', remotePath: 'posters/interest-free-growth.jpg',       contentType: 'image/jpeg' },
+  { file: 'posters/hooria-villas-payment-plan.jpg', bucket: 'projects', remotePath: 'posters/hooria-villas-payment-plan.jpg', contentType: 'image/jpeg' },
 ];
 
 const BUCKETS_TO_CREATE = [
@@ -57,6 +61,7 @@ const BUCKETS_TO_CREATE = [
   { name: 'directors', public: true },
   { name: 'projects',  public: true },
   { name: 'logos',     public: true },
+  { name: 'posters',   public: true },
 ];
 
 function getMimeType(filePath) {

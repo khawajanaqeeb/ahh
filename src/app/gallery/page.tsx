@@ -24,13 +24,14 @@ const galleryItems = [
   { src: MEDIA.off2, title: "Road Leveling Work", category: "Construction", size: "wide" },
   { src: MEDIA.off3, title: "Site Machinery Deployment", category: "Construction", size: "normal" },
   { src: MEDIA.off4, title: "Plot Demarcation Process", category: "Construction", size: "normal" },
-  // Delivered
-  { src: MEDIA.h1, title: "Hooria Hills — Delivered", category: "Delivered", size: "normal" },
-  { src: MEDIA.h2, title: "AHH City Phase 1 — Handover", category: "Delivered", size: "wide" },
-  { src: MEDIA.h1, title: "Completed Townhouse Project", category: "Delivered", size: "normal" },
+  // Official Posters
+  { src: MEDIA.posterAhhCityGrowthTerms, title: "AHH City Plot Rate Growth & Terms Poster", category: "Posters", size: "wide" },
+  { src: MEDIA.posterInvestmentOpportunity, title: "1-Year Investment Plan (40k-45k/mo Profit)", category: "Posters", size: "normal" },
+  { src: MEDIA.posterInterestFreeGrowth, title: "Invest in Interest-Free Business Growth Record", category: "Posters", size: "normal" },
+  { src: MEDIA.posterHooriaVillasPaymentPlan, title: "Hooria Villas Payment Plan & Rates Poster", category: "Posters", size: "wide" },
 ];
 
-const categories = ["All", "Office", "Projects", "Construction", "Delivered"];
+const categories = ["All", "Posters", "Office", "Projects", "Construction", "Delivered"];
 
 const videos = [
   {
