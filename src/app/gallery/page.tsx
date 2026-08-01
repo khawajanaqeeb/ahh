@@ -29,6 +29,8 @@ const galleryItems = [
   { src: MEDIA.posterInvestmentOpportunity, title: "1-Year Investment Plan (40k-45k/mo Profit)", category: "Posters", size: "normal" },
   { src: MEDIA.posterInterestFreeGrowth, title: "Invest in Interest-Free Business Growth Record", category: "Posters", size: "normal" },
   { src: MEDIA.posterHooriaVillasPaymentPlan, title: "Hooria Villas Payment Plan & Rates Poster", category: "Posters", size: "wide" },
+  { src: MEDIA.posterLabourCity, title: "Labour City Residential Home Town Poster", category: "Posters", size: "wide" },
+  { src: MEDIA.posterLabourCityPaymentPlan, title: "Labour City Payment Plan (80 Yds Res & 150 Yds Comm)", category: "Posters", size: "normal" },
 ];
 
 const categories = ["All", "Posters", "Office", "Projects", "Construction", "Delivered"];

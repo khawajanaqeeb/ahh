@@ -66,7 +66,7 @@ const projects = [
     status: "Active Development",
     badge: "active",
     payment: "Res 120 YDS: Rs 10 Lacs | Comm 150 YDS: Rs 15 Lacs",
-    image: MEDIA.posterHooriaVillasPaymentPlan,
+    image: MEDIA.hooriaVillasLogo,
     description: "2.5x growth in 2 years (+122% Return). 120 Sq Yd Res plots at Rs 10 Lacs total cost & 150 Sq Yd Commercial plots at Rs 15 Lacs total cost.",
   },
   {
@@ -74,36 +74,36 @@ const projects = [
     name: "AHH-City",
     location: "Scheme 45, Northern Bypass (Survey 297)",
     type: "Residential & Commercial Units",
-    size: "60 & 120 Sq Yards",
+    size: "60 & 120 Sq Yards | Commercial Shops 100 Sq Ft",
     status: "Rapid Site Development",
     badge: "active",
-    payment: "60 YDS: Rs 3.5 Lacs Today Rate | 120 YDS: Rs 5 Lacs Today Rate",
-    image: MEDIA.posterAhhCityGrowthTerms,
+    payment: "60 YDS: Rs 2 Lacs Total (Today Rate Rs 3.5 Lacs)",
+    image: MEDIA.ahhCityLogo,
     description: "+133% Growth in 2 Months! 60 Sq Yds total cost Rs 2 Lacs (Today Rate Rs 3.5 Lacs). 120 Sq Yds total cost Rs 3.5 Lacs (Today Rate Rs 5 Lacs).",
   },
   {
     id: "labour-city",
     name: "Labour City",
     location: "Industrial Corridor, Karachi",
-    type: "Affordable Housing",
-    size: "80 & 120 Sq Yards",
+    type: "Affordable Housing & Commercial",
+    size: "80 Sq Yards (Residential) & 150 Sq Yards (Commercial)",
     status: "Now Booking",
     badge: "active",
-    payment: "3x Growth in 1 Year (+200% Return) | Rs 6 Lacs Recent Rate",
-    image: MEDIA.posterInterestFreeGrowth,
-    description: "Affordable residential plots for working class. Price grew from Rs 2 Lacs to Rs 6 Lacs (+200%) in just 1 year.",
+    payment: "3x Growth in 1 Year (+200% Return)",
+    image: MEDIA.labourCityLogo,
+    description: "80 Sq Yards Residential & 150 Sq Yards Commercial. Affordable housing for working professionals. Price grew 3x in 1 year (+200%).",
   },
   {
     id: "summer-farm-houses",
     name: "Summer Farm Houses",
     location: "Malir / Gadap Town, Karachi",
     type: "Farm House Community",
-    size: "2000 - 4000 Sq Yards",
+    size: "1000 Sq Yards",
     status: "Now Booking",
     badge: "active",
-    payment: "+212% Peak Return (Rs 8 Lacs → Rs 25 Lacs in 1.5 Yrs)",
+    payment: "Cash Price: Rs 25 Lacs | +212% Peak Return",
     image: MEDIA.summerFarmhousesLogo,
-    description: "Luxury farmhouse community. 3x+ growth in 1.5 years (+212%). (Updated payment plan details coming soon).",
+    description: "1000 Sq Yards luxury farm house plots. Cash Price: Rs 25 Lacs. Delivered 3x+ growth in 1.5 years (+212%).",
   },
 ];
 
@@ -437,6 +437,62 @@ export default function Home() {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                 </svg>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== COMPANY INVESTMENT SHOWCASE ===== */}
+      <section className="section" style={{ background: "linear-gradient(180deg, rgba(10,10,22,0.98), rgba(20,20,38,0.95))", borderTop: "1px solid rgba(212,175,55,0.2)", borderBottom: "1px solid rgba(212,175,55,0.2)" }}>
+        <div className="container">
+          <div className="section-header">
+            <div className="section-label">High-Yield Returns</div>
+            <h2>Invest in <span className="gold-text">Interest-Free Business</span></h2>
+            <div className="gold-line" />
+            <p>Every AHH Brothers project delivers consistent compounding returns — outpacing inflation and conventional savings.</p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "2rem", alignItems: "stretch" }}>
+            {/* Poster 1: Investment Opportunity */}
+            <div className="glass-card" style={{ padding: "1.5rem", borderRadius: "16px", border: "1px solid rgba(212,175,55,0.3)", display: "flex", flexDirection: "column" }}>
+              <div style={{ borderRadius: "10px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.2)", marginBottom: "1.25rem" }}>
+                <Image
+                  src={MEDIA.posterInvestmentOpportunity}
+                  alt="Investment Opportunity — 1 Year Plan"
+                  width={600}
+                  height={600}
+                  style={{ width: "100%", height: "auto", maxHeight: "380px", objectFit: "contain", background: "#080812" }}
+                />
+              </div>
+              <span className="p-type" style={{ color: "#D4AF37" }}>1 to 5 Years Short-Term Plan</span>
+              <h3 style={{ color: "#F5F5F7", fontSize: "1.2rem", margin: "0.4rem 0 0.6rem" }}>1-Year Investment Plan (Monthly Profit)</h3>
+              <p style={{ color: "#8A8A9E", fontSize: "0.9rem", lineHeight: 1.6, flexGrow: 1 }}>
+                Earn <strong>PKR 40,000 to 45,000 PER MONTH</strong> on a 1 Million PKR minimum investment. Backed by a legally binding contract signed directly with AHH Brothers and a <strong>Full-Payment Post-Dated Cheque</strong>.
+              </p>
+              <a href="https://wa.me/923111123160?text=Hello%20AHH%20Brothers%2C%20I%20am%20interested%20in%20the%201-Year%20Investment%20Plan." target="_blank" rel="noopener noreferrer" className="btn-gold" style={{ width: "100%", textAlign: "center", justifyContent: "center", marginTop: "1rem" }}>
+                Inquire About 1-Year Plan
+              </a>
+            </div>
+
+            {/* Poster 2: Interest Free Growth */}
+            <div className="glass-card" style={{ padding: "1.5rem", borderRadius: "16px", border: "1px solid rgba(212,175,55,0.3)", display: "flex", flexDirection: "column" }}>
+              <div style={{ borderRadius: "10px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.2)", marginBottom: "1.25rem" }}>
+                <Image
+                  src={MEDIA.posterInterestFreeGrowth}
+                  alt="Invest in Interest-Free Business Growth Record"
+                  width={600}
+                  height={600}
+                  style={{ width: "100%", height: "auto", maxHeight: "380px", objectFit: "contain", background: "#080812" }}
+                />
+              </div>
+              <span className="p-type" style={{ color: "#D4AF37" }}>Proven Growth Record</span>
+              <h3 style={{ color: "#F5F5F7", fontSize: "1.2rem", margin: "0.4rem 0 0.6rem" }}>Project-Wise Price Growth Record</h3>
+              <p style={{ color: "#8A8A9E", fontSize: "0.9rem", lineHeight: 1.6, flexGrow: 1 }}>
+                Proven track record across 4 active projects in Karachi. <strong>Summer Farm Houses (+212%)</strong>, <strong>Hooria Villas (+122%)</strong>, <strong>Labour City (+200%)</strong>, and <strong>AHH City (+133%)</strong>.
+              </p>
+              <Link href="/current-projects" className="btn-outline" style={{ width: "100%", textAlign: "center", justifyContent: "center", marginTop: "1rem" }}>
+                Explore Active Projects
               </Link>
             </div>
           </div>

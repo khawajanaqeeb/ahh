@@ -15,7 +15,7 @@ const currentProjects = [
     status: "Rapid Site Development (Rates Rising!)",
     badge: "active",
     payment: "60 YDS: Rs 200,000 (Today Rate: Rs 350,000) | 120 YDS: Rs 350,000 (Today Rate: Rs 500,000)",
-    image: MEDIA.posterAhhCityGrowthTerms,
+    image: MEDIA.ahhCityLogo,
     poster: MEDIA.posterAhhCityGrowthTerms,
     description: "Government Registered Project under 99-year lease scheme. Features rapid price appreciation (60 Yds up 133% in 2 months, 120 Yds up 100%). Monthly installments starting at Rs 10,000/month.",
     amenities: ["99-Year Leasehold", "Biometric & QR Code Verification", "Prime Highway Location", "Rapid Development", "High Future Returns"],
@@ -42,7 +42,7 @@ const currentProjects = [
     status: "Under Development (+122% Return)",
     badge: "active",
     payment: "Res 120 YDS: Total Rs 1,000,000 | Comm 150 YDS: Total Rs 1,500,000",
-    image: MEDIA.posterHooriaVillasPaymentPlan,
+    image: MEDIA.hooriaVillasLogo,
     poster: MEDIA.posterHooriaVillasPaymentPlan,
     description: "Proven 2.5x growth in 2 years (+122% return). Premium gated community near Gulshan-e-Maymar with complete boundary wall and active street infrastructure.",
     amenities: ["Gated Township", "24/7 Security", "Wide Asphalt Roads", "Mosque & Parks", "NOC Cleared"],
@@ -61,18 +61,26 @@ const currentProjects = [
   {
     id: "labour-city",
     name: "Labour City",
-    location: "Industrial Corridor, Karachi",
-    type: "Affordable Housing Plots",
-    size: "80 & 120 Sq Yards",
-    status: "Now Booking (+200% Return)",
+    location: "Scheme 45, Northern Bypass (Survey Number 398, 398/1), Near Gulshan-e-Maymar, Karachi",
+    type: "Residential Home Town & Commercial Plots",
+    size: "80 Sq Yards (Residential) & 150 Sq Yards (Commercial)",
+    status: "Government Approved — 99 Years Leased",
     badge: "active",
-    payment: "3x Growth in 1 Year (Rs 2 Lacs → Rs 6 Lacs) | Monthly from Rs 6,000",
-    image: MEDIA.posterInterestFreeGrowth,
-    poster: MEDIA.posterInterestFreeGrowth,
-    description: "Designed specifically to bring affordable land within reach of working professionals. Proven 3x growth in 1 year (+200% return). Subsidised down payments and flexible terms.",
-    amenities: ["Proximity to Industrial Hubs", "Public Transport Links", "Primary School & Clinic", "Community Center", "Basic Utilities"],
+    payment: "Res 80 YDS: Rs 600,000 Total | Comm 150 YDS: Rs 1,350,000 Total",
+    image: MEDIA.labourCityLogo,
+    poster: MEDIA.posterLabourCityPaymentPlan,
+    description: "Government Approved 99-Year Leasehold project. Features 80 Sq Yd Residential & 150 Sq Yd Commercial plots with boundary wall, 24/7 security, developed infrastructure, and parks.",
+    amenities: ["Boundary Wall Society", "24/7 Security", "All Utilities Available", "Developed Infrastructure & Parks", "Ready for Construction"],
     paymentBreakdown: {
-      note: "3x Price Growth in 1 Year (Rs 2,000,000 → Rs 6,000,000). Flexible monthly installment plans available from Rs 6,000/month."
+      residential: [
+        { size: "80 SQ YARDS (Residential)", booking: "Rs 200,000", confirmation: "Rs 50,000", allocation: "Rs 50,000", monthly: "Rs 10,000 × 12", possession: "Rs 80,000", totalCost: "Rs 600,000" }
+      ],
+      commercial: {
+        title: "Commercial Plots (150 Sq Yards)",
+        installment: { booking: "Rs 300,000", confirmation: "Rs 100,000", allocation: "Rs 100,000", monthly: "Rs 15,000 × 12", halfYearly: "Rs 250,000 × 2", possession: "Rs 170,000", totalCost: "Rs 1,350,000" }
+      },
+      extraCharges: "Corner, West-Open, Road-Facing, Park-Facing: 5% of Total Cost each",
+      processingCharges: "Biometric Verification: Rs 5,000 | QR-Code: Rs 5,000 | Site Plan: Rs 5,000"
     }
   },
   {
@@ -80,16 +88,16 @@ const currentProjects = [
     name: "Summer Farm Houses",
     location: "Gadap Town / Malir, Karachi, Sindh",
     type: "Farm House Community",
-    size: "2000 to 4000 Sq Yards",
+    size: "1000 Sq Yards",
     status: "Now Booking (+212% Return)",
     badge: "active",
-    payment: "+212% Peak Return (Rs 8 Lacs → Rs 25 Lacs in 1.5 Years)",
+    payment: "Cash Price: Rs 25 Lacs | +212% Peak Return (Rs 8 Lacs → Rs 25 Lacs in 1.5 Yrs)",
     image: MEDIA.summerFarmhousesLogo,
     poster: MEDIA.posterInterestFreeGrowth,
-    description: "Luxury farmhouse community delivering 3x+ growth in just 1.5 years (+212% return). Escape to your private countryside retreat with lush greenery and private pool options.",
+    description: "Luxury farmhouse community delivering 3x+ growth in just 1.5 years (+212% return). 1000 Sq Yards Farm House plots at Cash Price Rs 25 Lacs.",
     amenities: ["Fruit Orchards", "Private Swimming Pools", "Boundary Wall Security", "Lush Landscapes", "24/7 Power Backup"],
     paymentBreakdown: {
-      note: "📌 Note: Updated payment schedule details will be uploaded soon as announced by developer."
+      note: "📌 Cash Price: Rs 25 Lacs for 1000 Sq Yards Farm House plot. (Detailed installment plan schedule will be uploaded soon as announced by developer)."
     }
   },
 ];
