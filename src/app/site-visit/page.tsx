@@ -97,7 +97,7 @@ export default function SiteVisit() {
 
       {/* Form + Info */}
       <section className="section">
-        <div className="container" style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: "3rem", alignItems: "start" }}>
+        <div className="site-visit-container container" style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: "3rem", alignItems: "start" }}>
           {/* Form */}
           <div>
             <div className="section-label">Book Your Visit</div>
@@ -119,7 +119,7 @@ export default function SiteVisit() {
                 {/* Contact Info */}
                 <div className="glass-card" style={{ padding: "1.5rem" }}>
                   <h3 style={{ color: "#D4AF37", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "1rem" }}>Your Details</h3>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                  <div className="form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                     <div>
                       <label style={{ display: "block", color: "#8A8A9E", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.4rem" }}>Full Name *</label>
                       <input
@@ -153,7 +153,7 @@ export default function SiteVisit() {
                 {/* Project Selection */}
                 <div className="glass-card" style={{ padding: "1.5rem" }}>
                   <h3 style={{ color: "#D4AF37", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "1rem" }}>Projects to Visit</h3>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
+                  <div className="project-btn-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
                     {projects.map((p) => (
                       <label
                         key={p.id}
@@ -183,7 +183,7 @@ export default function SiteVisit() {
                 {/* Date & Time */}
                 <div className="glass-card" style={{ padding: "1.5rem" }}>
                   <h3 style={{ color: "#D4AF37", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "1rem" }}>Preferred Schedule</h3>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                  <div className="form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                     <div>
                       <label style={{ display: "block", color: "#8A8A9E", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.4rem" }}>Date</label>
                       <input
@@ -248,7 +248,7 @@ export default function SiteVisit() {
           </div>
 
           {/* Info Panel */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", position: "sticky", top: "6rem" }}>
+          <div className="site-visit-layout" style={{ display: "flex", flexDirection: "column", gap: "1.25rem", position: "sticky", top: "6rem" }}>
             <div className="glass-card" style={{ padding: "1.5rem", border: "1px solid rgba(212,175,55,0.25)" }}>
               <h3 style={{ color: "#D4AF37", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "1rem" }}>Visit Information</h3>
               {[

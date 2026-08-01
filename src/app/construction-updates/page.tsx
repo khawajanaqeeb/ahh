@@ -133,7 +133,7 @@ export default function ConstructionUpdates() {
 
           {/* Overall Progress Card */}
           <div className="glass-card" style={{ padding: "2rem", marginBottom: "2.5rem", border: `1px solid ${project.color}40` }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "start", gap: "1.5rem", flexWrap: "wrap" }}>
+            <div className="progress-card-inner" style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "start", gap: "1.5rem", flexWrap: "wrap" }}>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: "0.7rem", color: project.color, letterSpacing: "0.15em", fontWeight: 700, textTransform: "uppercase", marginBottom: "0.4rem" }}>
                   {project.status}
@@ -169,7 +169,7 @@ export default function ConstructionUpdates() {
 
                   {/* Card */}
                   <div className="glass-card" style={{ padding: "1.5rem" }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 180px", gap: "1.5rem", alignItems: "start" }}>
+                    <div className="update-card-inner" style={{ display: "grid", gridTemplateColumns: "1fr 180px", gap: "1.5rem", alignItems: "start" }}>
                       <div>
                         <div style={{ fontSize: "0.72rem", color: project.color, letterSpacing: "0.12em", fontWeight: 700, textTransform: "uppercase", marginBottom: "0.35rem" }}>{update.month}</div>
                         <h3 style={{ color: "#F5F5F7", fontSize: "1.1rem", marginBottom: "0.6rem" }}>{update.title}</h3>
@@ -183,7 +183,7 @@ export default function ConstructionUpdates() {
                           ))}
                         </div>
                       </div>
-                      <div style={{ borderRadius: 10, overflow: "hidden", border: `1px solid ${project.color}30` }}>
+                      <div className="update-card-img" style={{ borderRadius: 10, overflow: "hidden", border: `1px solid ${project.color}30` }}>
                         <Image src={update.image} alt={update.title} width={180} height={130} style={{ width: "100%", height: 130, objectFit: "cover" }} />
                       </div>
                     </div>

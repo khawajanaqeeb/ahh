@@ -735,15 +735,107 @@ select.form-input {
 
 @media (max-width: 768px) {
   .section {
-    padding: 3rem 1rem;
+    padding: 2.5rem 1rem;
   }
 
   .section-header {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-header p {
+    font-size: 0.95rem;
   }
 
   .page-hero {
-    padding: 6rem 1rem 3rem;
+    padding: 6rem 1rem 2.5rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(1.8rem, 8vw, 3rem);
+  }
+
+  .section-label {
+    font-size: 0.78rem;
+  }
+
+  .btn-gold,
+  .btn-outline {
+    padding: 0.75rem 1.4rem;
+    font-size: 0.88rem;
+  }
+}
+
+/* XS phones */
+@media (max-width: 400px) {
+  .section {
+    padding: 2rem 0.85rem;
+  }
+  .page-hero {
+    padding: 5.5rem 0.85rem 2rem;
+  }
+  .glass-card {
+    border-radius: 10px;
+  }
+}
+
+/* ============================================
+   MOBILE RESPONSIVE — New Pages
+   ============================================ */
+
+/* Calculator */
+@media (max-width: 900px) {
+  .calc-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Site Visit */
+@media (max-width: 900px) {
+  .site-visit-container {
+    grid-template-columns: 1fr !important;
+  }
+  .site-visit-layout {
+    position: static !important;
+  }
+}
+
+/* Form 2-col grids inside site-visit and calculator */
+@media (max-width: 540px) {
+  .form-2col {
+    grid-template-columns: 1fr !important;
+  }
+  .project-btn-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .tenure-btn-row {
+    flex-direction: column !important;
+  }
+}
+
+/* Overseas page grid */
+@media (max-width: 900px) {
+  .overseas-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Construction updates progress card */
+@media (max-width: 640px) {
+  .progress-card-inner {
+    grid-template-columns: 1fr !important;
+  }
+  .progress-card-img {
+    display: none !important;
+  }
+}
+
+/* Construction updates timeline card */
+@media (max-width: 640px) {
+  .update-card-inner {
+    grid-template-columns: 1fr !important;
+  }
+  .update-card-img {
+    display: none !important;
   }
 }
 
@@ -1975,6 +2067,16 @@ select.form-input {
           transform: translateY(-2px);
         }
 
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 1.6fr 0.9fr 1fr 1.1fr;
+          gap: 2.5rem;
+        }
+        .footer-col {
+          display: flex;
+          flex-direction: column;
+        }
+
         @media (max-width: 1024px) {
           .footer-grid {
             grid-template-columns: 1fr 1fr;
@@ -2515,7 +2617,7 @@ select.form-input {
         }
         
         .accordion-open {
-          max-height: 120px;
+          max-height: 300px;
           border-bottom: 1px solid rgba(255, 255, 255, 0.04);
           padding-bottom: 0.5rem;
         }

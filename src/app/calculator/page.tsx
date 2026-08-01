@@ -102,13 +102,13 @@ export default function Calculator() {
             <p>Calculate your monthly installments across all AHH Brothers projects. Adjust down payment and tenure to find a plan that works for your budget.</p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", alignItems: "start" }}>
+          <div className="calc-layout" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", alignItems: "start" }}>
             {/* Left: Controls */}
             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
               {/* Project Selection */}
               <div className="glass-card" style={{ padding: "1.75rem" }}>
                 <h3 style={{ color: "#D4AF37", marginBottom: "1.25rem", fontSize: "1rem", letterSpacing: "0.05em", textTransform: "uppercase" }}>Select Project</h3>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                <div className="project-btn-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
                   {projects.map((p) => (
                     <button
                       key={p.id}
@@ -164,7 +164,7 @@ export default function Calculator() {
               {/* Tenure Selection */}
               <div className="glass-card" style={{ padding: "1.75rem" }}>
                 <h3 style={{ color: "#D4AF37", marginBottom: "1rem", fontSize: "1rem", letterSpacing: "0.05em", textTransform: "uppercase" }}>Installment Tenure</h3>
-                <div style={{ display: "flex", gap: "0.75rem" }}>
+                <div className="tenure-btn-row" style={{ display: "flex", gap: "0.75rem" }}>
                   {project.tenures.map((t) => (
                     <button
                       key={t}
@@ -190,7 +190,7 @@ export default function Calculator() {
             </div>
 
             {/* Right: Results */}
-            <div style={{ position: "sticky", top: "6rem" }}>
+            <div className="site-visit-sticky" style={{ position: "sticky", top: "6rem" }}>
               <div className="glass-card" style={{ padding: "2rem", border: "1px solid rgba(212,175,55,0.3)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
                   <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#D4AF37", boxShadow: "0 0 10px rgba(212,175,55,0.6)" }} />

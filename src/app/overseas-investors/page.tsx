@@ -110,7 +110,7 @@ export default function OverseasInvestors() {
       {/* Hero Intro */}
       <section className="section">
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center" }}>
+          <div className="overseas-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center" }}>
             <div>
               <div className="section-label">For Overseas Pakistanis</div>
               <h2 className="section-title">Invest in Pakistan <span className="text-gradient-gold">From Anywhere</span></h2>
