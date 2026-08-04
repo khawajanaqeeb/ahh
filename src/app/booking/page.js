@@ -11,6 +11,7 @@ import {
 import MapCanvas from '@/components/booking/MapCanvas';
 import BookingForm from '@/components/booking/BookingForm';
 import BookingReceiptModal from '@/components/booking/BookingReceiptModal';
+import { formatDateDDMMYY } from '@/lib/dateUtils';
 import {
   fetchPlots, savePlotToDb, deletePlotFromDb, clearAllPlotsFromDb,
   fetchBookings, saveBookingToDb, deleteBookingFromDb
@@ -483,13 +484,14 @@ export default function BookingPage() {
                 <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Token Amount</th>
                 <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Remaining</th>
                 <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Booking Date</th>
+                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Token Expiry</th>
                 <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/40">
               {filteredBookings.length === 0 ? (
                 <tr>
-                  <td colSpan="12" className="px-4 py-8 text-center text-slate-500 font-medium">
+                  <td colSpan="13" className="px-4 py-8 text-center text-slate-500 font-medium">
                     No bookings logged matching your filters.
                   </td>
                 </tr>
@@ -529,7 +531,10 @@ export default function BookingPage() {
                       <td className={`px-4 py-3 font-medium ${rem > 0 ? 'text-yellow-500' : 'text-slate-500'}`}>
                         Rs {parseInt(rem).toLocaleString()}
                       </td>
-                      <td className="px-4 py-3 text-slate-400">{b.date}</td>
+                      <td className="px-4 py-3 text-slate-300 font-mono text-xs">{formatDateDDMMYY(b.date)}</td>
+                      <td className="px-4 py-3 text-amber-400 font-mono text-xs font-semibold">
+                        {b.status === 'Token Received' ? formatDateDDMMYY(b.tokenExpiryDate) : '—'}
+                      </td>
                       <td className="px-4 py-3">
                         <div className="flex gap-1.5 justify-center items-center">
                           <button

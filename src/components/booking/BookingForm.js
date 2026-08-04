@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Save, Eraser, Trash2, Download, Upload, Compass, Info, FileText, Printer, Calendar, AlertTriangle, AlertOctagon } from 'lucide-react';
+import { formatDateDDMMYY } from '@/lib/dateUtils';
 
 export default function BookingForm({
   appMode,
@@ -241,7 +242,7 @@ export default function BookingForm({
                         Plot <strong>#{existingBooking.plotId}</strong> already has a <strong>Token Received</strong> entry!
                         {existingBooking.tokenExpiryDate && (
                           <span className="block mt-0.5 text-[11px] text-amber-200 font-mono">
-                            📅 Token Expires On: <strong>{existingBooking.tokenExpiryDate}</strong>
+                            📅 Token Expires On: <strong>{formatDateDDMMYY(existingBooking.tokenExpiryDate)}</strong>
                           </span>
                         )}
                         <span className="block mt-1 text-[10px] text-amber-400/90">

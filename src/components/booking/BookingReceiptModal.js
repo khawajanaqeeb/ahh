@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import { ArrowLeft, X, Printer, Calendar, AlertTriangle, AlertOctagon, CheckCircle2, Trash2 } from 'lucide-react';
+import { formatDateDDMMYY } from '@/lib/dateUtils';
 
 function getExpiryStatus(tokenExpiryDate) {
   if (!tokenExpiryDate) return { isExpired: false, isExpiringSoon: false, text: '' };
@@ -30,7 +31,7 @@ function getExpiryStatus(tokenExpiryDate) {
   return {
     isExpired: false,
     isExpiringSoon: false,
-    text: `Token Valid until ${tokenExpiryDate}`
+    text: `Token Valid until ${formatDateDDMMYY(tokenExpiryDate)}`
   };
 }
 
@@ -44,7 +45,7 @@ function buildReceiptHTML(booking) {
 
   const expiryHTML = booking.status === 'Token Received' && booking.tokenExpiryDate ? `
     <div style="font-size:10px;color:#ca8a04;font-family:monospace;margin-top:4px;font-weight:bold;">
-      📅 Token Expires On: ${booking.tokenExpiryDate}
+      📅 Token Expires On: ${formatDateDDMMYY(booking.tokenExpiryDate)}
     </div>
   ` : '';
 
@@ -60,7 +61,7 @@ function buildReceiptHTML(booking) {
         <div style="text-align:right;">
           <span class="copy-badge" style="background:${badgeBg};color:${badgeColor};border:1.5px solid ${badgeColor};">${copyType}</span>
           <div class="receipt-meta">Receipt #: <strong>${receiptNo}</strong></div>
-          <div class="receipt-meta" style="color:#94a3b8;">Date: <strong style="color:#1e293b;">${booking.date || 'N/A'}</strong></div>
+          <div class="receipt-meta" style="color:#94a3b8;">Date: <strong style="color:#1e293b;">${formatDateDDMMYY(booking.date)}</strong></div>
           ${expiryHTML}
         </div>
       </div>
@@ -193,9 +194,9 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor }) {
             {copyType}
           </span>
           <p className="text-[9px] font-mono text-slate-600 mt-1">Receipt #: <strong className="text-slate-900">{receiptNo}</strong></p>
-          <p className="text-[9px] text-slate-500">Date: <span className="font-semibold text-slate-800">{booking.date}</span></p>
+          <p className="text-[9px] text-slate-500">Date: <span className="font-semibold text-slate-800">{formatDateDDMMYY(booking.date)}</span></p>
           {booking.status === 'Token Received' && booking.tokenExpiryDate && (
-            <p className="text-[9px] font-bold text-amber-700 font-mono mt-0.5">Token Expires On: {booking.tokenExpiryDate}</p>
+            <p className="text-[9px] font-bold text-amber-700 font-mono mt-0.5">Token Expires On: {formatDateDDMMYY(booking.tokenExpiryDate)}</p>
           )}
         </div>
       </div>
@@ -330,7 +331,7 @@ export default function BookingReceiptModal({ booking, onSaveBooking, onDeleteBo
                   <span>Token will be expired tomorrow.</span>
                 </div>
                 <span className="text-[11px] font-mono font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
-                  Expires: {booking.tokenExpiryDate}
+                  Expires: {formatDateDDMMYY(booking.tokenExpiryDate)}
                 </span>
               </div>
             )}
@@ -342,7 +343,7 @@ export default function BookingReceiptModal({ booking, onSaveBooking, onDeleteBo
                   <span>TOKEN EXPIRED — Please enter a new expiry date or cancel the token.</span>
                 </div>
                 <div className="text-[11px] text-red-700">
-                  Expired on: <strong>{booking.tokenExpiryDate}</strong>. If cancelled, the plot color will vanish and count in available plots again. If customer paid remaining booking amount, mark as Fully Booked to turn green.
+                  Expired on: <strong>{formatDateDDMMYY(booking.tokenExpiryDate)}</strong>. If cancelled, the plot color will vanish and count in available plots again. If customer paid remaining booking amount, mark as Fully Booked to turn green.
                 </div>
               </div>
             )}
@@ -352,7 +353,7 @@ export default function BookingReceiptModal({ booking, onSaveBooking, onDeleteBo
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-1.5 text-yellow-400 font-bold">
                   <Calendar className="w-4 h-4" />
-                  <span>Token Expires On: {booking.tokenExpiryDate || 'Not Set'}</span>
+                  <span>Token Expires On: {formatDateDDMMYY(booking.tokenExpiryDate)}</span>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
