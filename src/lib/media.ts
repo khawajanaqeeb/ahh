@@ -46,4 +46,5 @@ export const MEDIA = {
   posterLabourCity: `${SUPABASE_STORAGE_BASE}/projects/posters/labour-city-poster.jpg`,
   posterLabourCityPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/labour-city-payment-plan.jpg`,
   posterSummerFarmhousesPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/summer-farmhouses-payment-plan.jpg`,
+  posterAhhCityPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/ahh-city-payment-plan.jpg`,
 };

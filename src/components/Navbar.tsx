@@ -149,13 +149,13 @@ const Navbar = () => {
             ))}
           </ul>
 
-          {/* Book Now CTA */}
+          {/* Booking Receipt CTA */}
           <Link href="/booking" className={`navbar-booking-btn ${pathname === '/booking' ? 'navbar-booking-btn-active' : ''}`}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
               <polyline points="9,22 9,12 15,12 15,22"/>
             </svg>
-            <span>Book Now</span>
+            <span>Booking Receipt</span>
           </Link>
 
           {/* CTA Button */}
@@ -266,7 +266,7 @@ const Navbar = () => {
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="rgba(212,175,55,0.1)"/>
               <polyline points="9 22 9 12 15 12 15 22"/>
             </svg>
-            Book Now — AHH City
+            Booking Receipt — AHH City
           </Link>
           <Link href="/contact" className="btn-gold" onClick={() => setMobileOpen(false)} style={{ width: "100%", justifyContent: "center" }}>
             Get In Touch

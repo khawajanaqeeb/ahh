@@ -61,24 +61,24 @@ const currentProjects: CurrentProject[] = [
     location: "Scheme 45, Northern Bypass (Survey Number 297), Karachi",
     type: "Residential & Commercial Units",
     size: "60 & 120 Sq Yards | Commercial Shops 100 Sq Ft",
-    status: "Rapid Site Development (Rates Rising!)",
+    status: "Government Registered Project",
     badge: "active",
-    payment: "60 YDS: Rs 200,000 (Today Rate: Rs 350,000) | 120 YDS: Rs 350,000 (Today Rate: Rs 500,000)",
+    payment: "60 YDS: Total Rs 350,000 | 120 YDS: Total Rs 500,000 | Comm Shop: Rs 350,000",
     image: MEDIA.ahhCityLogo,
-    poster: MEDIA.posterAhhCityGrowthTerms,
-    description: "Government Registered Project under 99-year lease scheme. Features rapid price appreciation (60 Yds up 133% in 2 months, 120 Yds up 100%). Monthly installments starting at Rs 10,000/month.",
-    amenities: ["99-Year Leasehold", "Biometric & QR Code Verification", "Prime Highway Location", "Rapid Development", "High Future Returns"],
+    poster: MEDIA.posterAhhCityPaymentPlan,
+    description: "Government Registered Project at Scheme 45, Northern Bypass (Survey Number 297). Combined Payment Plan for 60 Sq Yd (Total Rs 350,000) & 120 Sq Yd (Total Rs 500,000) Residential Plots with 20 monthly installments, plus 100 Sq.Ft. Commercial Shops.",
+    amenities: ["Government Registered", "Survey 297 Scheme 45", "Biometric & QR Verification", "Prime Highway Location", "99-Year Leasehold"],
     paymentBreakdown: {
       residential: [
-        { size: "60 SQ YARDS", booking: "Rs 50,000", confirmation: "Rs 25,000", allocation: "Rs 25,000", monthly: "Rs 10,000 × 10", possession: "—", totalCost: "Rs 200,000", todayRate: "Rs 350,000" },
-        { size: "120 SQ YARDS", booking: "Rs 100,000", confirmation: "Rs 50,000", allocation: "Rs 50,000", monthly: "Rs 15,000 × 10", possession: "—", totalCost: "Rs 350,000", todayRate: "Rs 500,000" },
+        { size: "60 SQ YARDS (Residential)", booking: "Rs 100,000", confirmation: "Rs 25,000", allocation: "Rs 25,000", monthly: "Rs 10,000 × 20", possession: "—", totalCost: "Rs 350,000" },
+        { size: "120 SQ YARDS (Residential)", booking: "Rs 150,000", confirmation: "Rs 25,000", allocation: "Rs 25,000", monthly: "Rs 15,000 × 20", possession: "—", totalCost: "Rs 500,000" }
       ],
       commercial: {
-        title: "Commercial Shops (100 Sq Ft)",
+        title: "Commercial Shop (100 Sq.Ft.)",
         cashPrice: "Rs 350,000",
         installment: { booking: "Rs 200,000", confirmation: "Rs 50,000", allocation: "Rs 50,000", possession: "Rs 50,000", totalCost: "Rs 350,000" }
       },
-      extraCharges: "Corner, West-Open, Road-Facing, Park-Facing: 5% of Total Cost each",
+      extraCharges: "Corner Plot/Unit, West-Open, Road, Park Facing: 5% of Total Cost each",
       processingCharges: "Biometric Verification: Rs 5,000 | QR-Code: Rs 5,000 | Site Plan: Rs 5,000"
     }
   },
@@ -322,8 +322,11 @@ export default function CurrentProjects() {
                   )}
 
                   <div className="p-action-row" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "1rem" }}>
-                    <Link href={`/contact?project=${encodeURIComponent(p.name)}`} className="btn-gold">
-                      Book Now / Inquiry
+                    <Link href="/booking" className="btn-gold">
+                      Booking Receipt
+                    </Link>
+                    <Link href={`/contact?project=${encodeURIComponent(p.name)}`} className="btn-outline">
+                      Inquire Project
                     </Link>
                     <button onClick={() => setSelectedPoster(p.poster)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
                       📄 View Full Poster

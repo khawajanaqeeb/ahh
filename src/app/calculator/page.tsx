@@ -7,12 +7,12 @@ const projects = [
   {
     id: "ahh-city-60",
     name: "AHH-City (60 Yds)",
-    basePrice: 200000,
+    basePrice: 350000,
     todayMarketRate: 350000,
-    minDown: 25, // 50k booking
+    minDown: 28, // 100k booking
     maxDown: 50,
-    tenures: [10, 12],
-    defaultTenure: 10,
+    tenures: [12, 20],
+    defaultTenure: 20,
     location: "Scheme 45, Northern Bypass (Survey 297)",
     size: "60 Sq Yards Residential",
     color: "#D4AF37",
@@ -20,12 +20,12 @@ const projects = [
   {
     id: "ahh-city-120",
     name: "AHH-City (120 Yds)",
-    basePrice: 350000,
+    basePrice: 500000,
     todayMarketRate: 500000,
-    minDown: 28, // 100k booking
+    minDown: 30, // 150k booking
     maxDown: 50,
-    tenures: [10, 12],
-    defaultTenure: 10,
+    tenures: [12, 20],
+    defaultTenure: 20,
     location: "Scheme 45, Northern Bypass (Survey 297)",
     size: "120 Sq Yards Residential",
     color: "#E8CC6E",

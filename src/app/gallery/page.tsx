@@ -32,6 +32,7 @@ const galleryItems = [
   { src: MEDIA.posterLabourCity, title: "Labour City Residential Home Town Poster", category: "Posters", size: "wide" },
   { src: MEDIA.posterLabourCityPaymentPlan, title: "Labour City Payment Plan (80 Yds Res & 150 Yds Comm)", category: "Posters", size: "normal" },
   { src: MEDIA.posterSummerFarmhousesPaymentPlan, title: "Summer Farmhouses Official Payment Schedule Poster", category: "Posters", size: "wide" },
+  { src: MEDIA.posterAhhCityPaymentPlan, title: "AHH City Official Combined Payment Plan Poster", category: "Posters", size: "wide" },
 ];
 
 const categories = ["All", "Posters", "Office", "Projects", "Construction", "Delivered"];
