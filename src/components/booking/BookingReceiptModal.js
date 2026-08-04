@@ -1,8 +1,38 @@
 // src/components/booking/BookingReceiptModal.js
 'use client';
 
-import React from 'react';
-import { ArrowLeft, X, Printer } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowLeft, X, Printer, Calendar, AlertTriangle, AlertOctagon, CheckCircle2, Trash2 } from 'lucide-react';
+
+function getExpiryStatus(tokenExpiryDate) {
+  if (!tokenExpiryDate) return { isExpired: false, isExpiringSoon: false, text: '' };
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const exp = new Date(tokenExpiryDate);
+  exp.setHours(0, 0, 0, 0);
+  const diffTime = exp.getTime() - today.getTime();
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 0) {
+    return {
+      isExpired: true,
+      isExpiringSoon: false,
+      text: 'TOKEN EXPIRED — Token validity has passed. Please enter a new expiry date or cancel the token.'
+    };
+  }
+  if (diffDays === 0 || diffDays === 1) {
+    return {
+      isExpired: false,
+      isExpiringSoon: true,
+      text: 'Token will be expired tomorrow.'
+    };
+  }
+  return {
+    isExpired: false,
+    isExpiringSoon: false,
+    text: `Token Valid until ${tokenExpiryDate}`
+  };
+}
 
 // Build raw HTML string for the printable receipt (no React, pure HTML+CSS)
 function buildReceiptHTML(booking) {
@@ -11,6 +41,12 @@ function buildReceiptHTML(booking) {
   const statusLabel = booking.status === 'Fully Booked' ? 'FULLY BOOKED' : 'TOKEN RECEIVED';
   const statusColor = booking.status === 'Fully Booked' ? '#16a34a' : '#ca8a04';
   const statusBg = booking.status === 'Fully Booked' ? '#dcfce7' : '#fef9c3';
+
+  const expiryHTML = booking.status === 'Token Received' && booking.tokenExpiryDate ? `
+    <div style="font-size:10px;color:#ca8a04;font-family:monospace;margin-top:4px;font-weight:bold;">
+      📅 Token Expires On: ${booking.tokenExpiryDate}
+    </div>
+  ` : '';
 
   const voucherHTML = (copyType, badgeColor, badgeBg) => `
     <div class="voucher">
@@ -25,6 +61,7 @@ function buildReceiptHTML(booking) {
           <span class="copy-badge" style="background:${badgeBg};color:${badgeColor};border:1.5px solid ${badgeColor};">${copyType}</span>
           <div class="receipt-meta">Receipt #: <strong>${receiptNo}</strong></div>
           <div class="receipt-meta" style="color:#94a3b8;">Date: <strong style="color:#1e293b;">${booking.date || 'N/A'}</strong></div>
+          ${expiryHTML}
         </div>
       </div>
 
@@ -157,6 +194,9 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor }) {
           </span>
           <p className="text-[9px] font-mono text-slate-600 mt-1">Receipt #: <strong className="text-slate-900">{receiptNo}</strong></p>
           <p className="text-[9px] text-slate-500">Date: <span className="font-semibold text-slate-800">{booking.date}</span></p>
+          {booking.status === 'Token Received' && booking.tokenExpiryDate && (
+            <p className="text-[9px] font-bold text-amber-700 font-mono mt-0.5">Token Expires On: {booking.tokenExpiryDate}</p>
+          )}
         </div>
       </div>
 
@@ -214,8 +254,13 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor }) {
   );
 }
 
-export default function BookingReceiptModal({ booking, onClose }) {
+export default function BookingReceiptModal({ booking, onSaveBooking, onDeleteBooking, onClose }) {
+  const [editExpiryMode, setEditExpiryMode] = useState(false);
+  const [newExpiryInput, setNewExpiryInput] = useState(booking?.tokenExpiryDate || '');
+
   if (!booking) return null;
+
+  const expiryInfo = booking.status === 'Token Received' ? getExpiryStatus(booking.tokenExpiryDate) : null;
 
   const handlePrint = () => {
     const html = buildReceiptHTML(booking);
@@ -227,10 +272,37 @@ export default function BookingReceiptModal({ booking, onClose }) {
     }
   };
 
+  const handleUpdateExpiryDate = () => {
+    if (!newExpiryInput) return;
+    const updated = { ...booking, tokenExpiryDate: newExpiryInput };
+    if (onSaveBooking) onSaveBooking(updated);
+    setEditExpiryMode(false);
+  };
+
+  const handleCancelToken = () => {
+    if (confirm(`Cancel token entry for Plot #${booking.plotId}? The yellow plot color will vanish on the map canvas and count as an Available plot again.`)) {
+      if (onDeleteBooking) onDeleteBooking(booking.plotId);
+      onClose();
+    }
+  };
+
+  const handleMarkFullyBooked = () => {
+    if (confirm(`Mark Plot #${booking.plotId} as Fully Booked? The plot color will turn GREEN on the map canvas.`)) {
+      const updated = {
+        ...booking,
+        status: 'Fully Booked',
+        paidAmount: booking.totalPrice,
+        tokenExpiryDate: ''
+      };
+      if (onSaveBooking) onSaveBooking(updated);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md flex justify-center items-start">
       <div className="bg-white text-slate-900 border border-slate-200 rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl relative my-auto">
 
+        {/* Top Action Header */}
         <div className="flex justify-between items-center pb-3 mb-4 border-b border-slate-200 gap-2">
           <button type="button" onClick={onClose}
             className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer">
@@ -247,6 +319,78 @@ export default function BookingReceiptModal({ booking, onClose }) {
             </button>
           </div>
         </div>
+
+        {/* TOKEN EXPIRY ALERTS & ACTIONS */}
+        {booking.status === 'Token Received' && (
+          <div className="mb-4 space-y-2">
+            {expiryInfo?.isExpiringSoon && (
+              <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs flex items-center justify-between gap-2 shadow-sm">
+                <div className="flex items-center gap-2 font-bold">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>Token will be expired tomorrow.</span>
+                </div>
+                <span className="text-[11px] font-mono font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
+                  Expires: {booking.tokenExpiryDate}
+                </span>
+              </div>
+            )}
+
+            {expiryInfo?.isExpired && (
+              <div className="p-3.5 rounded-xl bg-red-50 border border-red-300 text-red-900 text-xs flex flex-col gap-2 shadow-sm">
+                <div className="flex items-center gap-2 font-bold text-red-800">
+                  <AlertOctagon className="w-4 h-4 text-red-600 shrink-0" />
+                  <span>TOKEN EXPIRED — Please enter a new expiry date or cancel the token.</span>
+                </div>
+                <div className="text-[11px] text-red-700">
+                  Expired on: <strong>{booking.tokenExpiryDate}</strong>. If cancelled, the plot color will vanish and count in available plots again. If customer paid remaining booking amount, mark as Fully Booked to turn green.
+                </div>
+              </div>
+            )}
+
+            {/* EXPIRY MANAGEMENT BUTTON BAR */}
+            <div className="p-3 rounded-xl bg-slate-900 text-white text-xs space-y-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-yellow-400 font-bold">
+                  <Calendar className="w-4 h-4" />
+                  <span>Token Expires On: {booking.tokenExpiryDate || 'Not Set'}</span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button type="button" onClick={() => setEditExpiryMode(!editExpiryMode)}
+                    className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors">
+                    <Calendar className="w-3.5 h-3.5 text-yellow-400" />
+                    <span>{editExpiryMode ? 'Cancel Edit' : 'Edit Expiry Date'}</span>
+                  </button>
+                  <button type="button" onClick={handleMarkFullyBooked}
+                    className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1 cursor-pointer transition-all shadow-sm">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Paid & Fully Booked (Turn Green)</span>
+                  </button>
+                  <button type="button" onClick={handleCancelToken}
+                    className="px-3 py-1 rounded-lg bg-red-950 border border-red-800/80 hover:bg-red-900 text-red-300 text-xs font-bold flex items-center gap-1 cursor-pointer transition-all">
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Cancel Token (Vanish Plot Color)</span>
+                  </button>
+                </div>
+              </div>
+
+              {editExpiryMode && (
+                <div className="pt-2 border-t border-slate-800 flex items-center gap-2">
+                  <input
+                    type="date"
+                    value={newExpiryInput}
+                    onChange={(e) => setNewExpiryInput(e.target.value)}
+                    className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white outline-none focus:border-yellow-500"
+                  />
+                  <button type="button" onClick={handleUpdateExpiryDate}
+                    className="px-4 py-1.5 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold text-xs cursor-pointer transition-colors">
+                    Save New Expiry Date
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-3 text-center font-semibold">
           Preview — Both copies will print on 1 A4 sheet
@@ -276,3 +420,4 @@ export default function BookingReceiptModal({ booking, onClose }) {
     </div>
   );
 }
+

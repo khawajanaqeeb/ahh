@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Save, Eraser, Trash2, Download, Upload, Compass, Info, FileText, Printer } from 'lucide-react';
+import { Save, Eraser, Trash2, Download, Upload, Compass, Info, FileText, Printer, Calendar, AlertTriangle, AlertOctagon } from 'lucide-react';
 
 export default function BookingForm({
   appMode,
@@ -32,7 +32,14 @@ export default function BookingForm({
   const [totalPrice, setTotalPrice] = useState('');
   const [paidAmount, setPaidAmount] = useState('');
   const [bookingDate, setBookingDate] = useState('');
+  const [tokenExpiryDate, setTokenExpiryDate] = useState('');
   const [balance, setBalance] = useState(0);
+
+  const getDefaultExpiryDate = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    return d.toISOString().substring(0, 10);
+  };
 
   const resolveTargetPlotId = (input, selectedType) => {
     if (!input) return '';
@@ -68,6 +75,7 @@ export default function BookingForm({
         setTotalPrice(existing.totalPrice);
         setPaidAmount(existing.paidAmount);
         setBookingDate(existing.date);
+        setTokenExpiryDate(existing.tokenExpiryDate || getDefaultExpiryDate());
         if (onFormPreviewChange) onFormPreviewChange({ plotId: selectedPlotId, status: existing.status });
       } else {
         clearFields(false);
@@ -86,6 +94,7 @@ export default function BookingForm({
 
   useEffect(() => {
     setBookingDate(new Date().toISOString().substring(0, 10));
+    setTokenExpiryDate(getDefaultExpiryDate());
   }, []);
 
   const clearFields = (clearPlotId = true) => {
@@ -95,6 +104,7 @@ export default function BookingForm({
     setPlotType('Residential 120SQY'); setStatus('Token Received');
     setTotalPrice(''); setPaidAmount('');
     setBookingDate(new Date().toISOString().substring(0, 10));
+    setTokenExpiryDate(getDefaultExpiryDate());
     if (onFormPreviewChange) onFormPreviewChange(null);
   };
 
@@ -115,7 +125,8 @@ export default function BookingForm({
       status,
       totalPrice: parseFloat(totalPrice) || 0,
       paidAmount: parseFloat(paidAmount) || 0,
-      date: bookingDate
+      date: bookingDate,
+      tokenExpiryDate: status === 'Token Received' ? tokenExpiryDate : ''
     };
   };
 
@@ -215,6 +226,49 @@ export default function BookingForm({
                   return 'border-slate-800 focus:border-blue-500 focus:ring-blue-500';
                 })()}`}
                 placeholder="Click plot or type number (e.g. 8, 120-8, SR-1)" required />
+
+              {resolvedPreviewId && (() => {
+                const existingBooking = bookings.find(b => b.plotId === resolvedPreviewId);
+                if (!existingBooking) return null;
+                if (existingBooking.status === 'Token Received') {
+                  return (
+                    <div className="p-3 rounded-xl bg-amber-950/80 border border-amber-500/80 text-amber-300 text-xs flex flex-col gap-1 shadow-lg mt-2">
+                      <div className="font-bold flex items-center gap-1.5 text-amber-200">
+                        <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                        <span>Token Received Status Conflict</span>
+                      </div>
+                      <div>
+                        Plot <strong>#{existingBooking.plotId}</strong> already has a <strong>Token Received</strong> entry!
+                        {existingBooking.tokenExpiryDate && (
+                          <span className="block mt-0.5 text-[11px] text-amber-200 font-mono">
+                            📅 Token Expires On: <strong>{existingBooking.tokenExpiryDate}</strong>
+                          </span>
+                        )}
+                        <span className="block mt-1 text-[10px] text-amber-400/90">
+                          Client: {existingBooking.clientName} | Paid Token: Rs {parseInt(existingBooking.paidAmount || 0).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                }
+                if (existingBooking.status === 'Fully Booked') {
+                  return (
+                    <div className="p-3 rounded-xl bg-emerald-950/90 border border-emerald-500/80 text-emerald-300 text-xs flex flex-col gap-1 shadow-lg mt-2">
+                      <div className="font-bold flex items-center gap-1.5 text-emerald-200">
+                        <AlertOctagon className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>Fully Booked Plot Alert</span>
+                      </div>
+                      <div>
+                        Plot <strong>#{existingBooking.plotId}</strong> is already <strong>Fully Booked (Green)</strong>.
+                        <span className="block mt-1 text-[10px] text-emerald-300/90">
+                          Client: {existingBooking.clientName} | Total Paid: Rs {parseInt(existingBooking.paidAmount || 0).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
             </div>
 
             <div>
@@ -305,6 +359,22 @@ export default function BookingForm({
                 </select>
               </div>
             </div>
+
+            {status === 'Token Received' && (
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-yellow-400 mb-1 flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-yellow-400" />
+                  <span>Token Expires On</span>
+                </label>
+                <input
+                  type="date"
+                  value={tokenExpiryDate}
+                  onChange={(e) => setTokenExpiryDate(e.target.value)}
+                  className="w-full bg-slate-950 border border-yellow-600/60 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 rounded-lg px-3 py-2 text-sm text-yellow-300 font-medium transition-all outline-none"
+                  required={status === 'Token Received'}
+                />
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-3">
               <div>

@@ -68,6 +68,7 @@ ALTER TABLE ahh_city_bookings ADD COLUMN IF NOT EXISTS cnic TEXT;
 ALTER TABLE ahh_city_bookings ADD COLUMN IF NOT EXISTS payment_mode TEXT DEFAULT 'Cash';
 ALTER TABLE ahh_city_bookings ADD COLUMN IF NOT EXISTS block TEXT;
 ALTER TABLE ahh_city_bookings ADD COLUMN IF NOT EXISTS bank_name TEXT;
+ALTER TABLE ahh_city_bookings ADD COLUMN IF NOT EXISTS token_expiry_date TEXT;
 
 -- Enable Row Level Security (RLS) or disable for easy access
 ALTER TABLE ahh_city_plots ENABLE ROW LEVEL SECURITY;
@@ -216,7 +217,8 @@ export async function fetchBookings() {
         status: item.status,
         totalPrice: parseFloat(item.total_price),
         paidAmount: parseFloat(item.paid_amount),
-        date: item.date
+        date: item.date,
+        tokenExpiryDate: item.token_expiry_date || item.tokenExpiryDate || ''
       }));
     } catch (err) {
       console.error('Error fetching bookings from Supabase:', err);
@@ -258,7 +260,8 @@ export async function saveBookingToDb(booking) {
         status: booking.status,
         total_price: booking.totalPrice,
         paid_amount: booking.paidAmount,
-        date: booking.date
+        date: booking.date,
+        token_expiry_date: booking.tokenExpiryDate || null
       };
 
       const { error } = await supabase

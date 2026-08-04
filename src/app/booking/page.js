@@ -570,6 +570,8 @@ export default function BookingPage() {
       {activeReceiptBooking && (
         <BookingReceiptModal
           booking={activeReceiptBooking}
+          onSaveBooking={handleSaveBooking}
+          onDeleteBooking={handleDeleteBooking}
           onClose={() => setActiveReceiptBooking(null)}
         />
       )}
