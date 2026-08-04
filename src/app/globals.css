@@ -1297,15 +1297,80 @@ select.form-input {
           flex-wrap: wrap;
         }
 
+        .p-extra-charges-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.75rem;
+        }
+
         @media (max-width: 1024px) {
           .project-detail-row {
             grid-template-columns: 1fr;
+            gap: 0;
           }
           .p-image-side {
-            min-height: 280px;
+            min-height: auto;
+            padding: 1rem !important;
           }
           .p-content-side {
-            padding: 2rem;
+            padding: 1.5rem;
+          }
+          .p-content-side h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0.85rem;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .project-detail-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+          }
+          .p-content-side {
+            padding: 1.25rem 1rem;
+          }
+          .p-content-side h2 {
+            font-size: 1.45rem;
+            line-height: 1.25;
+            margin-bottom: 0.75rem;
+          }
+          .p-type {
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+          }
+          .p-meta {
+            font-size: 0.84rem;
+            margin-bottom: 1rem;
+          }
+          .p-desc {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+          }
+          .p-payment-highlight {
+            padding: 0.7rem 0.85rem;
+            font-size: 0.84rem;
+            margin-bottom: 1rem;
+          }
+          .p-payment-card {
+            padding: 1rem 0.75rem !important;
+          }
+          .p-extra-charges-grid {
+            grid-template-columns: 1fr;
+            gap: 0.6rem;
+          }
+          .p-action-row {
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+          }
+          .p-action-row .btn-gold,
+          .p-action-row .btn-outline {
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+            padding: 0.75rem 1rem;
           }
         }
 

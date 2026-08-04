@@ -126,7 +126,7 @@ export default function CurrentProjects() {
 
           <div className="project-detail-list">
             {currentProjects.map((p) => (
-              <div key={p.id} id={p.id} className="project-detail-row glass-card" style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "2rem" }}>
+              <div key={p.id} id={p.id} className="project-detail-row glass-card">
                 {/* Poster / Image side */}
                 <div className="p-image-side" style={{ padding: "1.25rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(10,10,22,0.6)" }}>
                   <div style={{ position: "relative", width: "100%", height: "auto", cursor: "pointer", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.25)" }} onClick={() => setSelectedPoster(p.poster)}>
@@ -172,13 +172,13 @@ export default function CurrentProjects() {
 
                   {/* Detailed Payment Plan Tables */}
                   {p.paymentBreakdown?.residential && (
-                    <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: "10px", padding: "1.25rem", marginBottom: "1.25rem", border: "1px solid rgba(212,175,55,0.25)" }}>
+                    <div className="p-payment-card" style={{ background: "rgba(255,255,255,0.03)", borderRadius: "10px", padding: "1.25rem", marginBottom: "1.25rem", border: "1px solid rgba(212,175,55,0.25)" }}>
                       <h4 style={{ color: "#D4AF37", fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.85rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
                         📊 Official Payment Schedule Breakdown
                       </h4>
 
                       {/* Residential Table */}
-                      <div style={{ overflowX: "auto", marginBottom: "1rem" }}>
+                      <div className="table-responsive" style={{ overflowX: "auto", marginBottom: "1rem" }}>
                         <table style={{ width: "100%", fontSize: "0.8rem", textAlign: "left", borderCollapse: "collapse" }}>
                           <thead>
                             <tr style={{ background: "rgba(212,175,55,0.15)", color: "#D4AF37", borderBottom: "1px solid rgba(212,175,55,0.3)" }}>
@@ -249,7 +249,7 @@ export default function CurrentProjects() {
                       )}
 
                       {/* Extra Charges & Document Fees */}
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "0.76rem" }}>
+                      <div className="p-extra-charges-grid" style={{ marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "0.76rem" }}>
                         <div style={{ color: "#8A8A9E" }}>
                           <span style={{ color: "#D4AF37", fontWeight: 700, display: "block" }}>⚡ Extra Charges:</span>
                           Corner, West-Open, Road, Park Facing: <strong>5% of Total Cost</strong>
