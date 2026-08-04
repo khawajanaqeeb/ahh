@@ -185,17 +185,29 @@ const Navbar = () => {
       {/* Mobile Menu Drawer */}
       <div className={`mobile-drawer ${mobileOpen ? "mobile-drawer-open" : ""}`}>
         <div className="mobile-drawer-header">
-          <Image
-            src={MEDIA.ahhLogoPng}
-            alt="AHH Brothers"
-            width={40}
-            height={40}
-            className="navbar-logo-img"
-          />
-          <div className="navbar-logo-text">
-            <span className="logo-title">AHH Brothers</span>
-            <span className="logo-subtitle">Builders & Developers</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <Image
+              src={MEDIA.ahhLogoPng}
+              alt="AHH Brothers"
+              width={38}
+              height={38}
+              className="navbar-logo-img"
+            />
+            <div className="navbar-logo-text">
+              <span className="logo-title" style={{ fontSize: "1.15rem" }}>AHH Brothers</span>
+              <span className="logo-subtitle" style={{ fontSize: "0.58rem" }}>Builders & Developers</span>
+            </div>
           </div>
+          <button
+            className="mobile-drawer-close"
+            onClick={() => setMobileOpen(false)}
+            aria-label="Close menu"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
         </div>
 
         <ul className="mobile-links">
