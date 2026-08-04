@@ -2987,3 +2987,91 @@ select.form-input {
     font-size: 0.76rem;
   }
 }
+
+/* ============================================
+   FULL VIEW POSTER LIGHTBOX — Full-Screen Stretch
+   ============================================ */
+
+.poster-modal-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: rgba(3, 3, 8, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 0;
+}
+
+.poster-modal-close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  background: linear-gradient(135deg, #D4AF37 0%, #B8942E 100%);
+  color: #0A0A0A;
+  font-weight: 800;
+  font-size: 0.88rem;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.4);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.5px;
+}
+
+.poster-modal-close:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6);
+}
+
+.poster-modal-content {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  margin: 0 auto;
+}
+
+.poster-modal-img {
+  width: auto;
+  max-width: 100vw;
+  height: auto;
+  max-height: 100vh;
+  max-height: 100dvh;
+  object-fit: contain;
+  display: block;
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .poster-modal-content {
+    align-items: flex-start;
+    padding: 3.5rem 0.25rem 2rem;
+  }
+  .poster-modal-img {
+    width: 100% !important;
+    max-width: 100vw !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 100vh;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+}
