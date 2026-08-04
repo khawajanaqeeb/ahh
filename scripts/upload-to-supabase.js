@@ -56,6 +56,7 @@ const UPLOAD_MAP = [
   { file: 'posters/hooria-villas-payment-plan.jpg', bucket: 'projects', remotePath: 'posters/hooria-villas-payment-plan.jpg', contentType: 'image/jpeg' },
   { file: 'posters/labour-city-poster.jpg',         bucket: 'projects', remotePath: 'posters/labour-city-poster.jpg',         contentType: 'image/jpeg' },
   { file: 'posters/labour-city-payment-plan.jpg',   bucket: 'projects', remotePath: 'posters/labour-city-payment-plan.jpg',   contentType: 'image/jpeg' },
+  { file: 'posters/summer-farmhouses-payment-plan.jpg', bucket: 'projects', remotePath: 'posters/summer-farmhouses-payment-plan.jpg', contentType: 'image/jpeg' },
 ];
 
 const BUCKETS_TO_CREATE = [

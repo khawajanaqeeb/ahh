@@ -5,7 +5,56 @@ import Link from "next/link";
 import { useState } from "react";
 import { MEDIA } from "@/lib/media";
 
-const currentProjects = [
+interface PaymentBreakdownResidential {
+  size: string;
+  booking: string;
+  confirmation: string;
+  allocation: string;
+  monthly: string;
+  possession?: string;
+  totalCost: string;
+  todayRate?: string;
+}
+
+interface PaymentBreakdownCommercial {
+  title: string;
+  cashPrice?: string;
+  installment?: {
+    booking?: string;
+    confirmation?: string;
+    allocation?: string;
+    monthly?: string;
+    halfYearly?: string;
+    possession?: string;
+    totalCost?: string;
+  };
+}
+
+interface PaymentBreakdown {
+  residential?: PaymentBreakdownResidential[];
+  commercial?: PaymentBreakdownCommercial;
+  extraCharges?: string;
+  processingCharges?: string;
+  note?: string;
+}
+
+interface CurrentProject {
+  id: string;
+  name: string;
+  location: string;
+  type: string;
+  size: string;
+  status: string;
+  badge: string;
+  payment: string;
+  image: string;
+  poster: string;
+  description: string;
+  amenities: string[];
+  paymentBreakdown: PaymentBreakdown;
+}
+
+const currentProjects: CurrentProject[] = [
   {
     id: "ahh-city",
     name: "AHH-City",
@@ -85,19 +134,23 @@ const currentProjects = [
   },
   {
     id: "summer-farm-houses",
-    name: "Summer Farm Houses",
-    location: "Gadap Town / Malir, Karachi, Sindh",
-    type: "Farm House Community",
-    size: "1000 Sq Yards",
-    status: "Now Booking (+212% Return)",
+    name: "Summer Farmhouses",
+    location: "Scheme 45, Northern Bypass, Karachi",
+    type: "Farm House Land & Community",
+    size: "Farm House Land (1000 Sq Yds)",
+    status: "Government Registered Project",
     badge: "active",
-    payment: "Cash Price: Rs 25 Lacs | +212% Peak Return (Rs 8 Lacs → Rs 25 Lacs in 1.5 Yrs)",
+    payment: "Cash Price: Rs 2,500,000 (25 Lacs) | Booking: Rs 1,000,000 | 5 Monthly: Rs 100,000",
     image: MEDIA.summerFarmhousesLogo,
-    poster: MEDIA.posterInterestFreeGrowth,
-    description: "Luxury farmhouse community delivering 3x+ growth in just 1.5 years (+212% return). 1000 Sq Yards Farm House plots at Cash Price Rs 25 Lacs.",
-    amenities: ["Fruit Orchards", "Private Swimming Pools", "Boundary Wall Security", "Lush Landscapes", "24/7 Power Backup"],
+    poster: MEDIA.posterSummerFarmhousesPaymentPlan,
+    description: "Government Registered Project located at Scheme 45, Northern Bypass, Karachi. Features prime farmhouse land with flexible installment plan (Booking Rs 1,000,000, Confirmation Rs 500,000, Allocation Rs 500,000, and 5 monthly installments of Rs 100,000) or total cash price Rs 2,500,000.",
+    amenities: ["Government Registered", "99-Year Leasehold", "24/7 Gated Security", "Prime Highway Location", "Rapid Development"],
     paymentBreakdown: {
-      note: "📌 Cash Price: Rs 25 Lacs for 1000 Sq Yards Farm House plot. (Detailed installment plan schedule will be uploaded soon as announced by developer)."
+      residential: [
+        { size: "FARM HOUSE LAND", booking: "Rs 1,000,000", confirmation: "Rs 500,000", allocation: "Rs 500,000", monthly: "Rs 100,000 × 5", possession: "—", totalCost: "Rs 2,500,000" }
+      ],
+      extraCharges: "Corner, West-Open, Road, Park Facing: 5% of Total Cost each",
+      processingCharges: "Biometric Verification: Rs 5,000 | QR-Code: Rs 5,000 | Site Plan: Rs 5,000"
     }
   },
 ];
@@ -262,7 +315,7 @@ export default function CurrentProjects() {
                     </div>
                   )}
 
-                  {p.paymentBreakdown?.note && (
+                  {('note' in p.paymentBreakdown && p.paymentBreakdown.note) && (
                     <div style={{ background: "rgba(212,175,55,0.06)", borderRadius: "8px", padding: "0.75rem 1rem", marginBottom: "1.25rem", border: "1px solid rgba(212,175,55,0.2)", fontSize: "0.85rem", color: "#D4AF37" }}>
                       {p.paymentBreakdown.note}
                     </div>

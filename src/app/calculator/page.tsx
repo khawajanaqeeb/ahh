@@ -84,15 +84,15 @@ const projects = [
   },
   {
     id: "summer-farm-houses",
-    name: "Summer Farm Houses",
+    name: "Summer Farmhouses (1000 Yds)",
     basePrice: 2500000,
     todayMarketRate: 2500000,
-    minDown: 20,
-    maxDown: 50,
-    tenures: [18, 24],
-    defaultTenure: 24,
-    location: "Gadap Town / Malir, Karachi",
-    size: "1000 Sq Yards (Cash Price: Rs 25 Lacs)",
+    minDown: 40, // 1,000,000 booking
+    maxDown: 60,
+    tenures: [5, 12],
+    defaultTenure: 5,
+    location: "Scheme 45, Northern Bypass, Karachi",
+    size: "Farm House Land (1000 Sq Yds)",
     color: "#E8CC6E",
   },
 ];

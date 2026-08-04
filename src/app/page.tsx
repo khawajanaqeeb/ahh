@@ -95,15 +95,15 @@ const projects = [
   },
   {
     id: "summer-farm-houses",
-    name: "Summer Farm Houses",
-    location: "Malir / Gadap Town, Karachi",
-    type: "Farm House Community",
-    size: "1000 Sq Yards",
-    status: "Now Booking",
+    name: "Summer Farmhouses",
+    location: "Scheme 45, Northern Bypass, Karachi",
+    type: "Farm House Land & Community",
+    size: "Farm House Land (1000 Sq Yds)",
+    status: "Govt Registered Project",
     badge: "active",
-    payment: "Cash Price: Rs 25 Lacs | +212% Peak Return",
+    payment: "Cash Price: Rs 25 Lacs | Booking: Rs 10 Lacs | 5 Monthly: Rs 1 Lac",
     image: MEDIA.summerFarmhousesLogo,
-    description: "1000 Sq Yards luxury farm house plots. Cash Price: Rs 25 Lacs. Delivered 3x+ growth in 1.5 years (+212%).",
+    description: "Government Registered Project at Scheme 45, Northern Bypass. Farm House Land with easy installment plan (Booking Rs 10 Lacs, 5 monthly of Rs 1 Lac) or Cash Price Rs 25 Lacs.",
   },
 ];
 
