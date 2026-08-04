@@ -142,12 +142,14 @@ export default function CurrentProjects() {
                       🔍 Tap to View Full Poster
                     </div>
                   </div>
-                  <div className={`p-badge p-badge-${p.badge}`} style={{ marginTop: "0.75rem" }}>{p.status}</div>
                 </div>
 
                 {/* Content Side */}
                 <div className="p-content-side">
-                  <span className="p-type">{p.type}</span>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                    <span className="p-type">{p.type}</span>
+                    <span className={`p-badge p-badge-${p.badge}`}>{p.status}</span>
+                  </div>
                   <h2>{p.name}</h2>
                   
                   <div className="p-meta">
