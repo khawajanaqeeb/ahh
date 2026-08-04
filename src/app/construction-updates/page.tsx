@@ -16,21 +16,21 @@ const projects = [
     color: "#D4AF37",
     updates: [
       {
-        month: "July 2025",
+        month: "01/07/25",
         image: MEDIA.off1,
         title: "Boundary Wall — 100% Complete",
         desc: "Entire perimeter boundary wall completed with main entrance gate structure erected.",
         milestones: ["Perimeter wall complete", "Main gate structure installed", "Security cabin established"],
       },
       {
-        month: "May 2025",
+        month: "01/05/25",
         image: MEDIA.off2,
         title: "Road Infrastructure",
         desc: "Main boulevard and street road leveling completed. Drainage channels under progress.",
         milestones: ["Main boulevard leveled", "Street roads marked", "Drainage channels 40% done"],
       },
       {
-        month: "March 2025",
+        month: "01/03/25",
         image: MEDIA.off4,
         title: "Site Clearing & Demarcation",
         desc: "Full site clearing completed. Plot demarcation and block division marked.",
@@ -48,14 +48,14 @@ const projects = [
     color: "#C5A028",
     updates: [
       {
-        month: "July 2025",
+        month: "01/07/25",
         image: MEDIA.off6,
         title: "Approval & Registration",
         desc: "Sindh Building Control Authority (SBCA) registration completed. NOC received.",
         milestones: ["SBCA registration done", "NOC received", "Legal clearance obtained"],
       },
       {
-        month: "April 2025",
+        month: "01/04/25",
         image: MEDIA.off7,
         title: "Land Acquisition",
         desc: "Complete land acquisition and title deed transfer completed. Site preparation begun.",
@@ -73,7 +73,7 @@ const projects = [
     color: "#E8CC6E",
     updates: [
       {
-        month: "July 2025",
+        month: "01/07/25",
         image: MEDIA.off3,
         title: "Master Plan Approved",
         desc: "Full master plan design approved by architectural board. Environmental clearance pending.",

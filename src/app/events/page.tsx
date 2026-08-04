@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -6,7 +6,7 @@ import Image from "next/image";
 const events = [
   {
     title: "Hooria Villas Site Visit & Launch Ceremony",
-    date: "August 15, 2026",
+    date: "15/08/26",
     time: "10:00 AM - 4:00 PM",
     location: "Hooria Villas Site, Northern Bypass",
     desc: "Join us for an exclusive on-site launching ceremony, layout presentation, and a guided tour of current speedy development progress.",
@@ -14,7 +14,7 @@ const events = [
   },
   {
     title: "Karachi Property Expo 2026",
-    date: "September 05-07, 2026",
+    date: "05/09/26 – 07/09/26",
     time: "11:00 AM - 8:00 PM",
     location: "Expo Center, Karachi (Hall 2, Booth A4)",
     desc: "Meet our executive team at the Karachi Property Expo to explore exclusive pre-launch booking rates for AHH-City and Labour City.",

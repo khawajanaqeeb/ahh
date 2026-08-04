@@ -202,7 +202,12 @@ export default function BookingForm({
 
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Booking Date</label>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Booking Date (dd/mm/yy)</label>
+                <span className="text-[11px] font-mono font-bold text-blue-400 bg-blue-950/60 border border-blue-800/40 px-2 py-0.5 rounded">
+                  📅 {formatDateDDMMYY(bookingDate)}
+                </span>
+              </div>
               <input type="date" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)}
                 className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white transition-all outline-none" required />
             </div>
@@ -363,10 +368,15 @@ export default function BookingForm({
 
             {status === 'Token Received' && (
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-yellow-400 mb-1 flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-yellow-400" />
-                  <span>Token Expires On</span>
-                </label>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-yellow-400 flex items-center gap-1">
+                    <Calendar className="w-3.5 h-3.5 text-yellow-400" />
+                    <span>Token Expires On (dd/mm/yy)</span>
+                  </label>
+                  <span className="text-[11px] font-mono font-bold text-yellow-400 bg-yellow-950/60 border border-yellow-800/40 px-2 py-0.5 rounded">
+                    📅 {formatDateDDMMYY(tokenExpiryDate)}
+                  </span>
+                </div>
                 <input
                   type="date"
                   value={tokenExpiryDate}
