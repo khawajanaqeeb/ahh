@@ -267,55 +267,53 @@ export default function Gallery() {
 
       {/* Lightbox */}
       {lightboxIndex !== null && (
-        <div
-          style={{
-            position: "fixed", inset: 0, background: "rgba(0,0,0,0.95)",
-            zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center",
-            backdropFilter: "blur(10px)",
-          }}
-          onClick={closeLightbox}
-        >
+        <div className="poster-modal-overlay" onClick={closeLightbox}>
           {/* Close */}
           <button
+            className="poster-modal-close"
             onClick={closeLightbox}
-            style={{ position: "absolute", top: "1.25rem", right: "1.25rem", width: 44, height: 44, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "white", zIndex: 10000 }}
+            aria-label="Close photo view"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            ✕ Close
           </button>
 
           {/* Prev */}
           <button
             onClick={(e) => { e.stopPropagation(); goPrev(); }}
-            style={{ position: "absolute", left: "1.5rem", width: 48, height: 48, borderRadius: "50%", background: "rgba(212,175,55,0.15)", border: "1px solid rgba(212,175,55,0.3)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#D4AF37", zIndex: 10000 }}
+            aria-label="Previous photo"
+            style={{ position: "fixed", left: "1rem", top: "50%", transform: "translateY(-50%)", width: 48, height: 48, borderRadius: "50%", background: "rgba(212,175,55,0.25)", border: "1px solid rgba(212,175,55,0.4)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#D4AF37", zIndex: 10000, boxShadow: "0 4px 20px rgba(0,0,0,0.6)" }}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
 
           {/* Image */}
           <div
-            style={{ maxWidth: "85vw", maxHeight: "85vh", position: "relative" }}
+            className="poster-modal-content"
+            style={{ flexDirection: "column", padding: "3.5rem 0.5rem 2rem" }}
             onClick={(e) => e.stopPropagation()}
           >
             <Image
               src={filtered[lightboxIndex].src}
               alt={filtered[lightboxIndex].title}
-              width={900}
-              height={600}
-              style={{ maxWidth: "85vw", maxHeight: "80vh", objectFit: "contain", borderRadius: "12px" }}
+              width={1600}
+              height={2200}
+              priority
+              className="poster-modal-img"
             />
-            <div style={{ textAlign: "center", marginTop: "1rem" }}>
-              <div style={{ color: "#D4AF37", fontSize: "0.72rem", letterSpacing: "0.12em", fontWeight: 700, textTransform: "uppercase", marginBottom: "0.25rem" }}>{filtered[lightboxIndex].category}</div>
-              <div style={{ color: "#F5F5F7", fontSize: "1rem", fontWeight: 600 }}>{filtered[lightboxIndex].title}</div>
-              <div style={{ color: "#8A8A9E", fontSize: "0.78rem", marginTop: "0.4rem" }}>{lightboxIndex + 1} / {filtered.length}</div>
+            <div style={{ textAlign: "center", marginTop: "1rem", padding: "0 1rem" }}>
+              <div style={{ color: "#D4AF37", fontSize: "0.78rem", letterSpacing: "0.12em", fontWeight: 700, textTransform: "uppercase", marginBottom: "0.25rem" }}>{filtered[lightboxIndex].category}</div>
+              <div style={{ color: "#F5F5F7", fontSize: "1.1rem", fontWeight: 700 }}>{filtered[lightboxIndex].title}</div>
+              <div style={{ color: "#8A8A9E", fontSize: "0.82rem", marginTop: "0.3rem" }}>{lightboxIndex + 1} / {filtered.length}</div>
             </div>
           </div>
 
           {/* Next */}
           <button
             onClick={(e) => { e.stopPropagation(); goNext(); }}
-            style={{ position: "absolute", right: "1.5rem", width: 48, height: 48, borderRadius: "50%", background: "rgba(212,175,55,0.15)", border: "1px solid rgba(212,175,55,0.3)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#D4AF37", zIndex: 10000 }}
+            aria-label="Next photo"
+            style={{ position: "fixed", right: "1rem", top: "50%", transform: "translateY(-50%)", width: 48, height: 48, borderRadius: "50%", background: "rgba(212,175,55,0.25)", border: "1px solid rgba(212,175,55,0.4)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#D4AF37", zIndex: 10000, boxShadow: "0 4px 20px rgba(0,0,0,0.6)" }}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
       )}
