@@ -291,10 +291,80 @@ export default function CurrentProjects() {
 
       {/* Lightbox for Poster Images */}
       {selectedPoster && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "1.5rem", backdropFilter: "blur(8px)" }} onClick={() => setSelectedPoster(null)}>
-          <div style={{ position: "relative", maxWidth: "90vw", maxHeight: "90vh" }} onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setSelectedPoster(null)} style={{ position: "absolute", top: "-15px", right: "-15px", width: 40, height: 40, borderRadius: "50%", background: "#D4AF37", border: "none", color: "#000", fontWeight: 800, cursor: "pointer", fontSize: "1.2rem", zIndex: 10000 }}>✕</button>
-            <Image src={selectedPoster} alt="Official Project Poster" width={900} height={1200} style={{ maxWidth: "90vw", maxHeight: "85vh", objectFit: "contain", borderRadius: "12px", border: "2px solid #D4AF37" }} />
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(5, 5, 12, 0.95)",
+            zIndex: 9999,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0.5rem",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+          }}
+          onClick={() => setSelectedPoster(null)}
+        >
+          {/* Top-Right Close Button */}
+          <button
+            onClick={() => setSelectedPoster(null)}
+            aria-label="Close poster view"
+            style={{
+              position: "absolute",
+              top: "16px",
+              right: "16px",
+              zIndex: 10000,
+              width: 44,
+              height: 44,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #D4AF37 0%, #B8942E 100%)",
+              border: "1.5px solid rgba(255, 255, 255, 0.4)",
+              color: "#0A0A0A",
+              fontWeight: 900,
+              cursor: "pointer",
+              fontSize: "1.3rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 4px 20px rgba(212, 175, 55, 0.5)",
+              transition: "transform 0.2s ease",
+            }}
+          >
+            ✕
+          </button>
+
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              height: "100%",
+              maxWidth: "98vw",
+              maxHeight: "94vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={selectedPoster}
+              alt="Official Project Poster"
+              width={1600}
+              height={2000}
+              priority
+              style={{
+                width: "auto",
+                height: "auto",
+                maxWidth: "98vw",
+                maxHeight: "94vh",
+                objectFit: "contain",
+                borderRadius: "8px",
+                border: "1.5px solid rgba(212, 175, 55, 0.4)",
+                boxShadow: "0 10px 40px rgba(0, 0, 0, 0.8), 0 0 50px rgba(212, 175, 55, 0.15)",
+              }}
+            />
           </div>
         </div>
       )}
