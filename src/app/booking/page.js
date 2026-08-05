@@ -328,17 +328,9 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
         {/* Header Panel */}
         <header className="flex flex-col md:flex-row justify-between items-center px-6 py-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md gap-4 shadow-xl">
           <div className="flex items-center gap-3.5">
-            {activeProject.logo ? (
-              <img
-                src={activeProject.logo}
-                alt={activeProject.name}
-                className="h-12 w-auto max-w-[180px] rounded-xl object-contain bg-white p-1 border border-slate-700 shadow-lg shrink-0"
-              />
-            ) : (
-              <div className="p-2.5 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl text-white shadow-lg shadow-blue-500/20 text-2xl">
-                {activeProject.icon}
-              </div>
-            )}
+            <div className="p-2.5 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl text-white shadow-lg shadow-blue-500/20 text-2xl">
+              {activeProject.icon}
+            </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-extrabold tracking-tight text-white font-outfit uppercase">

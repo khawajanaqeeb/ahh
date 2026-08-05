@@ -340,17 +340,9 @@ export default function MapCanvas({
       {/* Map Header */}
       <div className="flex flex-wrap justify-between items-center px-6 py-3.5 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md z-10 gap-3">
         <div className="flex items-center gap-3">
-          {currentProject?.logo ? (
-            <img
-              src={currentProject.logo}
-              alt={currentProject.name}
-              className="h-9 w-auto max-w-[140px] rounded-lg object-contain bg-white p-1 border border-slate-700 shadow-md shrink-0"
-            />
-          ) : (
-            <span className="p-1.5 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400 text-base font-bold">
-              🏛️
-            </span>
-          )}
+          <span className="p-1.5 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400 text-base font-bold">
+            {currentProject?.icon || '🏛️'}
+          </span>
           <div>
             <div className="flex items-center gap-2 font-bold text-sm text-white font-outfit">
               <span>{currentProject?.name || 'AHH CITY'} Master Site Plan</span>
