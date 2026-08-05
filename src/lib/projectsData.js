@@ -2,6 +2,7 @@
 // Central Project Registry & Specifications for AHH Brothers
 
 import { MEDIA } from './media';
+import { generateLabourCityPlots } from './labourCitySitePlanData';
 
 export const PROJECTS = [
   {
@@ -115,27 +116,7 @@ export function getPlaceholderPlotsForProject(projectId) {
   }
 
   if (projectId === 'labour-city') {
-    return Array.from({ length: 15 }, (_, i) => {
-      const num = i + 1;
-      const col = i % 5;
-      const row = Math.floor(i / 5);
-      const x = 120 + col * 200;
-      const y = 140 + row * 160;
-      const w = 170;
-      const h = 120;
-      return {
-        id: `LC-${num}`,
-        label: `LC-${num}`,
-        type: i % 3 === 0 ? 'Commercial Plot 120SQY' : 'Residential 80SQY',
-        rawCoords: `${x},${y} ${x+w},${y} ${x+w},${y+h} ${x},${y+h}`,
-        coords: [
-          { x, y },
-          { x: x + w, y },
-          { x: x + w, y: y + h },
-          { x, y: y + h }
-        ]
-      };
-    });
+    return generateLabourCityPlots();
   }
 
   if (projectId === 'summer-farm-houses') {
