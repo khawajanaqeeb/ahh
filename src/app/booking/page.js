@@ -332,7 +332,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
               <img
                 src={activeProject.logo}
                 alt={activeProject.name}
-                className="w-12 h-12 rounded-xl object-contain bg-white p-0.5 border border-slate-700 shadow-lg shrink-0"
+                className="h-12 w-auto max-w-[180px] rounded-xl object-contain bg-white p-1 border border-slate-700 shadow-lg shrink-0"
               />
             ) : (
               <div className="p-2.5 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl text-white shadow-lg shadow-blue-500/20 text-2xl">

@@ -135,7 +135,7 @@ export default function AdminLeftSidebar() {
                         <img
                           src={proj.logo}
                           alt={proj.name}
-                          className="w-8 h-8 rounded-lg object-contain bg-white p-0.5 border border-slate-700 shadow-sm shrink-0 group-hover:scale-105 transition-transform"
+                          className="h-8 w-auto max-w-[100px] rounded-md object-contain bg-white p-1 border border-slate-700 shadow-sm shrink-0 group-hover:scale-105 transition-transform"
                         />
                         <div>
                           <div className={`text-xs font-bold font-outfit ${isActive ? 'text-blue-400' : 'text-slate-200'}`}>
