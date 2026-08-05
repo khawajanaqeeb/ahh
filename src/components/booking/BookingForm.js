@@ -69,38 +69,37 @@ export default function BookingForm({
   const existingBooking = bookings.find(b => b.plotId === resolvedPreviewId);
 
   useEffect(() => {
-    if (selectedPlotId) {
-      setPlotIdInput(selectedPlotId);
-      const matchedPlot = plots.find(p => p.id === selectedPlotId);
+    const targetId = selectedPlotId || resolvedPreviewId;
+    if (targetId) {
+      if (selectedPlotId && plotIdInput !== selectedPlotId) {
+        setPlotIdInput(selectedPlotId);
+      }
+      const matchedPlot = plots.find(p => p.id === targetId);
       if (matchedPlot?.type) setPlotType(matchedPlot.type);
-      const existing = bookings.find(b => b.plotId === selectedPlotId);
+
+      const existing = bookings.find(b => b.plotId === targetId);
       if (existing) {
-        setClientName(existing.clientName);
+        setClientName(existing.clientName || '');
         setRelativeName(existing.relativeName || '');
         setCnic(existing.cnic || '');
         setPhone(existing.phone || '');
         setEmail(existing.email || '');
         setBlock(existing.block || '');
-        setPaymentMode(existing.paymentMode || 'Cash');
-        setBankName(existing.bankName || '');
-        setPlotType(existing.plotType);
-        setStatus(existing.status);
-        setTotalPrice(existing.totalPrice);
-        setPaidAmount(existing.paidAmount);
-        setBookingDate(existing.date);
+        setPlotType(existing.plotType || 'Residential 120SQY');
+        setStatus(existing.status || 'Token Received');
+        setTotalPrice(existing.totalPrice || '');
+        setPaidAmount(existing.paidAmount || '');
+        setBookingDate(existing.date || new Date().toISOString().substring(0, 10));
         setTokenExpiryDate(existing.tokenExpiryDate || getDefaultExpiryDate());
+        setPaymentMode('Cash');
+        setBankName('');
         setInstallmentMonth(getCurrentMonthYear());
         setInstallmentAmount('');
-        setAmountInWords(numberToWords(0));
-        if (onFormPreviewChange) onFormPreviewChange({ plotId: selectedPlotId, status: existing.status });
-      } else {
-        clearFields(false);
+        setAmountInWords('');
+        if (onFormPreviewChange) onFormPreviewChange({ plotId: targetId, status: existing.status });
       }
-    } else {
-      setPlotIdInput('');
-      clearFields(true);
     }
-  }, [selectedPlotId, bookings, plots]);
+  }, [selectedPlotId, resolvedPreviewId, bookings, plots]);
 
   useEffect(() => {
     const total = parseFloat(totalPrice) || 0;
