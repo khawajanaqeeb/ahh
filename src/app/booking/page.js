@@ -317,31 +317,10 @@ export default function BookingPage() {
         </div>
 
         <div className="flex flex-wrap gap-2.5 items-center">
-          {/* Mode Toggle */}
-          <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800/80">
-            <button
-              onClick={() => { setAppMode('booking'); setSelectedPlotId(null); }}
-              className={`flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg transition-all cursor-pointer ${
-                appMode === 'booking'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Eye className="w-4 h-4" />
-              <span>Booking Dashboard</span>
-            </button>
-            <button
-              onClick={() => { setAppMode('mapper'); setSelectedPlotId(null); }}
-              className={`flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg transition-all cursor-pointer ${
-                appMode === 'mapper'
-                  ? 'bg-purple-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <DraftingCompass className="w-4 h-4" />
-              <span>Layout Editor</span>
-            </button>
-          </div>
+          <span className="text-xs bg-blue-950/80 text-blue-400 border border-blue-800/60 px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5">
+            <Eye className="w-4 h-4 text-blue-400" />
+            <span>Booking App Dashboard</span>
+          </span>
         </div>
       </header>
 

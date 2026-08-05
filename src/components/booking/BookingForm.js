@@ -415,35 +415,40 @@ export default function BookingForm({
               </div>
             </div>
 
-            {(() => {
-              const existingBooking = bookings.find(b => b.plotId === resolvedPreviewId);
-              if (!existingBooking) return null;
-              return (
-                <div className="pt-2">
-                  <button type="button" onClick={() => onPrintReceipt && onPrintReceipt(existingBooking)}
-                    className="w-full py-2 rounded-lg bg-blue-950/60 text-blue-400 border border-blue-800/60 hover:bg-blue-900/60 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md">
-                    <Printer className="w-4 h-4" />
-                    <span>View & Print Receipt for Plot {existingBooking.plotId}</span>
-                  </button>
-                </div>
-              );
-            })()}
-
             <div className="pt-2 space-y-2">
-              <button type="button" onClick={(e) => handleFormSubmit(e, true)}
-                className="w-full py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer shadow-lg shadow-blue-500/20">
-                <Printer className="w-4 h-4" />
-                <span>Save & Print Receipt</span>
-              </button>
-              <div className="grid grid-cols-2 gap-2">
-                <button type="submit" className="py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors">
-                  <Save className="w-3.5 h-3.5" /><span>Save Entry Only</span>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="submit"
+                  className="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md shadow-emerald-600/20 active:scale-[0.98]"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>Save</span>
                 </button>
-                <button type="button" onClick={() => { clearFields(true); onClearFormSelection(); }}
-                  className="py-2 rounded-lg bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-400 text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-colors">
-                  <Eraser className="w-3.5 h-3.5" /><span>Clear</span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    if (e) e.preventDefault();
+                    const existing = bookings.find(b => b.plotId === resolvedPreviewId);
+                    if (existing && !clientName && !phone) {
+                      if (onPrintReceipt) onPrintReceipt(existing);
+                    } else {
+                      handleFormSubmit(e, true);
+                    }
+                  }}
+                  className="py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md shadow-blue-600/20 active:scale-[0.98]"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Print</span>
                 </button>
               </div>
+              <button
+                type="button"
+                onClick={() => { clearFields(true); onClearFormSelection(); }}
+                className="w-full py-2 rounded-xl bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-400 text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+              >
+                <Eraser className="w-3.5 h-3.5" />
+                <span>Clear Form</span>
+              </button>
             </div>
           </form>
         </div>

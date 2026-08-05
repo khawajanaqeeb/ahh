@@ -342,71 +342,15 @@ export default function MapCanvas({
           <span className="p-1.5 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400 text-base font-bold">🏛️</span>
           <div>
             <div className="flex items-center gap-2 font-bold text-sm text-white font-outfit">
-              <span>AHH CITY Master Blueprint</span>
+              <span>AHH CITY Master Site Plan</span>
               <span className="text-[10px] bg-blue-950 text-blue-400 border border-blue-800/40 px-2 py-0.5 rounded-full uppercase tracking-wider">
                 SURVEY NO 297
               </span>
             </div>
             <span className="text-[11px] text-slate-400 block">
-              Vector JSON Architecture Engine • Developer: AHH Brothers
+              Interactive Architectural Plot Map • Developer: AHH Brothers
             </span>
           </div>
-        </div>
-        
-        {/* Render mode selector & Actions */}
-        <div className="flex items-center gap-2">
-          {/* Toggle Vector JSON Map vs Image Overlay */}
-          <div className="flex bg-slate-950 p-0.5 rounded-lg border border-slate-800">
-            <button
-              onClick={() => setMapRenderMode('vector')}
-              className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
-                mapRenderMode === 'vector' 
-                  ? 'bg-blue-600 text-white' 
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              📐 Blueprint JSON
-            </button>
-            <button
-              onClick={() => setMapRenderMode('image')}
-              className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
-                mapRenderMode === 'image' 
-                  ? 'bg-blue-600 text-white' 
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              🖼️ Raster Overlay
-            </button>
-          </div>
-
-          {/* Draw buttons visible only in Mapper mode */}
-          {appMode === 'mapper' && (
-            <div className="flex gap-2 ml-2">
-              {!drawingActive ? (
-                <>
-                  <button 
-                    onClick={() => startDrawing('rect')}
-                    className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white cursor-pointer transition-colors"
-                  >
-                    📐 Draw Rectangle
-                  </button>
-                  <button 
-                    onClick={() => startDrawing('poly')}
-                    className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white cursor-pointer transition-colors"
-                  >
-                    ☡ Draw Polygon
-                  </button>
-                </>
-              ) : (
-                <button 
-                  onClick={stopDrawing}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-600/20 text-red-400 border border-red-800/30 hover:bg-red-600/30 cursor-pointer transition-colors animate-pulse"
-                >
-                  Cancel Active Drawing (Esc)
-                </button>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
