@@ -38,12 +38,13 @@ function getExpiryStatus(tokenExpiryDate) {
 
 // Build raw HTML string for the printable receipt (no React, pure HTML+CSS)
 function buildReceiptHTML(booking) {
-  const remaining = (parseFloat(booking.totalPrice) || 0) - (parseFloat(booking.paidAmount) || 0);
+  const computedTotal = ((parseFloat(booking.costOfLand) || 0) + (parseFloat(booking.extraCharges) || 0) + (parseFloat(booking.processingCharges) || 0)) || (parseFloat(booking.totalPrice) || 0);
+  const remaining = computedTotal - (parseFloat(booking.paidAmount) || 0);
   const receiptNo = `REC-${booking.plotId}-${booking.date?.replace(/-/g, '') || '01'}`;
-  const statusLabel = remaining <= 0 || booking.status === 'Fully Booked' ? 'FULLY BOOKED' : 'TOKEN RECEIVED';
-  const statusColor = remaining <= 0 || booking.status === 'Fully Booked' ? '#15803d' : '#b45309';
-  const statusBg = remaining <= 0 || booking.status === 'Fully Booked' ? '#f0fdf4' : '#fffbeb';
-  const statusBorder = remaining <= 0 || booking.status === 'Fully Booked' ? '#bbf7d0' : '#fde68a';
+  const statusLabel = remaining <= 0 || booking.status === 'Booking Received' ? 'BOOKING RECEIVED' : 'TOKEN RECEIVED';
+  const statusColor = remaining <= 0 || booking.status === 'Booking Received' ? '#15803d' : '#b45309';
+  const statusBg = remaining <= 0 || booking.status === 'Booking Received' ? '#f0fdf4' : '#fffbeb';
+  const statusBorder = remaining <= 0 || booking.status === 'Booking Received' ? '#bbf7d0' : '#fde68a';
 
   const paymentModeLabel = booking.paymentMode === 'Cash'
     ? '💵 Cash'
@@ -62,6 +63,28 @@ function buildReceiptHTML(booking) {
   const installmentHTML = booking.installmentMonth ? `
     <div style="font-size:10px;color:#1e3a8a;font-family:sans-serif;margin-top:2px;font-weight:bold;">
       🗓️ Installment Month: ${booking.installmentMonth}
+    </div>
+  ` : '';
+
+  const hasCostBreakdown = (parseFloat(booking.costOfLand) || 0) > 0;
+  const costBreakdownHTML = hasCostBreakdown ? `
+    <div class="cost-breakdown">
+      <div class="cost-row">
+        <span class="cost-lbl">Cost of Land:</span>
+        <span class="cost-val">Rs ${parseInt(booking.costOfLand || 0).toLocaleString()}</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-lbl">Extra Charges:</span>
+        <span class="cost-val">Rs ${parseInt(booking.extraCharges || 0).toLocaleString()}</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-lbl">Processing & Documentation:</span>
+        <span class="cost-val">Rs ${parseInt(booking.processingCharges || 0).toLocaleString()}</span>
+      </div>
+      <div class="cost-row cost-total">
+        <span class="cost-lbl">Total Receivable Amount:</span>
+        <span class="cost-val" style="color:#15803d;font-weight:900;">Rs ${parseInt(computedTotal).toLocaleString()}</span>
+      </div>
     </div>
   ` : '';
 
@@ -120,11 +143,14 @@ function buildReceiptHTML(booking) {
         ` : ''}
       </table>
 
+      <!-- Cost Breakdown -->
+      ${costBreakdownHTML}
+
       <!-- Financial Summary Box -->
       <div class="summary-box">
         <div class="summary-col">
-          <div class="sum-lbl">Total Price</div>
-          <div class="sum-val" style="color:#0f172a;">Rs ${parseInt(booking.totalPrice || 0).toLocaleString()}</div>
+          <div class="sum-lbl">Total Receivable</div>
+          <div class="sum-val" style="color:#0f172a;">Rs ${parseInt(computedTotal).toLocaleString()}</div>
         </div>
         <div class="summary-col" style="border-left:1px solid #cbd5e1; border-right:1px solid #cbd5e1;">
           <div class="sum-lbl">Total Paid Amount</div>
@@ -132,7 +158,7 @@ function buildReceiptHTML(booking) {
         </div>
         <div class="summary-col">
           <div class="sum-lbl">Remaining Balance</div>
-          <div class="sum-val" style="color:${remaining > 0 ? '#b45309' : '#15803d'};">${remaining <= 0 ? 'Rs 0 (FULLY PAID)' : `Rs ${parseInt(remaining).toLocaleString()}`}</div>
+          <div class="sum-val" style="color:${remaining > 0 ? '#b45309' : '#15803d'};">${remaining <= 0 ? 'Rs 0 (FULL AMOUNT RECEIVED)' : `Rs ${parseInt(remaining).toLocaleString()}`}</div>
         </div>
       </div>
 
@@ -359,6 +385,39 @@ function buildReceiptHTML(booking) {
       margin-top: 2px;
       font-weight: 600;
     }
+    .cost-breakdown {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 4px 10px;
+      margin-top: 2px;
+      margin-bottom: 2px;
+      background: #f8fafc;
+    }
+    .cost-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5px;
+      padding: 1.5px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .cost-row:last-child {
+      border-bottom: none;
+    }
+    .cost-lbl {
+      color: #64748b;
+      font-weight: 600;
+    }
+    .cost-val {
+      color: #0f172a;
+      font-weight: 700;
+      font-family: monospace;
+    }
+    .cost-total {
+      background: #f0fdf4;
+      padding: 2px 4px;
+      border-radius: 2px;
+      margin-top: 1px;
+    }
     @media print {
       html, body {
         width: 210mm;
@@ -392,9 +451,10 @@ function buildReceiptHTML(booking) {
 }
 
 function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder }) {
-  const remaining = (parseFloat(booking.totalPrice) || 0) - (parseFloat(booking.paidAmount) || 0);
+  const computedTotal = ((parseFloat(booking.costOfLand) || 0) + (parseFloat(booking.extraCharges) || 0) + (parseFloat(booking.processingCharges) || 0)) || (parseFloat(booking.totalPrice) || 0);
+  const remaining = computedTotal - (parseFloat(booking.paidAmount) || 0);
   const receiptNo = `REC-${booking.plotId}-${booking.date?.replace(/-/g, '') || '01'}`;
-  const isFullyPaid = remaining <= 0 || booking.status === 'Fully Booked';
+  const isFullyPaid = remaining <= 0 || booking.status === 'Booking Received';
 
   const paymentModeLabel = booking.paymentMode === 'Cash'
     ? '💵 Cash'
@@ -403,6 +463,7 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
     : `📱 Online Transfer ${booking.bankName ? `(${booking.bankName})` : ''}`;
 
   const amountInWordsText = booking.amountInWords || numberToWords(booking.paidAmount);
+  const hasCostBreakdown = (parseFloat(booking.costOfLand) || 0) > 0;
 
   return (
     <div className="border-2 border-slate-900 rounded-md p-3.5 bg-white space-y-2 text-[11px] flex flex-col justify-between shadow-sm">
@@ -436,7 +497,7 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
         <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-extrabold border ${
           isFullyPaid ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-yellow-100 text-yellow-800 border-yellow-300'
         }`}>
-          {isFullyPaid ? 'FULLY BOOKED' : 'TOKEN RECEIVED'}
+          {isFullyPaid ? 'BOOKING RECEIVED' : 'TOKEN RECEIVED'}
         </span>
       </div>
 
@@ -462,10 +523,33 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
         )}
       </div>
 
+      {/* Cost Breakdown */}
+      {hasCostBreakdown && (
+        <div className="border border-slate-300 rounded px-3 py-1.5 bg-slate-50 text-[10px] space-y-0.5">
+          <div className="text-[8.5px] uppercase font-bold text-slate-500 mb-0.5">Cost Breakdown</div>
+          <div className="flex justify-between border-b border-slate-100 py-0.5">
+            <span className="text-slate-500">Cost of Land:</span>
+            <span className="font-bold text-slate-900">Rs {parseInt(booking.costOfLand || 0).toLocaleString()}</span>
+          </div>
+          <div className="flex justify-between border-b border-slate-100 py-0.5">
+            <span className="text-slate-500">Extra Charges:</span>
+            <span className="font-bold text-slate-900">Rs {parseInt(booking.extraCharges || 0).toLocaleString()}</span>
+          </div>
+          <div className="flex justify-between border-b border-slate-100 py-0.5">
+            <span className="text-slate-500">Processing & Documentation:</span>
+            <span className="font-bold text-slate-900">Rs {parseInt(booking.processingCharges || 0).toLocaleString()}</span>
+          </div>
+          <div className="flex justify-between py-0.5 bg-emerald-50 rounded px-1">
+            <span className="text-emerald-700 font-bold">Total Receivable Amount:</span>
+            <span className="font-extrabold text-emerald-800">Rs {parseInt(computedTotal).toLocaleString()}</span>
+          </div>
+        </div>
+      )}
+
       <div className="bg-slate-100 border border-slate-300 text-slate-900 rounded p-2 grid grid-cols-3 gap-2 text-center text-[10px]">
         <div className="border-r border-slate-300 pr-1">
-          <div className="text-slate-500 text-[8.5px] uppercase font-bold">Total Price</div>
-          <div className="font-extrabold text-slate-900">Rs {parseInt(booking.totalPrice || 0).toLocaleString()}</div>
+          <div className="text-slate-500 text-[8.5px] uppercase font-bold">Total Receivable</div>
+          <div className="font-extrabold text-slate-900">Rs {parseInt(computedTotal).toLocaleString()}</div>
         </div>
         <div className="border-r border-slate-300 pr-1">
           <div className="text-slate-500 text-[8.5px] uppercase font-bold">Total Paid</div>
@@ -474,7 +558,7 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
         <div>
           <div className="text-slate-500 text-[8.5px] uppercase font-bold">Remaining</div>
           <div className={`font-extrabold ${remaining > 0 ? 'text-amber-700' : 'text-emerald-700'}`}>
-            {remaining <= 0 ? 'Rs 0 (FULLY PAID)' : `Rs ${parseInt(remaining).toLocaleString()}`}
+            {remaining <= 0 ? 'Rs 0 (FULL AMOUNT RECEIVED)' : `Rs ${parseInt(remaining).toLocaleString()}`}
           </div>
         </div>
       </div>
@@ -521,10 +605,10 @@ export default function BookingReceiptModal({ booking, onSaveBooking, onDeleteBo
   };
 
   const handleMarkFullyBooked = () => {
-    if (confirm(`Mark Plot #${booking.plotId} as Fully Booked? The plot color will turn GREEN on the map canvas.`)) {
+    if (confirm(`Mark Plot #${booking.plotId} as Booking Received? The plot color will turn GREEN on the map canvas.`)) {
       const updated = {
         ...booking,
-        status: 'Fully Booked',
+        status: 'Booking Received',
         paidAmount: booking.totalPrice,
         tokenExpiryDate: ''
       };
@@ -576,7 +660,7 @@ export default function BookingReceiptModal({ booking, onSaveBooking, onDeleteBo
                   <span>TOKEN EXPIRED — Please enter a new expiry date or cancel the token.</span>
                 </div>
                 <div className="text-[11px] text-red-700">
-                  Expired on: <strong>{formatDateDDMMYY(booking.tokenExpiryDate)}</strong>. If cancelled, the plot color will vanish and count in available plots again. If customer paid remaining booking amount, mark as Fully Booked to turn green.
+                  Expired on: <strong>{formatDateDDMMYY(booking.tokenExpiryDate)}</strong>. If cancelled, the plot color will vanish and count in available plots again. If customer paid remaining booking amount, mark as Booking Received to turn green.
                 </div>
               </div>
             )}
@@ -598,7 +682,7 @@ export default function BookingReceiptModal({ booking, onSaveBooking, onDeleteBo
                   <button type="button" onClick={handleMarkFullyBooked}
                     className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1 cursor-pointer transition-all shadow-sm">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Paid & Fully Booked (Turn Green)</span>
+                    <span>Paid & Booking Received (Turn Green)</span>
                   </button>
                   <button type="button" onClick={handleCancelToken}
                     className="px-3 py-1 rounded-lg bg-red-950 border border-red-800/80 hover:bg-red-900 text-red-300 text-xs font-bold flex items-center gap-1 cursor-pointer transition-all">

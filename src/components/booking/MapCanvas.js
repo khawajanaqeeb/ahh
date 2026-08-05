@@ -667,7 +667,7 @@ export default function MapCanvas({
                 } else if (booking) {
                   if (booking.status === 'Token Received') {
                     plotClass += ' token-received';
-                  } else if (booking.status === 'Fully Booked') {
+                  } else if (booking.status === 'Booking Received') {
                     plotClass += ' fully-booked';
                   }
                 }
@@ -756,7 +756,7 @@ export default function MapCanvas({
             <div className="flex justify-between items-center pt-1 border-t border-slate-800/60">
               <span className="text-slate-400">Status:</span>
               <span className={`font-bold ${
-                tooltip.status === 'Fully Booked' 
+                tooltip.status === 'Booking Received' 
                   ? 'text-emerald-400' 
                   : tooltip.status === 'Token Received' 
                     ? 'text-yellow-400' 
@@ -834,7 +834,7 @@ export default function MapCanvas({
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3.5 h-3.5 rounded bg-emerald-500/50 border border-emerald-400"></div>
-            <span>Fully Booked (Green)</span>
+            <span>Booking Received (Green)</span>
           </div>
           {formPreview && (
             <div className="flex items-center gap-2 border-t border-slate-700/60 pt-2 mt-0.5">

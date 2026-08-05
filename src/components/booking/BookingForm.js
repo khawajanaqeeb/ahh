@@ -34,11 +34,19 @@ export default function BookingForm({
   const [tokenExpiryDate, setTokenExpiryDate] = useState('');
   const [balance, setBalance] = useState(0);
 
-  // New states for Amount in Words, Installment Mode, and Full Payment Popup
+  // Cost breakdown fields
+  const [costOfLand, setCostOfLand] = useState('');
+  const [extraCharges, setExtraCharges] = useState('');
+  const [processingCharges, setProcessingCharges] = useState('');
+
+  // Amount in Words, Installment Mode, and Full Payment Popup
   const [amountInWords, setAmountInWords] = useState('');
   const [installmentMonth, setInstallmentMonth] = useState('');
   const [installmentAmount, setInstallmentAmount] = useState('');
   const [showFullPaymentModal, setShowFullPaymentModal] = useState(false);
+
+  // Auto-compute Total Receivable Amount from cost breakdown
+  const totalReceivableAmount = (parseFloat(costOfLand) || 0) + (parseFloat(extraCharges) || 0) + (parseFloat(processingCharges) || 0);
 
   const getCurrentMonthYear = () => {
     const d = new Date();
@@ -89,6 +97,9 @@ export default function BookingForm({
         setStatus(existing.status || 'Token Received');
         setTotalPrice(existing.totalPrice || '');
         setPaidAmount(existing.paidAmount || '');
+        setCostOfLand(existing.costOfLand || '');
+        setExtraCharges(existing.extraCharges || '');
+        setProcessingCharges(existing.processingCharges || '');
         setBookingDate(existing.date || new Date().toISOString().substring(0, 10));
         setTokenExpiryDate(existing.tokenExpiryDate || getDefaultExpiryDate());
         setPaymentMode('Cash');
@@ -102,14 +113,14 @@ export default function BookingForm({
   }, [selectedPlotId, resolvedPreviewId, bookings, plots]);
 
   useEffect(() => {
-    const total = parseFloat(totalPrice) || 0;
+    const total = totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0);
     let paid = parseFloat(paidAmount) || 0;
     if (existingBooking && installmentAmount) {
       paid += (parseFloat(installmentAmount) || 0);
     }
     const rem = Math.max(0, total - paid);
     setBalance(rem);
-  }, [totalPrice, paidAmount, installmentAmount, existingBooking]);
+  }, [totalPrice, paidAmount, installmentAmount, existingBooking, totalReceivableAmount]);
 
   useEffect(() => {
     setBookingDate(new Date().toISOString().substring(0, 10));
@@ -123,6 +134,7 @@ export default function BookingForm({
     setBlock(''); setPaymentMode('Cash'); setBankName('');
     setPlotType('Residential 120SQY'); setStatus('Token Received');
     setTotalPrice(''); setPaidAmount(''); setAmountInWords('');
+    setCostOfLand(''); setExtraCharges(''); setProcessingCharges('');
     setInstallmentMonth(getCurrentMonthYear()); setInstallmentAmount('');
     setBookingDate(new Date().toISOString().substring(0, 10));
     setTokenExpiryDate(getDefaultExpiryDate());
@@ -137,8 +149,9 @@ export default function BookingForm({
       const numInst = parseFloat(installmentAmount) || 0;
       const prevPaid = parseFloat(existingBooking.paidAmount) || 0;
       const newTotalPaid = numInst > 0 ? (prevPaid + numInst) : prevPaid;
-      const isFullyPaid = newTotalPaid >= (parseFloat(totalPrice) || 0);
-      const newStatus = isFullyPaid ? 'Fully Booked' : existingBooking.status;
+      const computedTotal = totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0);
+      const isFullyPaid = computedTotal > 0 && newTotalPaid >= computedTotal;
+      const newStatus = isFullyPaid ? 'Booking Received' : existingBooking.status;
 
       const updatedInstallments = numInst > 0
         ? [...(existingBooking.installments || []), { month: installmentMonth, amount: numInst, date: bookingDate, paymentMode, bankName }]
@@ -157,7 +170,10 @@ export default function BookingForm({
         bankName: paymentMode !== 'Cash' ? bankName.trim() : '',
         plotType,
         status: newStatus,
-        totalPrice: parseFloat(totalPrice) || 0,
+        costOfLand: parseFloat(costOfLand) || existingBooking.costOfLand || 0,
+        extraCharges: parseFloat(extraCharges) || existingBooking.extraCharges || 0,
+        processingCharges: parseFloat(processingCharges) || existingBooking.processingCharges || 0,
+        totalPrice: computedTotal > 0 ? computedTotal : (parseFloat(totalPrice) || 0),
         paidAmount: newTotalPaid,
         date: bookingDate,
         tokenExpiryDate: newStatus === 'Token Received' ? tokenExpiryDate : '',
@@ -168,9 +184,9 @@ export default function BookingForm({
     }
 
     const numericPaid = parseFloat(paidAmount) || 0;
-    const numericTotal = parseFloat(totalPrice) || 0;
-    const isFullyPaid = numericPaid >= numericTotal && numericTotal > 0;
-    const finalStatus = isFullyPaid ? 'Fully Booked' : status;
+    const computedTotal = totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0);
+    const isFullyPaid = computedTotal > 0 && numericPaid >= computedTotal;
+    const finalStatus = isFullyPaid ? 'Booking Received' : status;
 
     return {
       plotId: resolvedPlotId,
@@ -184,7 +200,10 @@ export default function BookingForm({
       bankName: paymentMode !== 'Cash' ? bankName.trim() : '',
       plotType,
       status: finalStatus,
-      totalPrice: numericTotal,
+      costOfLand: parseFloat(costOfLand) || 0,
+      extraCharges: parseFloat(extraCharges) || 0,
+      processingCharges: parseFloat(processingCharges) || 0,
+      totalPrice: computedTotal > 0 ? computedTotal : (parseFloat(totalPrice) || 0),
       paidAmount: numericPaid,
       date: bookingDate,
       tokenExpiryDate: finalStatus === 'Token Received' ? tokenExpiryDate : '',
@@ -236,11 +255,11 @@ export default function BookingForm({
   const handlePlotTypeChange = (e) => {
     const newType = e.target.value;
     setPlotType(newType);
-    if (newType === 'Residential 60SQY') { setTotalPrice(200000); setPaidAmount(50000); setAmountInWords(numberToWords(50000)); }
-    else if (newType === 'Residential 120SQY') { setTotalPrice(350000); setPaidAmount(100000); setAmountInWords(numberToWords(100000)); }
-    else if (newType === 'Commercial Shop 100SQFT') { setTotalPrice(350000); setPaidAmount(200000); setAmountInWords(numberToWords(200000)); }
-    else if (newType === 'Residential 150SQY') { setTotalPrice(1000000); setPaidAmount(200000); setAmountInWords(numberToWords(200000)); }
-    else if (newType === 'Commercial 150SQY') { setTotalPrice(1500000); setPaidAmount(300000); setAmountInWords(numberToWords(300000)); }
+    if (newType === 'Residential 60SQY') { setCostOfLand(200000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(200000); setPaidAmount(50000); setAmountInWords(numberToWords(50000)); }
+    else if (newType === 'Residential 120SQY') { setCostOfLand(350000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(350000); setPaidAmount(100000); setAmountInWords(numberToWords(100000)); }
+    else if (newType === 'Commercial Shop 100SQFT') { setCostOfLand(350000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(350000); setPaidAmount(200000); setAmountInWords(numberToWords(200000)); }
+    else if (newType === 'Residential 150SQY') { setCostOfLand(1000000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(1000000); setPaidAmount(200000); setAmountInWords(numberToWords(200000)); }
+    else if (newType === 'Commercial 150SQY') { setCostOfLand(1500000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(1500000); setPaidAmount(300000); setAmountInWords(numberToWords(300000)); }
     const resolvedId = resolveTargetPlotId(plotIdInput, newType);
     if (onFormPreviewChange) onFormPreviewChange(resolvedId ? { plotId: resolvedId, status } : null);
   };
@@ -251,9 +270,9 @@ export default function BookingForm({
     const numAmt = parseFloat(amt) || 0;
     setAmountInWords(numberToWords(numAmt));
 
-    const totalP = parseFloat(totalPrice) || 0;
+    const totalP = totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0);
     if (totalP > 0 && numAmt >= totalP) {
-      setStatus('Fully Booked');
+      setStatus('Booking Received');
       setShowFullPaymentModal(true);
     }
 
@@ -266,13 +285,13 @@ export default function BookingForm({
     setInstallmentAmount(amt);
     const numInst = parseFloat(amt) || 0;
     const prevPaid = existingBooking ? (parseFloat(existingBooking.paidAmount) || 0) : 0;
-    const totalP = parseFloat(totalPrice) || 0;
+    const totalP = totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0);
     const newTotal = prevPaid + numInst;
 
     setAmountInWords(numberToWords(numInst));
 
     if (totalP > 0 && newTotal >= totalP) {
-      setStatus('Fully Booked');
+      setStatus('Booking Received');
       setShowFullPaymentModal(true);
     }
   };
@@ -320,7 +339,7 @@ export default function BookingForm({
                 {resolvedPreviewId && (() => {
                   const isMapped = plots.some(p => p.id === resolvedPreviewId);
                   if (!isMapped) return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">⚠ Not On Map</span>);
-                  if (existingBooking?.status === 'Fully Booked') return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 animate-pulse">🟢 Fully Booked (Green)</span>);
+                  if (existingBooking?.status === 'Booking Received') return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 animate-pulse">🟢 Booking Received (Green)</span>);
                   if (existingBooking?.status === 'Token Received') return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-950/60 text-yellow-400 border border-yellow-800/50 animate-pulse">🟡 Token Received (Yellow)</span>);
                   return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">⚪ Available (Unbooked)</span>);
                 })()}
@@ -328,7 +347,7 @@ export default function BookingForm({
               <input type="text" value={plotIdInput} onChange={handlePlotInputChange}
                 className={`w-full bg-slate-950 border rounded-lg px-3 py-2 text-sm text-white transition-all outline-none focus:ring-1 ${(() => {
                   if (!resolvedPreviewId) return 'border-slate-800 focus:border-blue-500 focus:ring-blue-500';
-                  if (status === 'Fully Booked') return 'border-emerald-600/60 focus:border-emerald-500 focus:ring-emerald-500';
+                  if (status === 'Booking Received') return 'border-emerald-600/60 focus:border-emerald-500 focus:ring-emerald-500';
                   if (status === 'Token Received') return 'border-yellow-600/60 focus:border-yellow-500 focus:ring-yellow-500';
                   return 'border-slate-800 focus:border-blue-500 focus:ring-blue-500';
                 })()}`}
@@ -439,11 +458,11 @@ export default function BookingForm({
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Plot Dimension</label>
                   <select value={plotType} onChange={handlePlotTypeChange}
                     className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white cursor-pointer transition-all outline-none">
-                    <option value="Residential 60SQY">Res. 60 SQY (Total: Rs 200,000)</option>
-                    <option value="Residential 120SQY">Res. 120 SQY (Total: Rs 350,000)</option>
-                    <option value="Commercial Shop 100SQFT">Comm. Shop 100 SQFT (Total: Rs 350,000)</option>
-                    <option value="Residential 150SQY">Res. 150 SQY (Total: Rs 1,000,000)</option>
-                    <option value="Commercial 150SQY">Comm. 150 SQY (Total: Rs 1,500,000)</option>
+                    <option value="Residential 60SQY">Res. 60 SQY</option>
+                    <option value="Residential 120SQY">Res. 120 SQY</option>
+                    <option value="Commercial Shop 100SQFT">Comm. Shop 100 SQFT</option>
+                    <option value="Residential 150SQY">Res. 150 SQY</option>
+                    <option value="Commercial 150SQY">Comm. 150 SQY</option>
                     <option value="Custom Size">Other / Custom</option>
                   </select>
                 </div>
@@ -454,7 +473,7 @@ export default function BookingForm({
                       status === 'Token Received' ? 'border-yellow-600/60 text-yellow-400 focus:border-yellow-500' : 'border-emerald-600/60 text-emerald-400 focus:border-emerald-500'
                     }`}>
                     <option value="Token Received" className="text-yellow-400 font-semibold">🟡 Token Received (Yellow)</option>
-                    <option value="Fully Booked" className="text-emerald-400 font-semibold">🟢 Fully Booked (Green)</option>
+                    <option value="Booking Received" className="text-emerald-400 font-semibold">🟢 Booking Received (Green)</option>
                   </select>
                 </div>
               </div>
@@ -481,15 +500,55 @@ export default function BookingForm({
               </div>
             )}
 
-            {/* DYNAMIC PAYMENT / INSTALLMENT AMOUNT & TOTAL PRICE */}
+            {/* COST BREAKDOWN FIELDS */}
+            <div className="p-3 rounded-xl bg-slate-950/50 border border-slate-800/60 space-y-3">
+              <label className="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1">📋 Cost Breakdown</label>
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Cost of Land</label>
+                  <div className="relative">
+                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[11px]">Rs</span>
+                    <input type="number" value={costOfLand} onChange={(e) => setCostOfLand(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-1.5 text-sm text-white transition-all outline-none"
+                      placeholder="0" min="0" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Extra Charges</label>
+                  <div className="relative">
+                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[11px]">Rs</span>
+                    <input type="number" value={extraCharges} onChange={(e) => setExtraCharges(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-1.5 text-sm text-white transition-all outline-none"
+                      placeholder="0" min="0" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Processing & Doc</label>
+                  <div className="relative">
+                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[11px]">Rs</span>
+                    <input type="number" value={processingCharges} onChange={(e) => setProcessingCharges(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-1.5 text-sm text-white transition-all outline-none"
+                      placeholder="0" min="0" />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-semibold uppercase tracking-wider text-emerald-400 mb-1">Total Receivable Amount</label>
+                <div className="w-full bg-slate-950 border border-emerald-600/50 rounded-lg px-3 py-1.5 text-sm font-bold text-emerald-400">
+                  Rs {totalReceivableAmount > 0 ? totalReceivableAmount.toLocaleString() : (parseFloat(totalPrice) || 0).toLocaleString()}
+                </div>
+              </div>
+            </div>
+
+            {/* DYNAMIC PAYMENT / INSTALLMENT AMOUNT */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Total Plot Price</label>
                 <div className="relative">
                   <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">Rs</span>
-                  <input type="number" value={totalPrice} onChange={(e) => setTotalPrice(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-3 py-2 text-sm text-white transition-all outline-none"
-                    placeholder="0" min="0" required />
+                  <input type="number" value={totalReceivableAmount > 0 ? totalReceivableAmount : totalPrice} onChange={(e) => { if (totalReceivableAmount <= 0) setTotalPrice(e.target.value); }}
+                    className={`w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-3 py-2 text-sm text-white transition-all outline-none ${totalReceivableAmount > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
+                    placeholder="0" min="0" readOnly={totalReceivableAmount > 0} required />
                 </div>
               </div>
               <div>
@@ -528,7 +587,7 @@ export default function BookingForm({
               <div className={`w-full bg-slate-950 border rounded-lg px-3 py-2 text-sm font-bold ${
                 balance <= 0 ? 'border-emerald-600/60 text-emerald-400' : 'border-slate-800/40 text-slate-300'
               }`}>
-                {balance <= 0 ? 'Rs 0 (FULL PAYMENT RECEIVED)' : `Rs ${balance.toLocaleString()}`}
+                {balance <= 0 ? 'Rs 0 (FULL AMOUNT RECEIVED)' : `Rs ${balance.toLocaleString()}`}
               </div>
             </div>
 
@@ -570,7 +629,7 @@ export default function BookingForm({
         </div>
       )}
 
-      {/* POPUP MODAL: TOTAL PLOT AMOUNT RECEIVED (BALANCE ZERO) */}
+      {/* POPUP MODAL: FULL AMOUNT RECEIVED (BALANCE ZERO) */}
       {showFullPaymentModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
           <div className="bg-slate-900 border-2 border-emerald-500 rounded-2xl max-w-md w-full p-6 shadow-2xl text-center space-y-4 relative animate-bounce-short">
@@ -579,18 +638,18 @@ export default function BookingForm({
             </div>
             <div>
               <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 px-3 py-1 rounded-full">
-                🎉 Full Payment Received
+                🎉 Full Amount Received
               </span>
               <h3 className="text-xl font-black text-white mt-3 font-outfit">Total Plot Amount Received</h3>
               <p className="text-xs text-slate-300 mt-1">
-                Plot <strong className="text-emerald-400">#{resolvedPreviewId || plotIdInput}</strong> is now completely paid off! The remaining balance is <strong>Rs 0</strong> and plot status color is set to <strong>Fully Booked (Green)</strong>.
+                Plot <strong className="text-emerald-400">#{resolvedPreviewId || plotIdInput}</strong> is now completely paid off! The remaining balance is <strong>Rs 0</strong> and plot status color is set to <strong>Booking Received (Green)</strong>.
               </p>
             </div>
             <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs space-y-1 text-left">
               <div className="flex justify-between text-slate-400"><span>Client Name:</span> <strong className="text-white">{clientName}</strong></div>
-              <div className="flex justify-between text-slate-400"><span>Total Plot Price:</span> <strong className="text-white">Rs {parseInt(totalPrice || 0).toLocaleString()}</strong></div>
-              <div className="flex justify-between text-slate-400"><span>Total Amount Received:</span> <strong className="text-emerald-400">Rs {parseInt(totalPrice || 0).toLocaleString()}</strong></div>
-              <div className="flex justify-between text-slate-400"><span>Remaining Balance:</span> <strong className="text-emerald-400">Rs 0 (FULLY PAID)</strong></div>
+              <div className="flex justify-between text-slate-400"><span>Total Receivable Amount:</span> <strong className="text-white">Rs {(totalReceivableAmount > 0 ? totalReceivableAmount : parseInt(totalPrice || 0)).toLocaleString()}</strong></div>
+              <div className="flex justify-between text-slate-400"><span>Total Amount Received:</span> <strong className="text-emerald-400">Rs {(totalReceivableAmount > 0 ? totalReceivableAmount : parseInt(totalPrice || 0)).toLocaleString()}</strong></div>
+              <div className="flex justify-between text-slate-400"><span>Remaining Balance:</span> <strong className="text-emerald-400">Rs 0 (FULL AMOUNT RECEIVED)</strong></div>
             </div>
             <button
               onClick={() => setShowFullPaymentModal(false)}

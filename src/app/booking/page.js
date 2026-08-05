@@ -86,7 +86,7 @@ export default function BookingPage() {
   useEffect(() => {
     const totalMapped = plots.length;
     const token = bookings.filter(b => b.status === 'Token Received').length;
-    const booked = bookings.filter(b => b.status === 'Fully Booked').length;
+    const booked = bookings.filter(b => b.status === 'Booking Received').length;
     const available = Math.max(0, totalMapped - (token + booked));
     const revenue = bookings.reduce((sum, b) => sum + (parseFloat(b.paidAmount) || 0), 0);
     setStats({ total: totalMapped, available, token, booked, revenue });
@@ -350,7 +350,7 @@ export default function BookingPage() {
         <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
           <div className="w-12 h-12 rounded-xl bg-emerald-950/40 text-emerald-400 border border-emerald-800/30 flex items-center justify-center"><CheckCircle className="w-6 h-6" /></div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Fully Booked</span>
+            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Booking Received</span>
             <span className="text-xl font-bold font-outfit text-white">{stats.booked}</span>
           </div>
         </div>
@@ -433,7 +433,7 @@ export default function BookingPage() {
             >
               <option value="ALL">Show All Listings</option>
               <option value="Token Received">Token Received</option>
-              <option value="Fully Booked">Fully Booked</option>
+              <option value="Booking Received">Booking Received</option>
             </select>
 
             {/* Export CSV */}
@@ -482,7 +482,7 @@ export default function BookingPage() {
                       <td className="px-4 py-3 font-bold text-blue-400">Plot {b.plotId}</td>
                       <td className="px-4 py-3">
                         <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-                          b.status === 'Fully Booked'
+                          b.status === 'Booking Received'
                             ? 'bg-emerald-950/30 text-emerald-400 border-emerald-800/30'
                             : 'bg-yellow-950/30 text-yellow-400 border-yellow-800/30'
                         }`}>
