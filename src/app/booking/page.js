@@ -5,20 +5,24 @@ import React, { useState, useEffect } from 'react';
 import {
   Building, CheckCircle, Clock, Wallet,
   Search, FileSpreadsheet, Eye, DraftingCompass,
-  Trash2, Edit, AlertTriangle, Printer
+  Trash2, Edit, AlertTriangle, Printer, Layers, Shield
 } from 'lucide-react';
 
 import MapCanvas from '@/components/booking/MapCanvas';
 import BookingForm from '@/components/booking/BookingForm';
 import BookingReceiptModal from '@/components/booking/BookingReceiptModal';
+import AdminSidebar from '@/components/booking/AdminSidebar';
 import { formatDateDDMMYY } from '@/lib/dateUtils';
 import {
   fetchPlots, savePlotToDb, deletePlotFromDb, clearAllPlotsFromDb,
   fetchBookings, saveBookingToDb, deleteBookingFromDb, clearAllBookingsFromDb
 } from '@/lib/db';
 import { MASTER_SITE_PLAN_JSON, generatePlotsFromMasterJson } from '@/lib/sitePlanData';
+import { PROJECTS, getProjectById, getPlaceholderPlotsForProject } from '@/lib/projectsData';
 
-export default function BookingPage() {
+export default function BookingPage({ projectId = 'ahh-city' }) {
+  const activeProject = getProjectById(projectId);
+
   const [appMode, setAppMode] = useState('booking'); // 'booking' | 'mapper'
   const [plots, setPlots] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -44,30 +48,51 @@ export default function BookingPage() {
   // Live form preview state: { plotId, status } or null
   const [formPreview, setFormPreview] = useState(null);
 
-  // Initial load
+  // All bookings map for Admin Sidebar summary
+  const [allBookingsMap, setAllBookingsMap] = useState({});
+
+  // Load project data
   useEffect(() => {
-    async function loadInitialData() {
-      // 1. Fetch plots & bookings from DB
+    async function loadProjectData() {
+      // Fetch bookings for active project
+      const allDbBookings = await fetchBookings();
+
+      // Organize bookings by project
+      const projectBookingsMap = {};
+      PROJECTS.forEach(p => {
+        projectBookingsMap[p.id] = allDbBookings.filter(b => (b.projectId || 'ahh-city') === p.id);
+      });
+      setAllBookingsMap(projectBookingsMap);
+
+      const filteredBookings = allDbBookings.filter(b => (b.projectId || 'ahh-city') === projectId);
+      setBookings(filteredBookings);
+
+      // Fetch plots
       let dbPlots = await fetchPlots();
-      const dbBookings = await fetchBookings();
 
-      // Check if dbPlots has duplicate IDs
-      const hasDuplicateIds = dbPlots && dbPlots.length > 0 && dbPlots.some((plot, idx) => dbPlots.findIndex(p => p.id === plot.id) !== idx);
-
-      // If no plots or duplicate IDs found, load master layout from JSON
-      if (!dbPlots || dbPlots.length === 0 || hasDuplicateIds) {
-        await clearAllPlotsFromDb();
-        const masterPlots = generatePlotsFromMasterJson(MASTER_SITE_PLAN_JSON);
-        for (const plot of masterPlots) {
-          await savePlotToDb(plot);
+      if (projectId === 'ahh-city') {
+        const hasDuplicateIds = dbPlots && dbPlots.length > 0 && dbPlots.some((plot, idx) => dbPlots.findIndex(p => p.id === plot.id) !== idx);
+        if (!dbPlots || dbPlots.length === 0 || hasDuplicateIds) {
+          await clearAllPlotsFromDb();
+          const masterPlots = generatePlotsFromMasterJson(MASTER_SITE_PLAN_JSON);
+          for (const plot of masterPlots) {
+            await savePlotToDb(plot);
+          }
+          dbPlots = masterPlots;
         }
-        dbPlots = masterPlots;
+        setPlots(dbPlots);
+      } else {
+        // For new projects (Hooria Villas, Labour City, Summer Farm Houses)
+        const projPlots = dbPlots.filter(p => p.projectId === projectId);
+        if (projPlots && projPlots.length > 0) {
+          setPlots(projPlots);
+        } else {
+          // Fallback placeholder plot boundaries (reserving exact same map area)
+          setPlots(getPlaceholderPlotsForProject(projectId));
+        }
       }
 
-      setPlots(dbPlots);
-      setBookings(dbBookings);
-
-      // Check if raster overlay image exists
+      // Check for raster overlay image
       try {
         const res = await fetch('/api/upload-map');
         const data = await res.json();
@@ -79,8 +104,8 @@ export default function BookingPage() {
         setImageLoaded(false);
       }
     }
-    loadInitialData();
-  }, []);
+    loadProjectData();
+  }, [projectId]);
 
   // Compute stats dashboard values
   useEffect(() => {
@@ -98,19 +123,6 @@ export default function BookingPage() {
     setTimeout(() => {
       setToast(prev => ({ ...prev, show: false }));
     }, 3500);
-  };
-
-  // Reset to Master JSON Layout
-  const handleResetToMasterJson = async () => {
-    if (confirm('Reset site plan plot boundaries to the original Master JSON specification (Survey No. 297)?')) {
-      await clearAllPlotsFromDb();
-      const masterPlots = generatePlotsFromMasterJson(MASTER_SITE_PLAN_JSON);
-      for (const plot of masterPlots) {
-        await savePlotToDb(plot);
-      }
-      setPlots(masterPlots);
-      triggerToast('Reset to Master JSON Layout Specification successfully!');
-    }
   };
 
   // Callback: Handle Site Plan Image Upload
@@ -138,14 +150,13 @@ export default function BookingPage() {
     }
   };
 
-  // Callback: Add Plot Coordinates
-  const handleAddPlot = async (id, type, coords) => {
-    const rawCoords = coords.map(p => `${p.x},${p.y}`).join(' ');
-    const newPlot = { id, type, coords, rawCoords };
-    const success = await savePlotToDb(newPlot);
+  // Callback: Save Plot Coordinates
+  const handleSavePlot = async (newPlot) => {
+    const plotWithProject = { ...newPlot, projectId };
+    const success = await savePlotToDb(plotWithProject);
     if (success) {
-      setPlots(prev => [...prev.filter(p => p.id !== id), newPlot]);
-      triggerToast(`Plot ${id} successfully mapped!`);
+      setPlots(prev => [...prev.filter(p => p.id !== newPlot.id), plotWithProject]);
+      triggerToast(`Plot ${newPlot.id} successfully mapped!`);
     } else {
       triggerToast('Error saving plot coordinates.', true);
     }
@@ -177,13 +188,14 @@ export default function BookingPage() {
 
   // Callback: Save Booking
   const handleSaveBooking = async (booking) => {
-    const success = await saveBookingToDb(booking);
+    const bookingWithProject = { ...booking, projectId };
+    const success = await saveBookingToDb(bookingWithProject);
     if (success) {
       setBookings(prev => {
-        const filtered = prev.filter(b => b.plotId !== booking.plotId);
-        return [...filtered, booking];
+        const filtered = prev.filter(b => b.plotId === booking.plotId);
+        return [...filtered.filter(b => b.plotId !== booking.plotId), bookingWithProject];
       });
-      triggerToast(`Booking saved for Plot ${booking.plotId}!`);
+      triggerToast(`Booking saved for ${activeProject.name} — Plot ${booking.plotId}!`);
     } else {
       triggerToast('Error saving booking details.', true);
     }
@@ -201,48 +213,45 @@ export default function BookingPage() {
     }
   };
 
-  // Callback: Clear All Bookings
+  // Callback: Clear All Bookings for Active Project
   const handleClearAllBookings = async () => {
-    if (confirm('Are you sure you want to clear ALL bookings and receipts? This will delete all records from both Local Storage and Database!')) {
+    if (confirm(`Are you sure you want to clear ALL bookings and receipts for ${activeProject.name}? This will delete records from both Local Storage and Database!`)) {
       const success = await clearAllBookingsFromDb();
       if (success) {
         setBookings([]);
         setSelectedPlotId(null);
-        triggerToast('All bookings and receipts cleared successfully from local & database!', true);
+        triggerToast(`All receipts cleared for ${activeProject.name}!`, true);
       }
     }
   };
 
   // Callback: Export Layout Coordinates to JSON file
   const handleExportLayout = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(MASTER_SITE_PLAN_JSON, null, 2));
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(plots, null, 2));
     const anchor = document.createElement('a');
     anchor.setAttribute("href", dataStr);
-    anchor.setAttribute("download", "ahh_city_survey_297_master_layout.json");
+    anchor.setAttribute("download", `${activeProject.id}_site_plan_layout.json`);
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
-    triggerToast('Master JSON specification exported.');
+    triggerToast(`Exported ${plots.length} plot coordinates JSON!`);
   };
 
-  // Callback: Import Layout Coordinates from JSON
+  // Callback: Import Layout Coordinates from JSON file
   const handleImportLayout = (file) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
       try {
-        const imported = JSON.parse(e.target.result);
-        if (imported.residential_plots || Array.isArray(imported)) {
-          let plotsToImport = [];
-          if (imported.residential_plots) {
-            plotsToImport = generatePlotsFromMasterJson(imported);
-          } else if (Array.isArray(imported)) {
-            plotsToImport = imported;
-          }
-          for (const plot of plotsToImport) {
+        const importedData = JSON.parse(e.target.result);
+        const plotsToImport = importedData.plots ? importedData.plots : (Array.isArray(importedData) ? importedData : null);
+
+        if (plotsToImport && Array.isArray(plotsToImport)) {
+          const taggedPlots = plotsToImport.map(p => ({ ...p, projectId }));
+          for (const plot of taggedPlots) {
             await savePlotToDb(plot);
           }
-          setPlots(plotsToImport);
-          triggerToast('Master JSON site plan layout imported successfully!');
+          setPlots(taggedPlots);
+          triggerToast(`${activeProject.name} site plan layout imported successfully!`);
         } else {
           triggerToast('Invalid JSON site plan format.', true);
         }
@@ -256,19 +265,25 @@ export default function BookingPage() {
   // Callback: Export ledger entries to CSV (Excel)
   const handleExportCSV = () => {
     if (bookings.length === 0) {
-      triggerToast('Ledger is empty.', true);
+      triggerToast('Ledger is empty for this project.', true);
       return;
     }
     const headers = [
-      'Plot No', 'Status', 'Client Name', 'Relation', 'Father/Husband Name',
+      'Project', 'Plot No', 'Status', 'Client Name', 'Father/Husband Name',
       'CNIC', 'Contact No', 'Email', 'Payment Mode', 'Plot Dimension',
-      'Total Price (Rs)', 'Paid Token (Rs)', 'Balance (Rs)', 'Booking Date'
+      'Cost of Land (Rs)', 'Extra Charges (Rs)', 'Processing (Rs)',
+      'Total Receivable (Rs)', 'Paid Amount (Rs)', 'Balance (Rs)', 'Booking Date'
     ];
-    const rows = bookings.map(b => [
-      b.plotId, b.status, b.clientName, b.relationType || 'S/O', b.relativeName || 'N/A',
-      b.cnic || 'N/A', b.phone, b.email || 'N/A', b.paymentMode || 'Cash', b.plotType,
-      b.totalPrice, b.paidAmount, b.totalPrice - b.paidAmount, b.date
-    ]);
+    const rows = bookings.map(b => {
+      const computedTotal = ((parseFloat(b.costOfLand) || 0) + (parseFloat(b.extraCharges) || 0) + (parseFloat(b.processingCharges) || 0)) || (parseFloat(b.totalPrice) || 0);
+      const rem = computedTotal - (parseFloat(b.paidAmount) || 0);
+      return [
+        activeProject.name, b.plotId, b.status, b.clientName, b.relativeName || 'N/A',
+        b.cnic || 'N/A', b.phone, b.email || 'N/A', b.paymentMode || 'Cash', b.plotType,
+        b.costOfLand || 0, b.extraCharges || 0, b.processingCharges || 0,
+        computedTotal, b.paidAmount, rem, b.date
+      ];
+    });
 
     let csvContent = "data:text/csv;charset=utf-8,";
     csvContent += headers.join(",") + "\n";
@@ -286,11 +301,11 @@ export default function BookingPage() {
     const encoded = encodeURI(csvContent);
     const anchor = document.createElement('a');
     anchor.setAttribute("href", encoded);
-    anchor.setAttribute("download", `AHH_City_Ledger_${new Date().toISOString().substring(0, 10)}.csv`);
+    anchor.setAttribute("download", `${activeProject.name.replace(/\s+/g, '_')}_Ledger_${new Date().toISOString().substring(0, 10)}.csv`);
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
-    triggerToast('Excel CSV ledger exported successfully.');
+    triggerToast(`Excel CSV ledger exported for ${activeProject.name}.`);
   };
 
   // Filtered Bookings list for Table
@@ -307,293 +322,296 @@ export default function BookingPage() {
   });
 
   return (
-    <div className="flex flex-col gap-6 max-w-[1850px] w-full mx-auto p-6 min-h-screen">
+    <div className="relative min-h-screen bg-slate-950 text-slate-100">
 
-      {/* Header Panel */}
-      <header className="flex flex-col md:flex-row justify-between items-center px-6 py-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md gap-4 shadow-xl">
-        <div className="flex items-center gap-3.5">
-          <div className="p-2.5 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl text-white shadow-lg shadow-blue-500/20">
-            <Building className="w-7 h-7" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-extrabold tracking-tight text-white font-outfit">AHH CITY</h1>
-              <span className="text-xs bg-blue-950 text-blue-400 border border-blue-800/60 px-2.5 py-0.5 rounded-md font-bold">
-                Survey No. 297
-              </span>
+      {/* EXTREME RIGHT DOCKED ADMIN DASHBOARD SIDEBAR */}
+      <AdminSidebar
+        currentProjectId={projectId}
+        bookings={bookings}
+        plots={plots}
+        allBookingsMap={allBookingsMap}
+        onClearProjectBookings={handleClearAllBookings}
+        onExportCSV={handleExportCSV}
+      />
+
+      <div className="flex flex-col gap-6 max-w-[1700px] w-full mx-auto p-4 sm:p-6 pb-20">
+
+        {/* Header Panel */}
+        <header className="flex flex-col md:flex-row justify-between items-center px-6 py-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md gap-4 shadow-xl">
+          <div className="flex items-center gap-3.5">
+            <div className="p-2.5 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl text-white shadow-lg shadow-blue-500/20 text-2xl">
+              {activeProject.icon}
             </div>
-            <p className="text-xs text-slate-400 font-medium tracking-wide uppercase mt-0.5">
-              Master Architectural Site Plan & Booking Ledger System • AHH Brothers
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-2xl font-extrabold tracking-tight text-white font-outfit uppercase">
+                  {activeProject.name}
+                </h1>
+                <span className="text-xs bg-blue-950 text-blue-400 border border-blue-800/60 px-2.5 py-0.5 rounded-md font-bold">
+                  {activeProject.survey}
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 font-medium tracking-wide uppercase mt-0.5">
+                {activeProject.tagline} • Booking Ledger & Receipt System
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="flex flex-wrap gap-2.5 items-center">
-          <span className="text-xs bg-blue-950/80 text-blue-400 border border-blue-800/60 px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5">
-            <Eye className="w-4 h-4 text-blue-400" />
-            <span>Booking App Dashboard</span>
-          </span>
-        </div>
-      </header>
-
-      {/* Stats Counter Banner */}
-      <section className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
-          <div className="w-12 h-12 rounded-xl bg-blue-950/40 text-blue-400 border border-blue-800/30 flex items-center justify-center"><Building className="w-6 h-6" /></div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Total Mapped</span>
-            <span className="text-xl font-bold font-outfit text-white">{stats.total}</span>
+          <div className="flex flex-wrap gap-2.5 items-center">
+            <span className="text-xs bg-blue-950/80 text-blue-400 border border-blue-800/60 px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5">
+              <Eye className="w-4 h-4 text-blue-400" />
+              <span>{activeProject.name} Dashboard</span>
+            </span>
           </div>
-        </div>
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
-          <div className="w-12 h-12 rounded-xl bg-emerald-950/40 text-emerald-400 border border-emerald-800/30 flex items-center justify-center"><CheckCircle className="w-6 h-6" /></div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Available</span>
-            <span className="text-xl font-bold font-outfit text-white">{stats.available}</span>
+        </header>
+
+        {/* Stats Counter Banner */}
+        <section className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
+            <div className="w-12 h-12 rounded-xl bg-blue-950/40 text-blue-400 border border-blue-800/30 flex items-center justify-center"><Building className="w-6 h-6" /></div>
+            <div>
+              <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Total Mapped</span>
+              <span className="text-xl font-bold font-outfit text-white">{stats.total}</span>
+            </div>
           </div>
-        </div>
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
-          <div className="w-12 h-12 rounded-xl bg-yellow-950/40 text-yellow-400 border border-yellow-800/30 flex items-center justify-center"><Clock className="w-6 h-6" /></div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Tokens Received</span>
-            <span className="text-xl font-bold font-outfit text-white">{stats.token}</span>
+          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
+            <div className="w-12 h-12 rounded-xl bg-emerald-950/40 text-emerald-400 border border-emerald-800/30 flex items-center justify-center"><CheckCircle className="w-6 h-6" /></div>
+            <div>
+              <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Available</span>
+              <span className="text-xl font-bold font-outfit text-white">{stats.available}</span>
+            </div>
           </div>
-        </div>
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
-          <div className="w-12 h-12 rounded-xl bg-emerald-950/40 text-emerald-400 border border-emerald-800/30 flex items-center justify-center"><CheckCircle className="w-6 h-6" /></div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Booking Received</span>
-            <span className="text-xl font-bold font-outfit text-white">{stats.booked}</span>
+          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
+            <div className="w-12 h-12 rounded-xl bg-yellow-950/40 text-yellow-400 border border-yellow-800/30 flex items-center justify-center"><Clock className="w-6 h-6" /></div>
+            <div>
+              <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Tokens Recv</span>
+              <span className="text-xl font-bold font-outfit text-white">{stats.token}</span>
+            </div>
           </div>
-        </div>
-        <div className="col-span-2 md:col-span-1 p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
-          <div className="w-12 h-12 rounded-xl bg-purple-950/40 text-purple-400 border border-purple-800/30 flex items-center justify-center"><Wallet className="w-6 h-6" /></div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Funds Collected</span>
-            <span className="text-lg font-bold font-outfit text-white">Rs {stats.revenue.toLocaleString()}</span>
+          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
+            <div className="w-12 h-12 rounded-xl bg-emerald-950/40 text-emerald-400 border border-emerald-800/30 flex items-center justify-center"><CheckCircle className="w-6 h-6" /></div>
+            <div>
+              <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Booking Recv</span>
+              <span className="text-xl font-bold font-outfit text-white">{stats.booked}</span>
+            </div>
           </div>
-        </div>
-      </section>
+          <div className="col-span-2 md:col-span-1 p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
+            <div className="w-12 h-12 rounded-xl bg-purple-950/40 text-purple-400 border border-purple-800/30 flex items-center justify-center"><Wallet className="w-6 h-6" /></div>
+            <div>
+              <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Funds Collected</span>
+              <span className="text-lg font-bold font-outfit text-white">Rs {stats.revenue.toLocaleString()}</span>
+            </div>
+          </div>
+        </section>
 
-      {/* Main Workspace split screen */}
-      <main className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        {/* Main Workspace split screen */}
+        <main className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
-        {/* Left Side: Map viewport container */}
-        <div className="lg:col-span-8 h-full min-h-[550px]">
-          <MapCanvas
-            plots={plots}
-            bookings={bookings}
-            appMode={appMode}
-            selectedPlotId={selectedPlotId}
-            onSelectPlot={setSelectedPlotId}
-            onAddPlot={handleAddPlot}
-            imageSrc={imageSrc}
-            onUploadImage={handleImageUploaded}
-            imageLoaded={imageLoaded}
-            setImageLoaded={setImageLoaded}
-            formPreview={formPreview}
-          />
-        </div>
+          {/* LEFT 7 COLS: INTERACTIVE SITE PLAN MAP CANVAS (SAME SIZE SPACE RESERVED FOR ALL PROJECTS) */}
+          <div className="lg:col-span-7 h-[680px] min-h-[680px]">
+            <MapCanvas
+              appMode={appMode}
+              plots={plots}
+              bookings={bookings}
+              selectedPlotId={selectedPlotId}
+              currentProject={activeProject}
+              onSelectPlot={(plotId) => setSelectedPlotId(plotId)}
+              onSavePlot={handleSavePlot}
+              onDeletePlot={handleDeletePlot}
+              imageSrc={imageSrc}
+              imageLoaded={imageLoaded}
+              formPreview={formPreview}
+            />
+          </div>
 
-        {/* Right Side: sidebar panels */}
-        <div className="lg:col-span-4 h-full">
-          <BookingForm
-            appMode={appMode}
-            selectedPlotId={selectedPlotId}
-            plots={plots}
-            bookings={bookings}
-            onSaveBooking={handleSaveBooking}
-            onClearFormSelection={() => setSelectedPlotId(null)}
-            onDeletePlot={handleDeletePlot}
-            onClearLayout={handleClearLayout}
-            onExportLayout={handleExportLayout}
-            onImportLayout={handleImportLayout}
-            onFormPreviewChange={setFormPreview}
-            onPrintReceipt={(booking) => setActiveReceiptBooking(booking)}
-          />
-        </div>
+          {/* RIGHT 5 COLS: BOOKING DETAILS & INSTALLMENT ENTRY FORM */}
+          <div className="lg:col-span-5 h-[680px] min-h-[680px] overflow-y-auto custom-scrollbar">
+            <BookingForm
+              appMode={appMode}
+              selectedPlotId={selectedPlotId}
+              plots={plots}
+              bookings={bookings}
+              currentProject={activeProject}
+              onSaveBooking={handleSaveBooking}
+              onClearFormSelection={() => setSelectedPlotId(null)}
+              onDeletePlot={handleDeletePlot}
+              onClearLayout={handleClearLayout}
+              onExportLayout={handleExportLayout}
+              onImportLayout={handleImportLayout}
+              onFormPreviewChange={(previewData) => setFormPreview(previewData)}
+              onPrintReceipt={(bookingPayload) => setActiveReceiptBooking(bookingPayload)}
+            />
+          </div>
 
-      </main>
+        </main>
 
-      {/* Bottom Panel: Ledger Directory Table */}
-      <footer className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl flex flex-col gap-4">
-
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <Eye className="w-5 h-5 text-blue-500" />
-            <span>AHH City Booking Ledger Directory</span>
-          </h2>
-
-          <div className="flex flex-wrap gap-3 items-center w-full sm:w-auto">
-            {/* Search */}
-            <div className="relative shrink-0 w-full sm:w-60">
-              <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search Client, CNIC, Plot..."
-                className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white outline-none"
-              />
+        {/* BOTTOM SECTION: LEDGER TABLE & SEARCH */}
+        <section className="mt-4 p-6 rounded-2xl bg-slate-900 border border-slate-800 backdrop-blur-lg space-y-4 shadow-xl">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-800">
+            <div>
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <span>{activeProject.icon}</span>
+                <span>{activeProject.name} Customer Booking Ledger</span>
+              </h2>
+              <p className="text-xs text-slate-400">
+                Complete transaction ledger of token payments, bookings, and installment histories for {activeProject.name}.
+              </p>
             </div>
 
-            {/* Filter Status */}
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-lg px-3 py-1.5 text-xs text-slate-300 outline-none cursor-pointer"
-            >
-              <option value="ALL">Show All Listings</option>
-              <option value="Token Received">Token Received</option>
-              <option value="Booking Received">Booking Received</option>
-            </select>
+            <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+              {/* Search Bar */}
+              <div className="relative flex-grow md:flex-grow-0 min-w-[220px]">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search plot #, name, cnic..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white outline-none"
+                />
+              </div>
 
-            {/* Export CSV */}
-            <button
-              onClick={handleExportCSV}
-              className="flex items-center gap-1.5 text-xs font-semibold px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white cursor-pointer transition-colors shadow-md shadow-blue-500/10 w-full sm:w-auto justify-center"
-            >
-              <FileSpreadsheet className="w-3.5 h-3.5" />
-              <span>Export to Excel</span>
-            </button>
+              {/* Filter Status */}
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-lg px-3 py-1.5 text-xs text-slate-300 outline-none cursor-pointer"
+              >
+                <option value="ALL">Show All Listings</option>
+                <option value="Token Received">Token Received</option>
+                <option value="Booking Received">Booking Received</option>
+              </select>
 
-            {/* Clear All Bookings */}
-            <button
-              onClick={handleClearAllBookings}
-              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 cursor-pointer transition-colors w-full sm:w-auto justify-center"
-              title="Wipe all bookings and receipts from LocalStorage & Supabase Database"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Clear All Receipts</span>
-            </button>
+              {/* Export CSV */}
+              <button
+                onClick={handleExportCSV}
+                className="flex items-center gap-1.5 text-xs font-semibold px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white cursor-pointer transition-colors shadow-md shadow-blue-500/10 w-full sm:w-auto justify-center"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5" />
+                <span>Export to Excel</span>
+              </button>
+
+              {/* Clear All Bookings */}
+              <button
+                onClick={handleClearAllBookings}
+                className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 cursor-pointer transition-colors w-full sm:w-auto justify-center"
+                title="Wipe all bookings and receipts for active project"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Clear {activeProject.name} Receipts</span>
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Ledger grid table */}
-        <div className="overflow-x-auto border border-slate-800 bg-slate-950/30 rounded-xl">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-slate-800 bg-slate-950/80">
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Plot No</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Status</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Client Details</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">CNIC</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Contact No</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Payment Mode</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Plot Dimension</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Total Price</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Token Amount</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Remaining</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Booking Date</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Token Expiry</th>
-                <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/40">
-              {filteredBookings.length === 0 ? (
-                <tr>
-                  <td colSpan="13" className="px-4 py-8 text-center text-slate-500 font-medium">
-                    No bookings logged matching your filters.
-                  </td>
+          {/* Ledger grid table */}
+          <div className="overflow-x-auto border border-slate-800 bg-slate-950/30 rounded-xl">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-slate-800 bg-slate-950/80">
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Plot No</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Client Details</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">CNIC</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Contact No</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Payment Mode</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Plot Dimension</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Total Price</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Paid Amount</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Remaining</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider">Booking Date</th>
+                  <th className="px-4 py-3 font-semibold text-slate-400 uppercase tracking-wider text-center">Actions</th>
                 </tr>
-              ) : (
-                filteredBookings.map((b, idx) => {
-                  const rem = b.totalPrice - b.paidAmount;
-                  return (
-                    <tr key={`ledger-${b.plotId}-${idx}`} className="hover:bg-slate-800/10 transition-colors">
-                      <td className="px-4 py-3 font-bold text-blue-400">Plot {b.plotId}</td>
-                      <td className="px-4 py-3">
-                        <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
-                          b.status === 'Booking Received'
-                            ? 'bg-emerald-950/30 text-emerald-400 border-emerald-800/30'
-                            : 'bg-yellow-950/30 text-yellow-400 border-yellow-800/30'
-                        }`}>
-                          {b.status}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 font-semibold text-slate-200">
-                        <div>{b.clientName}</div>
-                        {b.relativeName && (
-                          <div className="text-[10px] text-slate-400 font-normal mt-0.5">
-                            <span className="font-semibold text-blue-400">{b.relationType || 'S/O'}</span> {b.relativeName}
+              </thead>
+              <tbody className="divide-y divide-slate-800/40">
+                {filteredBookings.length === 0 ? (
+                  <tr>
+                    <td colSpan="12" className="px-4 py-8 text-center text-slate-500 font-medium">
+                      No bookings logged matching your filters for {activeProject.name}.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredBookings.map((b, idx) => {
+                    const computedTotal = ((parseFloat(b.costOfLand) || 0) + (parseFloat(b.extraCharges) || 0) + (parseFloat(b.processingCharges) || 0)) || (parseFloat(b.totalPrice) || 0);
+                    const rem = computedTotal - b.paidAmount;
+                    return (
+                      <tr key={`ledger-${b.plotId}-${idx}`} className="hover:bg-slate-800/10 transition-colors">
+                        <td className="px-4 py-3 font-bold text-blue-400">Plot {b.plotId}</td>
+                        <td className="px-4 py-3">
+                          <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                            b.status === 'Booking Received'
+                              ? 'bg-emerald-950/30 text-emerald-400 border-emerald-800/30'
+                              : 'bg-yellow-950/30 text-yellow-400 border-yellow-800/30'
+                          }`}>
+                            {b.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="font-semibold text-white">{b.clientName}</div>
+                          {b.relativeName && <div className="text-[10px] text-slate-400">S/O {b.relativeName}</div>}
+                        </td>
+                        <td className="px-4 py-3 font-mono text-slate-300">{b.cnic || 'N/A'}</td>
+                        <td className="px-4 py-3 text-slate-300">{b.phone}</td>
+                        <td className="px-4 py-3">
+                          <span className="font-semibold text-blue-400">{b.paymentMode || 'Cash'}</span>
+                          {b.bankName && <span className="text-[10px] text-slate-400 block">({b.bankName})</span>}
+                        </td>
+                        <td className="px-4 py-3 text-slate-300">{b.plotType}</td>
+                        <td className="px-4 py-3 font-semibold text-white">Rs {parseInt(computedTotal).toLocaleString()}</td>
+                        <td className="px-4 py-3 font-bold text-emerald-400">Rs {parseInt(b.paidAmount || 0).toLocaleString()}</td>
+                        <td className="px-4 py-3">
+                          <span className={`font-bold ${rem <= 0 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                            {rem <= 0 ? 'Rs 0 (FULL PAID)' : `Rs ${parseInt(rem).toLocaleString()}`}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-slate-400 font-mono">{formatDateDDMMYY(b.date)}</td>
+                        <td className="px-4 py-3 text-center">
+                          <div className="flex items-center justify-center gap-1.5">
+                            <button
+                              onClick={() => setActiveReceiptBooking(b)}
+                              className="p-1.5 rounded-lg bg-blue-950 border border-blue-800/60 hover:bg-blue-900 text-blue-400 transition-colors cursor-pointer"
+                              title="Print A4 Receipt Voucher"
+                            >
+                              <Printer className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteBooking(b.plotId)}
+                              className="p-1.5 rounded-lg bg-red-950 border border-red-800/60 hover:bg-red-900 text-red-400 transition-colors cursor-pointer"
+                              title="Delete Receipt Entry"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
                           </div>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-slate-300 font-mono text-[11px]">{b.cnic || 'N/A'}</td>
-                      <td className="px-4 py-3 text-slate-400">{b.phone}</td>
-                      <td className="px-4 py-3">
-                        <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300 text-[10px] font-medium">
-                          {b.paymentMode === 'Cheque' ? '🏦 Cheque' : b.paymentMode === 'Online' ? '📱 Online' : '💵 Cash'}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-slate-400">{b.plotType}</td>
-                      <td className="px-4 py-3 text-slate-300">Rs {parseInt(b.totalPrice).toLocaleString()}</td>
-                      <td className="px-4 py-3 text-emerald-400 font-medium">Rs {parseInt(b.paidAmount).toLocaleString()}</td>
-                      <td className={`px-4 py-3 font-medium ${rem > 0 ? 'text-yellow-500' : 'text-slate-500'}`}>
-                        Rs {parseInt(rem).toLocaleString()}
-                      </td>
-                      <td className="px-4 py-3 text-slate-300 font-mono text-xs">{formatDateDDMMYY(b.date)}</td>
-                      <td className="px-4 py-3 text-amber-400 font-mono text-xs font-semibold">
-                        {b.status === 'Token Received' ? formatDateDDMMYY(b.tokenExpiryDate) : '—'}
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex gap-1.5 justify-center items-center">
-                          <button
-                            onClick={() => setActiveReceiptBooking(b)}
-                            className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[11px] flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
-                            title="View & Print Official Receipt"
-                          >
-                            <Printer className="w-3 h-3" />
-                            <span>Receipt</span>
-                          </button>
-                          <button
-                            onClick={() => { setAppMode('booking'); setSelectedPlotId(b.plotId); }}
-                            className="p-1 rounded bg-slate-800 text-blue-400 border border-slate-700 hover:bg-slate-700 cursor-pointer transition-colors"
-                            title="Edit Booking"
-                          >
-                            <Edit className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteBooking(b.plotId)}
-                            className="p-1 rounded bg-red-950/40 text-red-400 border border-red-800/40 hover:bg-red-900/40 cursor-pointer transition-colors"
-                            title="Delete Booking"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-      </footer>
+        {/* PRINTABLE RECEIPT MODAL */}
+        {activeReceiptBooking && (
+          <BookingReceiptModal
+            booking={activeReceiptBooking}
+            onSaveBooking={handleSaveBooking}
+            onDeleteBooking={handleDeleteBooking}
+            onClose={() => setActiveReceiptBooking(null)}
+          />
+        )}
 
-      {/* PRINTABLE RECEIPT MODAL */}
-      {activeReceiptBooking && (
-        <BookingReceiptModal
-          booking={activeReceiptBooking}
-          onSaveBooking={handleSaveBooking}
-          onDeleteBooking={handleDeleteBooking}
-          onClose={() => setActiveReceiptBooking(null)}
-        />
-      )}
+        {/* TOAST ALERTS */}
+        {toast.show && (
+          <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-xl font-bold text-xs shadow-2xl flex items-center gap-2 border animate-bounce ${
+            toast.isError ? 'bg-red-950 text-red-200 border-red-800' : 'bg-emerald-950 text-emerald-200 border-emerald-800'
+          }`}>
+            <span>{toast.isError ? '⚠️' : '✅'}</span>
+            <span>{toast.text}</span>
+          </div>
+        )}
 
-      {/* Floating custom Toast Alert */}
-      {toast.show && (
-        <div className={`fixed bottom-6 left-6 z-50 px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 backdrop-blur-md text-sm border font-semibold animate-bounce ${
-          toast.isError
-            ? 'bg-red-950/90 text-red-400 border-red-800/40'
-            : 'bg-slate-900/90 text-emerald-400 border-slate-800'
-        }`}>
-          {toast.isError ? <AlertTriangle className="w-5 h-5" /> : <CheckCircle className="w-5 h-5" />}
-          <span>{toast.text}</span>
-        </div>
-      )}
-
+      </div>
     </div>
   );
 }

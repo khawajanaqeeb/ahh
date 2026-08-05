@@ -8,6 +8,7 @@ export default function BookingForm({
   selectedPlotId,
   plots,
   bookings,
+  currentProject,
   onSaveBooking,
   onClearFormSelection,
   onDeletePlot,
@@ -159,6 +160,7 @@ export default function BookingForm({
 
       return {
         ...existingBooking,
+        projectId: currentProject?.id || 'ahh-city',
         plotId: resolvedPlotId,
         clientName: clientName.trim(),
         relativeName: relativeName.trim(),
@@ -189,6 +191,7 @@ export default function BookingForm({
     const finalStatus = isFullyPaid ? 'Booking Received' : status;
 
     return {
+      projectId: currentProject?.id || 'ahh-city',
       plotId: resolvedPlotId,
       clientName: clientName.trim(),
       relativeName: relativeName.trim(),
@@ -255,11 +258,23 @@ export default function BookingForm({
   const handlePlotTypeChange = (e) => {
     const newType = e.target.value;
     setPlotType(newType);
-    if (newType === 'Residential 60SQY') { setCostOfLand(200000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(200000); setPaidAmount(50000); setAmountInWords(numberToWords(50000)); }
-    else if (newType === 'Residential 120SQY') { setCostOfLand(350000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(350000); setPaidAmount(100000); setAmountInWords(numberToWords(100000)); }
-    else if (newType === 'Commercial Shop 100SQFT') { setCostOfLand(350000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(350000); setPaidAmount(200000); setAmountInWords(numberToWords(200000)); }
-    else if (newType === 'Residential 150SQY') { setCostOfLand(1000000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(1000000); setPaidAmount(200000); setAmountInWords(numberToWords(200000)); }
-    else if (newType === 'Commercial 150SQY') { setCostOfLand(1500000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(1500000); setPaidAmount(300000); setAmountInWords(numberToWords(300000)); }
+
+    const preset = currentProject?.plotTypes?.find(pt => pt.label === newType);
+    if (preset) {
+      setCostOfLand(preset.costOfLand > 0 ? preset.costOfLand : '');
+      setExtraCharges(preset.extraCharges > 0 ? preset.extraCharges : '');
+      setProcessingCharges(preset.processingCharges > 0 ? preset.processingCharges : '');
+      setTotalPrice(preset.total > 0 ? preset.total : '');
+      setPaidAmount(preset.paid > 0 ? preset.paid : '');
+      setAmountInWords(preset.paid > 0 ? numberToWords(preset.paid) : '');
+    } else {
+      if (newType === 'Residential 60SQY') { setCostOfLand(200000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(200000); setPaidAmount(50000); setAmountInWords(numberToWords(50000)); }
+      else if (newType === 'Residential 120SQY') { setCostOfLand(350000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(350000); setPaidAmount(100000); setAmountInWords(numberToWords(100000)); }
+      else if (newType === 'Commercial Shop 100SQFT') { setCostOfLand(350000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(350000); setPaidAmount(200000); setAmountInWords(numberToWords(200000)); }
+      else if (newType === 'Residential 150SQY') { setCostOfLand(1000000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(1000000); setPaidAmount(200000); setAmountInWords(numberToWords(200000)); }
+      else if (newType === 'Commercial 150SQY') { setCostOfLand(1500000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(1500000); setPaidAmount(300000); setAmountInWords(numberToWords(300000)); }
+    }
+
     const resolvedId = resolveTargetPlotId(plotIdInput, newType);
     if (onFormPreviewChange) onFormPreviewChange(resolvedId ? { plotId: resolvedId, status } : null);
   };
@@ -458,12 +473,18 @@ export default function BookingForm({
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Plot Dimension</label>
                   <select value={plotType} onChange={handlePlotTypeChange}
                     className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white cursor-pointer transition-all outline-none">
-                    <option value="Residential 60SQY">Res. 60 SQY</option>
-                    <option value="Residential 120SQY">Res. 120 SQY</option>
-                    <option value="Commercial Shop 100SQFT">Comm. Shop 100 SQFT</option>
-                    <option value="Residential 150SQY">Res. 150 SQY</option>
-                    <option value="Commercial 150SQY">Comm. 150 SQY</option>
-                    <option value="Custom Size">Other / Custom</option>
+                    {(currentProject?.plotTypes || [
+                      { label: 'Residential 60SQY' },
+                      { label: 'Residential 120SQY' },
+                      { label: 'Commercial Shop 100SQFT' },
+                      { label: 'Residential 150SQY' },
+                      { label: 'Commercial 150SQY' },
+                      { label: 'Custom Size' }
+                    ]).map((pt, idx) => (
+                      <option key={`pt-${idx}`} value={pt.label}>
+                        {pt.label} {pt.total > 0 ? `(Rs ${pt.total.toLocaleString()})` : ''}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div>
