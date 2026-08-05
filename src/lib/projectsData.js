@@ -1,6 +1,8 @@
 // src/lib/projectsData.js
 // Central Project Registry & Specifications for AHH Brothers
 
+import { MEDIA } from './media';
+
 export const PROJECTS = [
   {
     id: 'ahh-city',
@@ -8,6 +10,7 @@ export const PROJECTS = [
     tagline: 'Master Planned Housing Scheme',
     survey: 'Survey No. 297, Karachi',
     icon: '🏛️',
+    logo: MEDIA.ahhCityLogo,
     color: 'blue',
     badgeBg: 'bg-blue-950/80',
     badgeBorder: 'border-blue-800/60',
@@ -28,6 +31,7 @@ export const PROJECTS = [
     tagline: 'Luxury Residential Villa Project',
     survey: 'Sector 5, Prime Location, Karachi',
     icon: '🏡',
+    logo: MEDIA.hooriaVillasLogo,
     color: 'purple',
     badgeBg: 'bg-purple-950/80',
     badgeBorder: 'border-purple-800/60',
@@ -46,6 +50,7 @@ export const PROJECTS = [
     tagline: 'Affordable Community Township',
     survey: 'Industrial Zone Phase 2, Karachi',
     icon: '🏗️',
+    logo: MEDIA.labourCityLogo,
     color: 'emerald',
     badgeBg: 'bg-emerald-950/80',
     badgeBorder: 'border-emerald-800/60',
@@ -64,6 +69,7 @@ export const PROJECTS = [
     tagline: 'Exclusive Countryside Resort Scheme',
     survey: 'Super Highway Green Belt, Karachi',
     icon: '🌾',
+    logo: MEDIA.summerFarmhousesLogo,
     color: 'amber',
     badgeBg: 'bg-amber-950/80',
     badgeBorder: 'border-amber-800/60',

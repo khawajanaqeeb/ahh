@@ -340,9 +340,17 @@ export default function MapCanvas({
       {/* Map Header */}
       <div className="flex flex-wrap justify-between items-center px-6 py-3.5 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md z-10 gap-3">
         <div className="flex items-center gap-3">
-          <span className="p-1.5 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400 text-base font-bold">
-            {currentProject?.icon || '🏛️'}
-          </span>
+          {currentProject?.logo ? (
+            <img
+              src={currentProject.logo}
+              alt={currentProject.name}
+              className="w-9 h-9 rounded-lg object-contain bg-white p-0.5 border border-slate-700 shadow-md shrink-0"
+            />
+          ) : (
+            <span className="p-1.5 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400 text-base font-bold">
+              🏛️
+            </span>
+          )}
           <div>
             <div className="flex items-center gap-2 font-bold text-sm text-white font-outfit">
               <span>{currentProject?.name || 'AHH CITY'} Master Site Plan</span>
@@ -369,8 +377,14 @@ export default function MapCanvas({
       >
         {/* Reserved Site Plan Space Banner for New Projects */}
         {currentProject && currentProject.id !== 'ahh-city' && (
-          <div className="absolute top-4 left-6 z-20 px-3.5 py-2 bg-slate-900/90 border border-slate-800/90 rounded-xl backdrop-blur-md text-xs text-slate-200 flex items-center gap-2 shadow-lg">
-            <span className="text-base">{currentProject.icon}</span>
+          <div className="absolute top-4 left-6 z-20 px-3.5 py-2 bg-slate-900/90 border border-slate-800/90 rounded-xl backdrop-blur-md text-xs text-slate-200 flex items-center gap-2.5 shadow-lg">
+            {currentProject.logo && (
+              <img
+                src={currentProject.logo}
+                alt={currentProject.name}
+                className="w-7 h-7 rounded-md object-contain bg-white p-0.5 border border-slate-700 shrink-0"
+              />
+            )}
             <div>
               <div className="font-bold text-blue-300">
                 Reserved Site Plan Canvas — {currentProject.name}
