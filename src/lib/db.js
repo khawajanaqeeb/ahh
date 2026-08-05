@@ -218,7 +218,10 @@ export async function fetchBookings() {
         totalPrice: parseFloat(item.total_price),
         paidAmount: parseFloat(item.paid_amount),
         date: item.date,
-        tokenExpiryDate: item.token_expiry_date || item.tokenExpiryDate || ''
+        tokenExpiryDate: item.token_expiry_date || item.tokenExpiryDate || '',
+        amountInWords: item.amount_in_words || item.amountInWords || '',
+        installmentMonth: item.installment_month || item.installmentMonth || '',
+        installments: item.installments || []
       }));
     } catch (err) {
       console.error('Error fetching bookings from Supabase:', err);
@@ -261,7 +264,10 @@ export async function saveBookingToDb(booking) {
         total_price: booking.totalPrice,
         paid_amount: booking.paidAmount,
         date: booking.date,
-        token_expiry_date: booking.tokenExpiryDate || null
+        token_expiry_date: booking.tokenExpiryDate || null,
+        amount_in_words: booking.amountInWords || null,
+        installment_month: booking.installmentMonth || null,
+        installments: booking.installments || []
       };
 
       const { error } = await supabase
