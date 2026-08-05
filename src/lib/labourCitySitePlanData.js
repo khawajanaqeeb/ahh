@@ -135,145 +135,44 @@ export const LABOUR_CITY_SITE_PLAN_JSON = {
 // Complete Interactive 2D Polygon Generator matching exact Blueprint Layout Coordinates
 export function generateLabourCityPlots(specJSON = LABOUR_CITY_SITE_PLAN_JSON) {
   const plots = [];
+  const gap = 1;
 
-  // 1. BLOCK A (Bottom Sector - Near 100' Main Road)
-  // Commercial Plots C-1 to C-24 (150 SQYD 25'x54')
-  const blockAX = 40;
-  const blockAY = 400;
-  for (let i = 0; i < 24; i++) {
-    const plotNo = i + 1;
-    const col = i % 12;
-    const row = Math.floor(i / 12);
-    const w = 24;
-    const h = 32;
-    const x = blockAX + col * (w + 2);
-    const y = blockAY + row * (h + 2);
-    const plotId = `A-C${plotNo}`;
+  // Block definitions based on the HTML master layout
+  const blockDefs = [
+    { id: 'A', type: 'Residential 80SQY', size: '80 sq.yd', startX: 30, startY: 60, cols: 4, rows: 17, plotW: 28, plotH: 16, count: 68 },
+    { id: 'B', type: 'Residential 80SQY', size: '80 sq.yd', startX: 165, startY: 60, cols: 5, rows: 19, plotW: 28, plotH: 14, count: 95 },
+    { id: 'B2', type: 'Residential 80SQY', size: '80 sq.yd', startX: 340, startY: 60, cols: 5, rows: 24, plotW: 28, plotH: 12, count: 120 },
+    { id: 'D', type: 'Commercial Plots 150SQY', size: '150 sq.yd', startX: 620, startY: 60, cols: 4, rows: 18, plotW: 30, plotH: 16, count: 72 },
+  ];
 
-    plots.push({
-      id: plotId,
-      label: plotId,
-      projectId: 'labour-city',
-      block: 'A',
-      plotNumber: plotNo,
-      type: 'Commercial Plot 120SQY',
-      dimensions: "25' x 54'",
-      area: '150SQY',
-      rawCoords: `${x},${y} ${x + w},${y} ${x + w},${y + h} ${x},${y + h}`,
-      coords: [{ x, y }, { x: x + w, y }, { x: x + w, y: y + h }, { x, y: y + h }]
-    });
-  }
+  blockDefs.forEach(b => {
+    for (let i = 0; i < b.count; i++) {
+      const plotNo = i + 1;
+      const col = i % b.cols;
+      const row = Math.floor(i / b.cols);
+      const x = b.startX + col * (b.plotW + gap);
+      const y = b.startY + row * (b.plotH + gap);
+      const plotId = `${b.id}-${plotNo}`;
 
-  // Block A Residential Plots A-1 to A-44 (80 SQYD 24'x30') + Hospital (336 SQYD)
-  const resAX = 40;
-  const resAY = 310;
-  for (let i = 0; i < 44; i++) {
-    const plotNo = i + 1;
-    const col = i % 11;
-    const row = Math.floor(i / 11);
-    const w = 24;
-    const h = 18;
-    const x = resAX + col * (w + 2);
-    const y = resAY + row * (h + 2);
-    const plotId = `A-${plotNo}`;
-
-    plots.push({
-      id: plotId,
-      label: plotId,
-      projectId: 'labour-city',
-      block: 'A',
-      plotNumber: plotNo,
-      type: 'Residential 80SQY',
-      dimensions: "24' x 30'",
-      area: '80SQY',
-      rawCoords: `${x},${y} ${x + w},${y} ${x + w},${y + h} ${x},${y + h}`,
-      coords: [{ x, y }, { x: x + w, y }, { x: x + w, y: y + h }, { x, y: y + h }]
-    });
-  }
-
-  // 2. BLOCK B (Lower-Mid Sector)
-  // Residential Plots B-1 to B-116 (80 SQYD 24'x30') + Park B (1367 SQYD)
-  const blockBX = 40;
-  const blockBY = 190;
-  for (let i = 0; i < 116; i++) {
-    const plotNo = i + 1;
-    const col = i % 12;
-    const row = Math.floor(i / 12);
-    const w = 22;
-    const h = 16;
-    const x = blockBX + col * (w + 2);
-    const y = blockBY + row * (h + 2);
-    const plotId = `B-${plotNo}`;
-
-    plots.push({
-      id: plotId,
-      label: plotId,
-      projectId: 'labour-city',
-      block: 'B',
-      plotNumber: plotNo,
-      type: 'Residential 80SQY',
-      dimensions: "24' x 30'",
-      area: '80SQY',
-      rawCoords: `${x},${y} ${x + w},${y} ${x + w},${y + h} ${x},${y + h}`,
-      coords: [{ x, y }, { x: x + w, y }, { x: x + w, y: y + h }, { x, y: y + h }]
-    });
-  }
-
-  // 3. BLOCK C (Upper-Mid Sector)
-  // Residential Plots C-1 to C-60 (80 SQYD) + School & Community Centre
-  const blockCX = 40;
-  const blockCY = 90;
-  for (let i = 0; i < 60; i++) {
-    const plotNo = i + 1;
-    const col = i % 12;
-    const row = Math.floor(i / 12);
-    const w = 22;
-    const h = 16;
-    const x = blockCX + col * (w + 2);
-    const y = blockCY + row * (h + 2);
-    const plotId = `C-${plotNo}`;
-
-    plots.push({
-      id: plotId,
-      label: plotId,
-      projectId: 'labour-city',
-      block: 'C',
-      plotNumber: plotNo,
-      type: 'Residential 80SQY',
-      dimensions: "24' x 30'",
-      area: '80SQY',
-      rawCoords: `${x},${y} ${x + w},${y} ${x + w},${y + h} ${x},${y + h}`,
-      coords: [{ x, y }, { x: x + w, y }, { x: x + w, y: y + h }, { x, y: y + h }]
-    });
-  }
-
-  // 4. BLOCK D (Top Sector)
-  // Residential Plots D-1 to D-72 (80 SQYD) + Mosque (3881 SQYD), Park D1, Park D2
-  const blockDX = 40;
-  const blockDY = 20;
-  for (let i = 0; i < 72; i++) {
-    const plotNo = i + 1;
-    const col = i % 12;
-    const row = Math.floor(i / 12);
-    const w = 22;
-    const h = 16;
-    const x = blockDX + col * (w + 2);
-    const y = blockDY + row * (h + 2);
-    const plotId = `D-${plotNo}`;
-
-    plots.push({
-      id: plotId,
-      label: plotId,
-      projectId: 'labour-city',
-      block: 'D',
-      plotNumber: plotNo,
-      type: 'Residential 80SQY',
-      dimensions: "24' x 30'",
-      area: '80SQY',
-      rawCoords: `${x},${y} ${x + w},${y} ${x + w},${y + h} ${x},${y + h}`,
-      coords: [{ x, y }, { x: x + w, y }, { x: x + w, y: y + h }, { x, y: y + h }]
-    });
-  }
+      plots.push({
+        id: plotId,
+        label: plotId,
+        projectId: 'labour-city',
+        block: b.id,
+        plotNumber: plotNo,
+        type: b.type,
+        dimensions: b.size,
+        area: b.size,
+        rawCoords: `${x},${y} ${x + b.plotW},${y} ${x + b.plotW},${y + b.plotH} ${x},${y + b.plotH}`,
+        coords: [
+          { x, y },
+          { x: x + b.plotW, y },
+          { x: x + b.plotW, y: y + b.plotH },
+          { x, y: y + b.plotH }
+        ]
+      });
+    }
+  });
 
   return plots;
 }

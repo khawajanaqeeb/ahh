@@ -57,8 +57,16 @@ export default function MapCanvas({
   const viewportRef = useRef(null);
   const mapContainerRef = useRef(null);
 
-  // Get vector layout structural features
+  // Get vector layout structural features for default AHH City
   const layoutFeatures = getLayoutFeatures(MASTER_SITE_PLAN_JSON);
+
+  useEffect(() => {
+    if (currentProject?.id === 'labour-city') {
+      setDimensions({ width: 900, height: 500 });
+    } else {
+      setDimensions({ width: 1460, height: 980 });
+    }
+  }, [currentProject?.id]);
 
   // Reset view to fit the viewport container
   const resetView = () => {
@@ -467,174 +475,237 @@ export default function MapCanvas({
                 opacity="0.6"
               />
             )}
-
-            {/* VECTOR MAP STRUCTURE MATCHING BLUEPRINT IMAGE EXACTLY */}
-            <g className="vector-master-plan">
-              
-              {/* Outer Boundary Box */}
-              <rect 
-                x={layoutFeatures.boundary.x} 
-                y={layoutFeatures.boundary.y} 
-                width={layoutFeatures.boundary.width} 
-                height={layoutFeatures.boundary.height} 
-                fill="none" 
-                stroke="#000000" 
-                strokeWidth="2.5" 
-              />
-
-              {/* Master Header Titles */}
-              <text x={layoutFeatures.headerTitleX || 280} y="58" fontSize="26" fontWeight="900" fill="#000000" fontFamily="sans-serif" textAnchor="middle">
-                AHH CITY
-              </text>
-              <text x={layoutFeatures.headerSurveyX || 650} y="58" fontSize="26" fontWeight="900" fill="#000000" fontFamily="sans-serif" textAnchor="middle">
-                SURVEY NO 297
-              </text>
-
-              {/* WATERMARKS */}
-              <text x="230" y="260" fontSize="30" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-15 230 260)" letterSpacing="4">
-                60 SQYARD
-              </text>
-              <text x="620" y="260" fontSize="30" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-15 620 260)" letterSpacing="4">
-                60 SQYARD
-              </text>
-              <text x="480" y="760" fontSize="32" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-10 480 760)" letterSpacing="6">
-                120 SQYARD
-              </text>
-
-              {/* ROADS NETWORK */}
-              {layoutFeatures.roads.map((road) => (
-                <g key={road.id}>
-                  <rect 
-                    x={road.x} 
-                    y={road.y} 
-                    width={road.width} 
-                    height={road.height} 
-                    fill="none" 
-                    stroke="none"
-                  />
-                  <text 
-                    x={road.x + road.width / 2} 
-                    y={road.y + road.height / 2 + 1} 
-                    fontSize="10" 
-                    fontWeight="bold" 
-                    fill="#1e293b" 
-                    textAnchor="middle" 
-                    dominantBaseline="middle"
-                    transform={road.type === 'vertical' ? `rotate(-90 ${road.x + road.width / 2} ${road.y + road.height / 2})` : ''}
-                  >
-                    {road.name}
-                  </text>
-                </g>
-              ))}
-
-              {/* Vertical 30 FT Roads between 60 SQY column-pairs */}
-              {layoutFeatures.vertical30FtRoads.map((road, idx) => (
-                <g key={`v30-${idx}`}>
-                  {/* Left edge line */}
-                  <line x1={road.x} y1={road.y} x2={road.x} y2={road.y + road.height} stroke="#000000" strokeWidth="0.5" strokeDasharray="3 2" />
-                  {/* Right edge line */}
-                  <line x1={road.x + road.width} y1={road.y} x2={road.x + road.width} y2={road.y + road.height} stroke="#000000" strokeWidth="0.5" strokeDasharray="3 2" />
-                  {/* Road label */}
-                  <text 
-                    x={road.x + road.width / 2} 
-                    y={road.y + road.height / 2} 
-                    fontSize="8" 
-                    fontWeight="bold" 
-                    fill="#334155" 
-                    textAnchor="middle"
-                    transform={`rotate(-90 ${road.x + road.width / 2} ${road.y + road.height / 2})`}
-                  >
-                    {road.label}
-                  </text>
-                </g>
-              ))}
-
-              {/* AMENITIES ZONES */}
-              {layoutFeatures.amenities.map((amenity) => (
-                <g key={amenity.id}>
-                  <rect 
-                    x={amenity.x} 
-                    y={amenity.y} 
-                    width={amenity.width} 
-                    height={amenity.height} 
-                    fill="#ffffff" 
-                    stroke="#000000" 
-                    strokeWidth="2"
-                  />
-                  {amenity.name.split('\n').map((line, i) => (
-                    <text 
-                      key={i}
-                      x={amenity.x + amenity.width / 2} 
-                      y={amenity.y + amenity.height / 2 - (amenity.name.includes('\n') ? 8 - i * 18 : 0)} 
-                      fontSize="13" 
-                      fontWeight="bold" 
-                      fill="#000000" 
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                    >
-                      {line}
-                    </text>
-                  ))}
-                </g>
-              ))}
-
-              {/* ENTRANCE GRAPHIC (BOTTOM RIGHT) */}
-              {layoutFeatures.entrancePos && (
-                <g transform={`translate(${layoutFeatures.entrancePos.x}, ${layoutFeatures.entrancePos.y})`}>
-                  <text x="0" y="20" fontSize="14" fontWeight="900" fill="#000000">
-                    ENTRANCE
-                  </text>
-                  <path d="M 85 15 L 115 15 M 110 10 L 115 15 L 110 20" fill="none" stroke="#000000" strokeWidth="2.5" />
-                </g>
-              )}
-
-              {/* RIGHT SIDEBAR — LEGEND & BRANDING matching blueprint image */}
-              <g transform={`translate(${layoutFeatures.legendBox.x - 40}, 30)`}>
+                 {/* VECTOR MAP STRUCTURE MATCHING BLUEPRINT IMAGE EXACTLY */}
+            {currentProject?.id !== 'labour-city' ? (
+              <g className="vector-master-plan">
                 
-                {/* AHH CITY Tree Logo Header */}
-                <g transform="translate(30, 0)">
-                  <circle cx="80" cy="35" r="28" fill="#15803d" opacity="0.15" />
-                  <text x="80" y="32" fontSize="24" textAnchor="middle">🌳</text>
-                  <text x="80" y="70" fontSize="18" fontWeight="900" fill="#15803d" textAnchor="middle">
-                    AHH CITY
-                  </text>
-                </g>
+                {/* Outer Boundary Box */}
+                <rect 
+                  x={layoutFeatures.boundary.x} 
+                  y={layoutFeatures.boundary.y} 
+                  width={layoutFeatures.boundary.width} 
+                  height={layoutFeatures.boundary.height} 
+                  fill="none" 
+                  stroke="#000000" 
+                  strokeWidth="2.5" 
+                />
 
-                {/* Dimension Legend Table Box */}
-                <g transform="translate(0, 100)">
-                  <rect x="0" y="0" width={layoutFeatures.legendBox.width} height={layoutFeatures.legendBox.height} fill="#ffffff" stroke="#000000" strokeWidth="2" />
-                  <text x={layoutFeatures.legendBox.width / 2} y="28" fontSize="16" fontWeight="bold" fill="#000000" textAnchor="middle">
-                    Dimension
-                  </text>
-                  <line x1="0" y1="40" x2={layoutFeatures.legendBox.width} y2="40" stroke="#000000" strokeWidth="1.5" />
+                {/* Master Header Titles */}
+                <text x={layoutFeatures.headerTitleX || 280} y="58" fontSize="26" fontWeight="900" fill="#000000" fontFamily="sans-serif" textAnchor="middle">
+                  AHH CITY
+                </text>
+                <text x={layoutFeatures.headerSurveyX || 650} y="58" fontSize="26" fontWeight="900" fill="#000000" fontFamily="sans-serif" textAnchor="middle">
+                  SURVEY NO 297
+                </text>
 
-                  {layoutFeatures.legendBox.items.map((item, idx) => (
-                    <g key={`legend-${idx}`} transform={`translate(15, ${62 + idx * 42})`}>
-                      <text x="0" y="0" fontSize="11" fontWeight="bold" fill="#000000">
-                        {item.name}
+                {/* WATERMARKS */}
+                <text x="230" y="260" fontSize="30" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-15 230 260)" letterSpacing="4">
+                  60 SQYARD
+                </text>
+                <text x="620" y="260" fontSize="30" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-15 620 260)" letterSpacing="4">
+                  60 SQYARD
+                </text>
+                <text x="480" y="760" fontSize="32" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-10 480 760)" letterSpacing="6">
+                  120 SQYARD
+                </text>
+
+                {/* ROADS NETWORK */}
+                {layoutFeatures.roads.map((road) => (
+                  <g key={road.id}>
+                    <rect 
+                      x={road.x} 
+                      y={road.y} 
+                      width={road.width} 
+                      height={road.height} 
+                      fill="none" 
+                      stroke="none"
+                    />
+                    <text 
+                      x={road.x + road.width / 2} 
+                      y={road.y + road.height / 2 + 1} 
+                      fontSize="10" 
+                      fontWeight="bold" 
+                      fill="#1e293b" 
+                      textAnchor="middle" 
+                      dominantBaseline="middle"
+                      transform={road.type === 'vertical' ? `rotate(-90 ${road.x + road.width / 2} ${road.y + road.height / 2})` : ''}
+                    >
+                      {road.name}
+                    </text>
+                  </g>
+                ))}
+
+                {/* Vertical 30 FT Roads between 60 SQY column-pairs */}
+                {layoutFeatures.vertical30FtRoads.map((road, idx) => (
+                  <g key={`v30-${idx}`}>
+                    {/* Left edge line */}
+                    <line x1={road.x} y1={road.y} x2={road.x} y2={road.y + road.height} stroke="#000000" strokeWidth="0.5" strokeDasharray="3 2" />
+                    {/* Right edge line */}
+                    <line x1={road.x + road.width} y1={road.y} x2={road.x + road.width} y2={road.y + road.height} stroke="#000000" strokeWidth="0.5" strokeDasharray="3 2" />
+                    {/* Road label */}
+                    <text 
+                      x={road.x + road.width / 2} 
+                      y={road.y + road.height / 2} 
+                      fontSize="8" 
+                      fontWeight="bold" 
+                      fill="#334155" 
+                      textAnchor="middle"
+                      transform={`rotate(-90 ${road.x + road.width / 2} ${road.y + road.height / 2})`}
+                    >
+                      {road.label}
+                    </text>
+                  </g>
+                ))}
+
+                {/* AMENITIES ZONES */}
+                {layoutFeatures.amenities.map((amenity) => (
+                  <g key={amenity.id}>
+                    <rect 
+                      x={amenity.x} 
+                      y={amenity.y} 
+                      width={amenity.width} 
+                      height={amenity.height} 
+                      fill="#ffffff" 
+                      stroke="#000000" 
+                      strokeWidth="2"
+                    />
+                    {amenity.name.split('\n').map((line, i) => (
+                      <text 
+                        key={i}
+                        x={amenity.x + amenity.width / 2} 
+                        y={amenity.y + amenity.height / 2 - (amenity.name.includes('\n') ? 8 - i * 18 : 0)} 
+                        fontSize="13" 
+                        fontWeight="bold" 
+                        fill="#000000" 
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        {line}
                       </text>
-                      <text x={layoutFeatures.legendBox.width - 30} y="0" fontSize="11" fontWeight="bold" fill="#000000" textAnchor="end">
-                        {item.val}
-                      </text>
-                    </g>
-                  ))}
-                </g>
+                    ))}
+                  </g>
+                ))}
 
-                {/* AHH Brothers Developer Logo */}
-                <g transform="translate(20, 560)">
-                  <circle cx="80" cy="30" r="20" fill="#ca8a04" opacity="0.15" />
-                  <text x="80" y="34" fontSize="18" textAnchor="middle">👑</text>
-                  <text x="80" y="72" fontSize="22" fontWeight="900" fill="#b45309" textAnchor="middle" style={{ fontStyle: 'italic' }}>
-                    AHH Brothers
-                  </text>
-                  <text x="80" y="90" fontSize="9" fontWeight="bold" fill="#64748b" textAnchor="middle">
-                    BUILDERS & DEVELOPERS
-                  </text>
+                {/* ENTRANCE GRAPHIC (BOTTOM RIGHT) */}
+                {layoutFeatures.entrancePos && (
+                  <g transform={`translate(${layoutFeatures.entrancePos.x}, ${layoutFeatures.entrancePos.y})`}>
+                    <text x="0" y="20" fontSize="14" fontWeight="900" fill="#000000">
+                      ENTRANCE
+                    </text>
+                    <path d="M 85 15 L 115 15 M 110 10 L 115 15 L 110 20" fill="none" stroke="#000000" strokeWidth="2.5" />
+                  </g>
+                )}
+
+                {/* RIGHT SIDEBAR — LEGEND & BRANDING matching blueprint image */}
+                <g transform={`translate(${layoutFeatures.legendBox.x - 40}, 30)`}>
+                  
+                  {/* AHH CITY Tree Logo Header */}
+                  <g transform="translate(30, 0)">
+                    <circle cx="80" cy="35" r="28" fill="#15803d" opacity="0.15" />
+                    <text x="80" y="32" fontSize="24" textAnchor="middle">🌳</text>
+                    <text x="80" y="70" fontSize="18" fontWeight="900" fill="#15803d" textAnchor="middle">
+                      AHH CITY
+                    </text>
+                  </g>
+
+                  {/* Dimension Legend Table Box */}
+                  <g transform="translate(0, 100)">
+                    <rect x="0" y="0" width={layoutFeatures.legendBox.width} height={layoutFeatures.legendBox.height} fill="#ffffff" stroke="#000000" strokeWidth="2" />
+                    <text x={layoutFeatures.legendBox.width / 2} y="28" fontSize="16" fontWeight="bold" fill="#000000" textAnchor="middle">
+                      Dimension
+                    </text>
+                    <line x1="0" y1="40" x2={layoutFeatures.legendBox.width} y2="40" stroke="#000000" strokeWidth="1.5" />
+
+                    {layoutFeatures.legendBox.items.map((item, idx) => (
+                      <g key={`legend-${idx}`} transform={`translate(15, ${62 + idx * 42})`}>
+                        <text x="0" y="0" fontSize="11" fontWeight="bold" fill="#000000">
+                          {item.name}
+                        </text>
+                        <text x={layoutFeatures.legendBox.width - 30} y="0" fontSize="11" fontWeight="bold" fill="#000000" textAnchor="end">
+                          {item.val}
+                        </text>
+                      </g>
+                    ))}
+                  </g>
+
+                  {/* AHH Brothers Developer Logo */}
+                  <g transform="translate(20, 560)">
+                    <circle cx="80" cy="30" r="20" fill="#ca8a04" opacity="0.15" />
+                    <text x="80" y="34" fontSize="18" textAnchor="middle">👑</text>
+                    <text x="80" y="72" fontSize="22" fontWeight="900" fill="#b45309" textAnchor="middle" style={{ fontStyle: 'italic' }}>
+                      AHH Brothers
+                    </text>
+                    <text x="80" y="90" fontSize="9" fontWeight="bold" fill="#64748b" textAnchor="middle">
+                      BUILDERS & DEVELOPERS
+                    </text>
+                  </g>
+
                 </g>
 
               </g>
+            ) : (
+              <g className="vector-labour-city-plan">
+                {/* Labour City specific boundaries and roads */}
+                <polygon points="20,30 880,30 860,480 20,480" fill="none" stroke="#374151" strokeWidth="2" />
+                
+                {/* 50' Road */}
+                <rect x="20" y="440" width="840" height="28" fill="#d1d5db" rx="2" />
+                <text x="440" y="454" fontSize="9" fill="#374151" fontWeight="bold" textAnchor="middle" dominantBaseline="central">50'-0" Wide Road</text>
 
-            </g>
+                {/* 30' Roads */}
+                <rect x="20" y="30" width="840" height="22" fill="#e5e7eb" rx="2" />
+                <text x="440" y="41" fontSize="8" fill="#4b5563" textAnchor="middle" dominantBaseline="central">30' Wide Road</text>
+                
+                <rect x="155" y="30" width="12" height="385" fill="#e5e7eb" />
+                <rect x="315" y="30" width="12" height="385" fill="#e5e7eb" />
+                <rect x="510" y="30" width="12" height="410" fill="#e5e7eb" />
+                <rect x="610" y="30" width="12" height="410" fill="#e5e7eb" />
+                
+                <rect x="315" y="235" width="195" height="12" fill="#e5e7eb" />
+                <text x="412" y="241" fontSize="7.5" fill="#6b7280" textAnchor="middle" dominantBaseline="central">30' Wide Road</text>
+
+                <rect x="155" y="410" width="500" height="16" fill="#e5e7eb" />
+                <text x="405" y="418" fontSize="7.5" fill="#6b7280" textAnchor="middle" dominantBaseline="central">30' Wide Road</text>
+
+                {/* Block Backgrounds */}
+                <rect x="26" y="42" width="122" height="292" fill="#fca5a5" stroke="#dc2626" strokeWidth="1" rx="3" opacity="0.3" />
+                <text x="87" y="52" fontSize="9" fill="#dc2626" fontWeight="bold" textAnchor="middle">Block A</text>
+
+                <rect x="161" y="42" width="151" height="286" fill="#fed7aa" stroke="#ea580c" strokeWidth="1" rx="3" opacity="0.3" />
+                <text x="236" y="52" fontSize="9" fill="#ea580c" fontWeight="bold" textAnchor="middle">Block B</text>
+
+                <rect x="336" y="42" width="151" height="308" fill="#fef08a" stroke="#ca8a04" strokeWidth="1" rx="3" opacity="0.3" />
+                <text x="411" y="52" fontSize="9" fill="#ca8a04" fontWeight="bold" textAnchor="middle">Block B2</text>
+
+                <rect x="616" y="42" width="130" height="288" fill="#f0abfc" stroke="#a21caf" strokeWidth="1" rx="3" opacity="0.3" />
+                <text x="681" y="52" fontSize="9" fill="#a21caf" fontWeight="bold" textAnchor="middle">Block D</text>
+
+                {/* Amenities */}
+                <g>
+                  <rect x="530" y="80" width="80" height="90" fill="#93c5fd" stroke="#1d4ed8" strokeWidth="1" rx="4" />
+                  <text x="570" y="125" fontSize="8.5" fill="#1d4ed8" fontWeight="bold" textAnchor="middle" dominantBaseline="central">Mosque</text>
+                  
+                  <rect x="695" y="310" width="75" height="80" fill="#6ee7b7" stroke="#065f46" strokeWidth="1" rx="4" />
+                  <text x="732" y="350" fontSize="8.5" fill="#065f46" fontWeight="bold" textAnchor="middle" dominantBaseline="central">School</text>
+                  
+                  <rect x="612" y="310" width="75" height="80" fill="#6ee7b7" stroke="#065f46" strokeWidth="1" rx="4" />
+                  <text x="649" y="345" fontSize="8.5" fill="#065f46" fontWeight="bold" textAnchor="middle" dominantBaseline="central">Community</text>
+                  <text x="649" y="356" fontSize="8.5" fill="#065f46" fontWeight="bold" textAnchor="middle" dominantBaseline="central">Centre</text>
+
+                  <rect x="30" y="380" width="130" height="55" fill="#86efac" stroke="#15803d" strokeWidth="1" rx="4" />
+                  <text x="95" y="407" fontSize="8.5" fill="#15803d" fontWeight="bold" textAnchor="middle" dominantBaseline="central">Park A</text>
+
+                  <rect x="245" y="385" width="130" height="42" fill="#86efac" stroke="#15803d" strokeWidth="1" rx="4" />
+                  <text x="310" y="406" fontSize="8.5" fill="#15803d" fontWeight="bold" textAnchor="middle" dominantBaseline="central">Park 'B'</text>
+
+                  <rect x="620" y="420" width="130" height="42" fill="#86efac" stroke="#15803d" strokeWidth="1" rx="4" />
+                  <text x="685" y="441" fontSize="8.5" fill="#15803d" fontWeight="bold" textAnchor="middle" dominantBaseline="central">Park D1</text>
+
+                  <rect x="755" y="60" width="120" height="90" fill="#86efac" stroke="#15803d" strokeWidth="1" rx="4" />
+                  <text x="815" y="105" fontSize="8.5" fill="#15803d" fontWeight="bold" textAnchor="middle" dominantBaseline="central">Park D2</text>
+                </g>
+              </g>
+            )}
 
             {/* Temp Drawing shapes in Mapper mode */}
             <g>

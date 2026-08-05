@@ -8,8 +8,8 @@ export const PROJECTS = [
   {
     id: 'ahh-city',
     name: 'AHH City',
-    tagline: 'Master Planned Housing Scheme',
-    survey: 'Survey No. 297, Karachi',
+    tagline: 'Residential & Commercial Units',
+    survey: 'Scheme 45, Northern Bypass (Survey Number 297), Karachi',
     icon: '🏛️',
     logo: MEDIA.ahhCityLogo,
     color: 'blue',
@@ -17,11 +17,9 @@ export const PROJECTS = [
     badgeBorder: 'border-blue-800/60',
     badgeText: 'text-blue-400',
     plotTypes: [
-      { label: 'Residential 60SQY', costOfLand: 200000, extraCharges: 0, processingCharges: 0, total: 200000, paid: 50000 },
-      { label: 'Residential 120SQY', costOfLand: 350000, extraCharges: 0, processingCharges: 0, total: 350000, paid: 100000 },
-      { label: 'Commercial Shop 100SQFT', costOfLand: 350000, extraCharges: 0, processingCharges: 0, total: 350000, paid: 200000 },
-      { label: 'Residential 150SQY', costOfLand: 1000000, extraCharges: 0, processingCharges: 0, total: 1000000, paid: 200000 },
-      { label: 'Commercial 150SQY', costOfLand: 1500000, extraCharges: 0, processingCharges: 0, total: 1500000, paid: 300000 },
+      { label: '60 SQ YARDS (Residential)', costOfLand: 350000, extraCharges: 0, processingCharges: 0, total: 350000, paid: 100000 },
+      { label: '120 SQ YARDS (Residential)', costOfLand: 500000, extraCharges: 0, processingCharges: 0, total: 500000, paid: 150000 },
+      { label: 'Commercial Shop (100 Sq.Ft.)', costOfLand: 350000, extraCharges: 0, processingCharges: 0, total: 350000, paid: 200000 },
       { label: 'Custom Size', costOfLand: 0, extraCharges: 0, processingCharges: 0, total: 0, paid: 0 }
     ],
     route: '/booking'
@@ -29,8 +27,8 @@ export const PROJECTS = [
   {
     id: 'hooria-villas',
     name: 'Hooria Villas',
-    tagline: 'Luxury Residential Villa Project',
-    survey: 'Sector 5, Prime Location, Karachi',
+    tagline: 'Residential & Commercial Plots',
+    survey: 'Scheme 45, Northern Bypass (Survey Number 395, 396, 397), Karachi',
     icon: '🏡',
     logo: MEDIA.hooriaVillasLogo,
     color: 'purple',
@@ -38,9 +36,8 @@ export const PROJECTS = [
     badgeBorder: 'border-purple-800/60',
     badgeText: 'text-purple-400',
     plotTypes: [
-      { label: 'Villa 120SQY', costOfLand: 4500000, extraCharges: 300000, processingCharges: 50000, total: 4850000, paid: 1000000 },
-      { label: 'Luxury Villa 150SQY', costOfLand: 6500000, extraCharges: 400000, processingCharges: 50000, total: 6950000, paid: 1500000 },
-      { label: 'Executive Villa 200SQY', costOfLand: 9500000, extraCharges: 500000, processingCharges: 75000, total: 10075000, paid: 2500000 },
+      { label: '120 SQ YARDS (Residential)', costOfLand: 1000000, extraCharges: 0, processingCharges: 0, total: 1000000, paid: 200000 },
+      { label: 'Commercial Plots (150 Sq Yards)', costOfLand: 1500000, extraCharges: 0, processingCharges: 0, total: 1500000, paid: 300000 },
       { label: 'Custom Villa', costOfLand: 0, extraCharges: 0, processingCharges: 0, total: 0, paid: 0 }
     ],
     route: '/booking/hooria-villas'
@@ -48,8 +45,8 @@ export const PROJECTS = [
   {
     id: 'labour-city',
     name: 'Labour City',
-    tagline: 'Affordable Community Township',
-    survey: 'Industrial Zone Phase 2, Karachi',
+    tagline: 'Residential Home Town & Commercial Plots',
+    survey: 'Scheme 45, Northern Bypass (Survey Number 398, 398/1), Near Gulshan-e-Maymar, Karachi',
     icon: '🏗️',
     logo: MEDIA.labourCityLogo,
     color: 'emerald',
@@ -57,18 +54,17 @@ export const PROJECTS = [
     badgeBorder: 'border-emerald-800/60',
     badgeText: 'text-emerald-400',
     plotTypes: [
-      { label: 'Residential 80SQY', costOfLand: 1200000, extraCharges: 50000, processingCharges: 25000, total: 1275000, paid: 250000 },
-      { label: 'Commercial Plot 120SQY', costOfLand: 2500000, extraCharges: 100000, processingCharges: 35000, total: 2635000, paid: 500000 },
-      { label: 'Industrial Plot 200SQY', costOfLand: 4500000, extraCharges: 200000, processingCharges: 50000, total: 4750000, paid: 1000000 },
+      { label: '80 SQ YARDS (Residential)', costOfLand: 600000, extraCharges: 0, processingCharges: 0, total: 600000, paid: 200000 },
+      { label: 'Commercial Plots (150 Sq Yards)', costOfLand: 1350000, extraCharges: 0, processingCharges: 0, total: 1350000, paid: 300000 },
       { label: 'Custom Unit', costOfLand: 0, extraCharges: 0, processingCharges: 0, total: 0, paid: 0 }
     ],
     route: '/booking/labour-city'
   },
   {
     id: 'summer-farm-houses',
-    name: 'Summer Farm Houses',
-    tagline: 'Exclusive Countryside Resort Scheme',
-    survey: 'Super Highway Green Belt, Karachi',
+    name: 'Summer Farmhouses',
+    tagline: 'Farm House Land & Community',
+    survey: 'Scheme 45, Northern Bypass, Karachi',
     icon: '🌾',
     logo: MEDIA.summerFarmhousesLogo,
     color: 'amber',
@@ -76,9 +72,7 @@ export const PROJECTS = [
     badgeBorder: 'border-amber-800/60',
     badgeText: 'text-amber-400',
     plotTypes: [
-      { label: 'Luxury Farm 500SQY', costOfLand: 7500000, extraCharges: 500000, processingCharges: 100000, total: 8100000, paid: 2000000 },
-      { label: 'Executive Farm 1000SQY', costOfLand: 14000000, extraCharges: 800000, processingCharges: 150000, total: 14950000, paid: 3500000 },
-      { label: 'Resort Estate 2000SQY', costOfLand: 26000000, extraCharges: 1200000, processingCharges: 250000, total: 27450000, paid: 6000000 },
+      { label: 'FARM HOUSE LAND (1000 Sq Yds)', costOfLand: 2500000, extraCharges: 0, processingCharges: 0, total: 2500000, paid: 1000000 },
       { label: 'Custom Farm', costOfLand: 0, extraCharges: 0, processingCharges: 0, total: 0, paid: 0 }
     ],
     route: '/booking/summer-farm-houses'
