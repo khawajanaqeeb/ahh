@@ -132,8 +132,8 @@ export default function AdminLeftSidebar() {
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className="w-7 h-7 rounded-md bg-slate-950 border border-slate-800 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition-transform">
-                          {proj.icon}
+                        <span className="w-8 h-8 p-1 rounded-md bg-white border border-slate-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform overflow-hidden shadow-sm">
+                          <img src={proj.logo} alt={`${proj.name} logo`} className="w-full h-full object-contain" />
                         </span>
                         <div>
                           <div className={`text-xs font-bold font-outfit ${isActive ? 'text-blue-400' : 'text-slate-200'}`}>
