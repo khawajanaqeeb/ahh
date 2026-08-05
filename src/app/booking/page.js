@@ -328,8 +328,8 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
         {/* Header Panel */}
         <header className="flex flex-col md:flex-row justify-between items-center px-6 py-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md gap-4 shadow-xl">
           <div className="flex items-center gap-3.5">
-            <div className="p-2.5 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl text-white shadow-lg shadow-blue-500/20 text-2xl">
-              {activeProject.icon}
+            <div className="w-12 h-12 p-1.5 bg-white rounded-xl shadow-lg shadow-blue-500/20 flex items-center justify-center overflow-hidden border border-slate-200">
+              <img src={activeProject.logo} alt={`${activeProject.name} logo`} className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -439,7 +439,9 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-800">
             <div>
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <span>{activeProject.icon}</span>
+                <span className="w-8 h-8 p-1 rounded-md bg-white border border-slate-700 flex items-center justify-center overflow-hidden">
+                  <img src={activeProject.logo} alt={`${activeProject.name} logo`} className="w-full h-full object-contain" />
+                </span>
                 <span>{activeProject.name} Customer Booking Ledger</span>
               </h2>
               <p className="text-xs text-slate-400">

@@ -348,8 +348,12 @@ export default function MapCanvas({
       {/* Map Header */}
       <div className="flex flex-wrap justify-between items-center px-6 py-3.5 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md z-10 gap-3">
         <div className="flex items-center gap-3">
-          <span className="p-1.5 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400 text-base font-bold">
-            {currentProject?.icon || '🏛️'}
+          <span className="w-8 h-8 p-1 bg-white rounded-lg border border-slate-200 flex items-center justify-center overflow-hidden">
+            {currentProject?.logo ? (
+              <img src={currentProject.logo} alt="Project Logo" className="w-full h-full object-contain" />
+            ) : (
+              '🏛️'
+            )}
           </span>
           <div>
             <div className="flex items-center gap-2 font-bold text-sm text-white font-outfit">

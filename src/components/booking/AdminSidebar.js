@@ -105,8 +105,8 @@ export default function AdminSidebar({
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-xl p-2 rounded-lg bg-slate-950 border border-slate-800 group-hover:scale-110 transition-transform">
-                        {proj.icon}
+                      <span className="w-8 h-8 p-1 rounded-md bg-white border border-slate-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform overflow-hidden shadow-sm">
+                        <img src={proj.logo} alt={`${proj.name} logo`} className="w-full h-full object-contain" />
                       </span>
                       <div>
                         <div className="flex items-center gap-2">
@@ -138,7 +138,9 @@ export default function AdminSidebar({
           <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3 shadow-lg">
             <div className="flex items-center justify-between pb-2 border-b border-slate-800">
               <span className="text-xs font-bold text-slate-300 flex items-center gap-2">
-                <span>{activeProject.icon}</span>
+                <span className="w-6 h-6 p-0.5 rounded bg-white border border-slate-700 flex items-center justify-center overflow-hidden">
+                  <img src={activeProject.logo} alt={`${activeProject.name} logo`} className="w-full h-full object-contain" />
+                </span>
                 <span>{activeProject.name} Live Overview</span>
               </span>
               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${activeProject.badgeBg} ${activeProject.badgeText} ${activeProject.badgeBorder} border`}>
