@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import AdminLeftSidebar from "@/components/AdminLeftSidebar";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -82,6 +83,9 @@ export default function RootLayout({
 
         {/* WhatsApp floating button */}
         <WhatsAppButton />
+
+        {/* Left Side Admin Panel */}
+        <AdminLeftSidebar />
       </body>
     </html>
   );

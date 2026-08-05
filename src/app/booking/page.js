@@ -11,7 +11,6 @@ import {
 import MapCanvas from '@/components/booking/MapCanvas';
 import BookingForm from '@/components/booking/BookingForm';
 import BookingReceiptModal from '@/components/booking/BookingReceiptModal';
-import AdminSidebar from '@/components/booking/AdminSidebar';
 import { formatDateDDMMYY } from '@/lib/dateUtils';
 import {
   fetchPlots, savePlotToDb, deletePlotFromDb, clearAllPlotsFromDb,
@@ -323,16 +322,6 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
 
   return (
     <div className="relative min-h-screen bg-slate-950 text-slate-100">
-
-      {/* EXTREME RIGHT DOCKED ADMIN DASHBOARD SIDEBAR */}
-      <AdminSidebar
-        currentProjectId={projectId}
-        bookings={bookings}
-        plots={plots}
-        allBookingsMap={allBookingsMap}
-        onClearProjectBookings={handleClearAllBookings}
-        onExportCSV={handleExportCSV}
-      />
 
       <div className="flex flex-col gap-6 max-w-[1700px] w-full mx-auto p-4 sm:p-6 pb-20">
 
