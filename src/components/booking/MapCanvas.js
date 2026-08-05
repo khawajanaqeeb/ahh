@@ -343,7 +343,7 @@ export default function MapCanvas({
           <div>
             <div className="flex items-center gap-2 font-bold text-sm text-white font-outfit">
               <span>AHH CITY Master Site Plan</span>
-              <span className="text-[10px] bg-blue-950 text-blue-400 border border-blue-800/40 px-2 py-0.5 rounded-full uppercase tracking-wider">
+              <span className="text-[10px] bg-blue-950 text-blue-400 border border-blue-800/40 px-2 py-0.5 rounded-md uppercase tracking-wider">
                 SURVEY NO 297
               </span>
             </div>

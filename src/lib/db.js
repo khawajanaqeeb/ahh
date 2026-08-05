@@ -313,6 +313,15 @@ export async function saveBookingToDb(booking) {
 }
 
 export async function deleteBookingFromDb(plotId) {
+  if (typeof window !== 'undefined') {
+    const local = localStorage.getItem('ahh_city_bookings_data');
+    if (local) {
+      const bookingsList = JSON.parse(local);
+      const filtered = bookingsList.filter(b => b.plotId !== plotId);
+      localStorage.setItem('ahh_city_bookings_data', JSON.stringify(filtered));
+    }
+  }
+
   if (supabase) {
     try {
       const { error } = await supabase
@@ -320,26 +329,19 @@ export async function deleteBookingFromDb(plotId) {
         .delete()
         .eq('plot_id', plotId);
       if (error) throw error;
-      return true;
     } catch (err) {
       console.error('Error deleting booking from Supabase:', err);
     }
   }
 
-  // LocalStorage Fallback
-  if (typeof window !== 'undefined') {
-    const local = localStorage.getItem('ahh_city_bookings_data');
-    if (local) {
-      const bookingsList = JSON.parse(local);
-      const filtered = bookingsList.filter(b => b.plotId !== plotId);
-      localStorage.setItem('ahh_city_bookings_data', JSON.stringify(filtered));
-      return true;
-    }
-  }
-  return false;
+  return true;
 }
 
 export async function clearAllBookingsFromDb() {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('ahh_city_bookings_data');
+  }
+
   if (supabase) {
     try {
       const { error } = await supabase
@@ -347,15 +349,10 @@ export async function clearAllBookingsFromDb() {
         .delete()
         .neq('plot_id', 'SYSTEM_DUMMY_UNUSED');
       if (error) throw error;
-      return true;
     } catch (err) {
       console.error('Error clearing bookings from Supabase:', err);
     }
   }
 
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('ahh_city_bookings_data');
-    return true;
-  }
-  return false;
+  return true;
 }

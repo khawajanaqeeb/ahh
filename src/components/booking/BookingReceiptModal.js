@@ -494,7 +494,7 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
           <span className="text-lg font-black text-blue-950">PLOT {booking.plotId}</span>
           <span className="text-[9.5px] text-slate-600 font-bold ml-2">({booking.plotType})</span>
         </div>
-        <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-extrabold border ${
+        <span className={`px-2.5 py-0.5 rounded-md text-[9px] font-extrabold border ${
           isFullyPaid ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-yellow-100 text-yellow-800 border-yellow-300'
         }`}>
           {isFullyPaid ? 'BOOKING RECEIVED' : 'TOKEN RECEIVED'}

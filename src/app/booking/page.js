@@ -14,7 +14,7 @@ import BookingReceiptModal from '@/components/booking/BookingReceiptModal';
 import { formatDateDDMMYY } from '@/lib/dateUtils';
 import {
   fetchPlots, savePlotToDb, deletePlotFromDb, clearAllPlotsFromDb,
-  fetchBookings, saveBookingToDb, deleteBookingFromDb
+  fetchBookings, saveBookingToDb, deleteBookingFromDb, clearAllBookingsFromDb
 } from '@/lib/db';
 import { MASTER_SITE_PLAN_JSON, generatePlotsFromMasterJson } from '@/lib/sitePlanData';
 
@@ -195,8 +195,20 @@ export default function BookingPage() {
       const success = await deleteBookingFromDb(plotId);
       if (success) {
         setBookings(prev => prev.filter(b => b.plotId !== plotId));
-        triggerToast(`Booking for Plot ${plotId} deleted.`);
+        triggerToast(`Booking for Plot ${plotId} deleted from local & database.`);
         if (selectedPlotId === plotId) setSelectedPlotId(null);
+      }
+    }
+  };
+
+  // Callback: Clear All Bookings
+  const handleClearAllBookings = async () => {
+    if (confirm('Are you sure you want to clear ALL bookings and receipts? This will delete all records from both Local Storage and Database!')) {
+      const success = await clearAllBookingsFromDb();
+      if (success) {
+        setBookings([]);
+        setSelectedPlotId(null);
+        triggerToast('All bookings and receipts cleared successfully from local & database!', true);
       }
     }
   };
@@ -306,7 +318,7 @@ export default function BookingPage() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-extrabold tracking-tight text-white font-outfit">AHH CITY</h1>
-              <span className="text-xs bg-blue-950 text-blue-400 border border-blue-800/60 px-2.5 py-0.5 rounded-full font-bold">
+              <span className="text-xs bg-blue-950 text-blue-400 border border-blue-800/60 px-2.5 py-0.5 rounded-md font-bold">
                 Survey No. 297
               </span>
             </div>
@@ -444,6 +456,16 @@ export default function BookingPage() {
               <FileSpreadsheet className="w-3.5 h-3.5" />
               <span>Export to Excel</span>
             </button>
+
+            {/* Clear All Bookings */}
+            <button
+              onClick={handleClearAllBookings}
+              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 cursor-pointer transition-colors w-full sm:w-auto justify-center"
+              title="Wipe all bookings and receipts from LocalStorage & Supabase Database"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Clear All Receipts</span>
+            </button>
           </div>
         </div>
 
@@ -481,7 +503,7 @@ export default function BookingPage() {
                     <tr key={`ledger-${b.plotId}-${idx}`} className="hover:bg-slate-800/10 transition-colors">
                       <td className="px-4 py-3 font-bold text-blue-400">Plot {b.plotId}</td>
                       <td className="px-4 py-3">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                        <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
                           b.status === 'Booking Received'
                             ? 'bg-emerald-950/30 text-emerald-400 border-emerald-800/30'
                             : 'bg-yellow-950/30 text-yellow-400 border-yellow-800/30'

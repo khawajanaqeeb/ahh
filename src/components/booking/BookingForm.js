@@ -315,7 +315,7 @@ export default function BookingForm({
               <span>{existingBooking ? 'Add Plot Installment Entry' : 'Booking Details Form'}</span>
             </span>
             {existingBooking && (
-              <span className="text-[10px] bg-purple-950 text-purple-300 border border-purple-800/60 px-2.5 py-0.5 rounded-full font-bold">
+              <span className="text-[10px] bg-purple-950 text-purple-300 border border-purple-800/60 px-2.5 py-0.5 rounded-md font-bold">
                 🗓️ Installment Mode
               </span>
             )}
@@ -338,10 +338,10 @@ export default function BookingForm({
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Plot Number</label>
                 {resolvedPreviewId && (() => {
                   const isMapped = plots.some(p => p.id === resolvedPreviewId);
-                  if (!isMapped) return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">⚠ Not On Map</span>);
-                  if (existingBooking?.status === 'Booking Received') return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 animate-pulse">🟢 Booking Received (Green)</span>);
-                  if (existingBooking?.status === 'Token Received') return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-950/60 text-yellow-400 border border-yellow-800/50 animate-pulse">🟡 Token Received (Yellow)</span>);
-                  return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">⚪ Available (Unbooked)</span>);
+                  if (!isMapped) return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 border border-slate-700">⚠ Not On Map</span>);
+                  if (existingBooking?.status === 'Booking Received') return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 animate-pulse">🟢 Booking Received (Green)</span>);
+                  if (existingBooking?.status === 'Token Received') return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-yellow-950/60 text-yellow-400 border border-yellow-800/50 animate-pulse">🟡 Token Received (Yellow)</span>);
+                  return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">⚪ Available (Unbooked)</span>);
                 })()}
               </div>
               <input type="text" value={plotIdInput} onChange={handlePlotInputChange}
@@ -637,7 +637,7 @@ export default function BookingForm({
               <CheckCircle2 className="w-10 h-10 animate-pulse" />
             </div>
             <div>
-              <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 px-3 py-1 rounded-full">
+              <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 px-3 py-1 rounded-md">
                 🎉 Full Amount Received
               </span>
               <h3 className="text-xl font-black text-white mt-3 font-outfit">Total Plot Amount Received</h3>
