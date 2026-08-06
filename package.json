@@ -12,11 +12,13 @@
     "node": ">=20 <25"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.110.3",
+    "@supabase/ssr": "^0.12.4",
+    "@supabase/supabase-js": "^2.112.2",
     "lucide-react": "^1.24.0",
     "next": "^16.2.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "resend": "^6.18.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
