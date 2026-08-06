@@ -78,7 +78,7 @@ export default function AdminSidebar({
         </div>
 
         {/* Scrollable Admin Content Body */}
-        <div className="flex-grow overflow-y-auto p-4 space-y-5 custom-scrollbar">
+        <div className="flex-grow overflow-y-auto p-4 space-y-6 custom-scrollbar">
 
           {/* PROJECT SELECTOR TABS */}
           <div className="space-y-2">
@@ -98,7 +98,7 @@ export default function AdminSidebar({
                   <Link
                     key={proj.id}
                     href={proj.route}
-                    className={`p-3 rounded-xl border text-left transition-all flex items-center justify-between cursor-pointer group ${
+                    className={`p-4 rounded-xl border text-left transition-all flex items-center justify-between cursor-pointer group ${
                       isActive
                         ? 'bg-slate-900 border-blue-500 shadow-lg shadow-blue-500/10'
                         : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60'
@@ -135,7 +135,7 @@ export default function AdminSidebar({
           </div>
 
           {/* ACTIVE PROJECT STATS CARD */}
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3 shadow-lg">
+          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-4 shadow-lg">
             <div className="flex items-center justify-between pb-2 border-b border-slate-800">
               <span className="text-xs font-bold text-slate-300 flex items-center gap-2">
                 <span className="w-6 h-6 p-0.5 rounded bg-white border border-slate-700 flex items-center justify-center overflow-hidden">
@@ -148,8 +148,8 @@ export default function AdminSidebar({
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800/80">
                 <span className="text-[10px] text-slate-400 uppercase font-semibold block">Mapped Plots</span>
                 <span className="text-sm font-bold font-outfit text-white">{totalPlotsCount}</span>
               </div>
@@ -169,14 +169,14 @@ export default function AdminSidebar({
           </div>
 
           {/* PROJECT MANAGEMENT QUICK ACTIONS */}
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2.5">
+          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
             <span className="text-[10px] uppercase font-extrabold tracking-widest text-slate-400 block mb-1">
               🛠️ Project Quick Actions
             </span>
 
             <button
               onClick={onExportCSV}
-              className="w-full py-2 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
+              className="w-full py-3 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
             >
               <FileSpreadsheet className="w-3.5 h-3.5" />
               <span>Export {activeProject.name} Ledger (Excel)</span>
@@ -184,7 +184,7 @@ export default function AdminSidebar({
 
             <button
               onClick={onClearProjectBookings}
-              className="w-full py-2 px-3 rounded-lg bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+              className="w-full py-3 px-3 rounded-lg bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear {activeProject.name} Receipts</span>

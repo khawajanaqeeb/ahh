@@ -336,7 +336,7 @@ export default function BookingForm({
             )}
           </h2>
 
-          <form onSubmit={handleFormSubmit} className="space-y-4">
+          <form onSubmit={handleFormSubmit} className="space-y-5">
             <div>
               <div className="flex justify-between items-center mb-1">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Date (dd/mm/yy)</label>
@@ -345,7 +345,7 @@ export default function BookingForm({
                 </span>
               </div>
               <input type="date" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white transition-all outline-none" required />
+                className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none" required />
             </div>
 
             <div>
@@ -360,7 +360,7 @@ export default function BookingForm({
                 })()}
               </div>
               <input type="text" value={plotIdInput} onChange={handlePlotInputChange}
-                className={`w-full bg-slate-950 border rounded-lg px-3 py-2 text-sm text-white transition-all outline-none focus:ring-1 ${(() => {
+                className={`w-full bg-slate-950 border rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none focus:ring-1 ${(() => {
                   if (!resolvedPreviewId) return 'border-slate-800 focus:border-blue-500 focus:ring-blue-500';
                   if (status === 'Booking Received') return 'border-emerald-600/60 focus:border-emerald-500 focus:ring-emerald-500';
                   if (status === 'Token Received') return 'border-yellow-600/60 focus:border-yellow-500 focus:ring-yellow-500';
@@ -388,53 +388,53 @@ export default function BookingForm({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Client Full Name</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Client Full Name</label>
               <input type="text" value={clientName} onChange={(e) => setClientName(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white transition-all outline-none"
+                className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
                 placeholder="e.g. Muhammad Ali" required />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Father / Husband Name</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Father / Husband Name</label>
                 <input type="text" value={relativeName} onChange={(e) => setRelativeName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white transition-all outline-none"
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
                   placeholder="e.g. Muhammad Usman" />
               </div>
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Block</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Block</label>
                 <input type="text" value={block} onChange={(e) => setBlock(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white transition-all outline-none"
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
                   placeholder="e.g. Block A" />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Client CNIC</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Client CNIC</label>
                 <input type="text" value={cnic} onChange={(e) => setCnic(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white transition-all outline-none"
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
                   placeholder="42101-XXXXXXX-X" />
               </div>
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Contact No.</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Contact No.</label>
                 <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white transition-all outline-none"
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
                   placeholder="e.g. 0300-1234567" required />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Email</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Email</label>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white transition-all outline-none"
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
                   placeholder="name@mail.com" />
               </div>
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Payment Mode</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Payment Mode</label>
                 <select value={paymentMode} onChange={(e) => { setPaymentMode(e.target.value); setBankName(''); }}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white cursor-pointer transition-all outline-none font-medium">
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white cursor-pointer transition-all outline-none font-medium">
                   <option value="Cash">💵 Cash</option>
                   <option value="Cheque">🏦 Cheque</option>
                   <option value="Online">📱 Online Transfer</option>
@@ -444,9 +444,9 @@ export default function BookingForm({
 
             {paymentMode !== 'Cash' && (
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Bank Name</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Bank Name</label>
                 <input type="text" value={bankName} onChange={(e) => setBankName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white transition-all outline-none"
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
                   placeholder={paymentMode === 'Cheque' ? 'e.g. HBL, MCB, Allied Bank' : 'e.g. Meezan Bank, UBL'} />
               </div>
             )}
@@ -462,13 +462,13 @@ export default function BookingForm({
                   type="text"
                   value={installmentMonth}
                   onChange={(e) => setInstallmentMonth(e.target.value)}
-                  className="w-full bg-slate-950 border border-blue-600/60 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-blue-300 font-semibold transition-all outline-none"
+                  className="w-full bg-slate-950 border border-blue-600/60 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-blue-300 font-semibold transition-all outline-none"
                   placeholder="e.g. August 2026, September 2026"
                   required
                 />
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Plot Dimension</label>
                   <select value={plotType} onChange={handlePlotTypeChange}
@@ -526,29 +526,29 @@ export default function BookingForm({
               <label className="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1">📋 Cost Breakdown</label>
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Cost of Land</label>
+                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Cost of Land</label>
                   <div className="relative">
                     <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[11px]">Rs</span>
                     <input type="number" value={costOfLand} onChange={(e) => setCostOfLand(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-1.5 text-sm text-white transition-all outline-none"
+                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-2.5 text-sm text-white transition-all outline-none"
                       placeholder="0" min="0" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Extra Charges</label>
+                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Extra Charges</label>
                   <div className="relative">
                     <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[11px]">Rs</span>
                     <input type="number" value={extraCharges} onChange={(e) => setExtraCharges(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-1.5 text-sm text-white transition-all outline-none"
+                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-2.5 text-sm text-white transition-all outline-none"
                       placeholder="0" min="0" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Processing & Doc</label>
+                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Processing & Doc</label>
                   <div className="relative">
                     <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[11px]">Rs</span>
                     <input type="number" value={processingCharges} onChange={(e) => setProcessingCharges(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-1.5 text-sm text-white transition-all outline-none"
+                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-2.5 text-sm text-white transition-all outline-none"
                       placeholder="0" min="0" />
                   </div>
                 </div>
@@ -562,29 +562,29 @@ export default function BookingForm({
             </div>
 
             {/* DYNAMIC PAYMENT / INSTALLMENT AMOUNT */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Total Plot Price</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Total Plot Price</label>
                 <div className="relative">
                   <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">Rs</span>
                   <input type="number" value={totalReceivableAmount > 0 ? totalReceivableAmount : totalPrice} onChange={(e) => { if (totalReceivableAmount <= 0) setTotalPrice(e.target.value); }}
-                    className={`w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-3 py-2 text-sm text-white transition-all outline-none ${totalReceivableAmount > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
+                    className={`w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-3 py-2.5 text-sm text-white transition-all outline-none ${totalReceivableAmount > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
                     placeholder="0" min="0" readOnly={totalReceivableAmount > 0} required />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
                   {existingBooking ? 'New Installment Amount' : 'Token / Paid Amount'}
                 </label>
                 <div className="relative">
                   <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">Rs</span>
                   {existingBooking ? (
                     <input type="number" value={installmentAmount} onChange={handleInstallmentAmountChange}
-                      className="w-full bg-slate-950 border border-emerald-600/60 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg pl-8 pr-3 py-2 text-sm text-white font-bold transition-all outline-none"
+                      className="w-full bg-slate-950 border border-emerald-600/60 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg pl-8 pr-3 py-2.5 text-sm text-white font-bold transition-all outline-none"
                       placeholder="0" min="0" required />
                   ) : (
                     <input type="number" value={paidAmount} onChange={handlePaidAmountChange}
-                      className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-3 py-2 text-sm text-white transition-all outline-none"
+                      className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-3 py-2.5 text-sm text-white transition-all outline-none"
                       placeholder="0" min="0" required />
                   )}
                 </div>
@@ -593,18 +593,18 @@ export default function BookingForm({
 
             {/* AUTOMATIC AMOUNT IN WORDS FIELD */}
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Amount in Words</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Amount in Words</label>
               <input
                 type="text"
                 value={amountInWords}
                 onChange={(e) => setAmountInWords(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800/80 focus:border-blue-500 rounded-lg px-3 py-2 text-xs text-blue-400 font-medium italic transition-all outline-none"
+                className="w-full bg-slate-950 border border-slate-800/80 focus:border-blue-500 rounded-lg px-3 py-2.5 text-xs text-blue-400 font-medium italic transition-all outline-none"
                 placeholder="Automatically generated in words..."
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Remaining Balance</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Remaining Balance</label>
               <div className={`w-full bg-slate-950 border rounded-lg px-3 py-2 text-sm font-bold ${
                 balance <= 0 ? 'border-emerald-600/60 text-emerald-400' : 'border-slate-800/40 text-slate-300'
               }`}>
@@ -612,7 +612,7 @@ export default function BookingForm({
               </div>
             </div>
 
-            <div className="pt-2 space-y-2">
+            <div className="pt-4 space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="submit"

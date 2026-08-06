@@ -2442,21 +2442,32 @@ select.form-input {
         /* Dropdown Menu Glass styling */
         .dropdown-menu-glass {
           position: absolute;
-          top: calc(100% + 15px);
+          top: calc(100% + 4px);
           left: 50%;
-          transform: translateX(-50%) translateY(10px);
-          background: rgba(13, 13, 26, 0.9);
+          transform: translateX(-50%) translateY(6px);
+          background: rgba(13, 13, 26, 0.95);
           backdrop-filter: blur(25px);
           -webkit-backdrop-filter: blur(25px);
-          border: 1px solid rgba(212, 175, 55, 0.15);
-          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+          border: 1px solid rgba(212, 175, 55, 0.18);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.65);
           border-radius: 12px;
-          padding: 0.75rem;
-          width: 210px;
+          padding: 0.6rem;
+          width: 220px;
           opacity: 0;
           pointer-events: none;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
           z-index: 100;
+        }
+
+        /* Invisible hover bridge — fills the gap between nav link and dropdown */
+        .nav-link-with-icon::after {
+          content: '';
+          position: absolute;
+          bottom: -12px;
+          left: 0;
+          right: 0;
+          height: 12px;
+          background: transparent;
         }
 
         .dropdown-menu-glass::before {
@@ -2467,9 +2478,9 @@ select.form-input {
           transform: translateX(-50%) rotate(45deg);
           width: 10px;
           height: 10px;
-          background: rgba(13, 13, 26, 0.9);
-          border-left: 1px solid rgba(212, 175, 55, 0.15);
-          border-top: 1px solid rgba(212, 175, 55, 0.15);
+          background: rgba(13, 13, 26, 0.95);
+          border-left: 1px solid rgba(212, 175, 55, 0.18);
+          border-top: 1px solid rgba(212, 175, 55, 0.18);
         }
 
         .dropdown-trigger:hover .dropdown-menu-glass,
@@ -2793,40 +2804,30 @@ select.form-input {
         }
 
 /* ============================================
-   BOOKING PORTAL — Navbar Button
+   NAVBAR — Admin Icon Button (left of logo)
    ============================================ */
 
-.navbar-booking-btn {
+.navbar-admin-icon-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 18px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #ca8a04, #d97706);
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-decoration: none;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #8A8A9E;
+  flex-shrink: 0;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 12px rgba(202, 138, 4, 0.35);
-  white-space: nowrap;
 }
 
-.navbar-booking-btn:hover {
-  background: linear-gradient(135deg, #d97706, #f59e0b);
-  box-shadow: 0 4px 20px rgba(202, 138, 4, 0.5);
-  transform: translateY(-1px);
+.navbar-admin-icon-btn:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.3);
+  color: #D4AF37;
+  transform: scale(1.05);
 }
 
-.navbar-booking-btn-active {
-  background: linear-gradient(135deg, #92400e, #b45309);
-  box-shadow: 0 2px 12px rgba(180, 83, 9, 0.4);
-}
-
-@media (max-width: 1024px) {
-  .navbar-booking-btn { display: none; }
-}
 
 /* ============================================
    BOOKING PORTAL — SVG Plot Overlay Classes

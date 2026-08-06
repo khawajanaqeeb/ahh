@@ -466,7 +466,7 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
   const hasCostBreakdown = (parseFloat(booking.costOfLand) || 0) > 0;
 
   return (
-    <div className="border-2 border-slate-900 rounded-md p-3.5 bg-white space-y-2 text-[11px] flex flex-col justify-between shadow-sm">
+    <div className="border-2 border-slate-900 rounded-md p-4 sm:p-5 bg-white space-y-2.5 text-[11px] flex flex-col justify-between shadow-sm">
       <div className="flex justify-between items-start border-b-2 border-slate-900 pb-2">
         <div>
           <div className="text-xl font-black text-blue-900 tracking-tight">AHH CITY</div>
@@ -510,13 +510,13 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
           ['Block', booking.block || 'N/A'],
           ['Payment Method', paymentModeLabel],
         ].map(([label, val]) => (
-          <div key={label} className="flex justify-between border-b border-slate-100 py-0.5">
+          <div key={label} className="flex justify-between border-b border-slate-100 py-1.5">
             <span className="text-slate-500 font-medium">{label}:</span>
             <span className="font-bold text-slate-900 ml-1 truncate max-w-[130px]">{val}</span>
           </div>
         ))}
         {amountInWordsText && (
-          <div className="col-span-2 flex justify-between border-b border-slate-100 py-0.5">
+          <div className="col-span-2 flex justify-between border-b border-slate-100 py-1.5">
             <span className="text-slate-500 font-medium">Amount in Words:</span>
             <span className="font-bold text-slate-900 italic">{amountInWordsText}</span>
           </div>
@@ -527,26 +527,26 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
       {hasCostBreakdown && (
         <div className="border border-slate-300 rounded px-3 py-1.5 bg-slate-50 text-[10px] space-y-0.5">
           <div className="text-[8.5px] uppercase font-bold text-slate-500 mb-0.5">Cost Breakdown</div>
-          <div className="flex justify-between border-b border-slate-100 py-0.5">
+          <div className="flex justify-between border-b border-slate-100 py-1.5">
             <span className="text-slate-500">Cost of Land:</span>
             <span className="font-bold text-slate-900">Rs {parseInt(booking.costOfLand || 0).toLocaleString()}</span>
           </div>
-          <div className="flex justify-between border-b border-slate-100 py-0.5">
+          <div className="flex justify-between border-b border-slate-100 py-1.5">
             <span className="text-slate-500">Extra Charges:</span>
             <span className="font-bold text-slate-900">Rs {parseInt(booking.extraCharges || 0).toLocaleString()}</span>
           </div>
-          <div className="flex justify-between border-b border-slate-100 py-0.5">
+          <div className="flex justify-between border-b border-slate-100 py-1.5">
             <span className="text-slate-500">Processing & Documentation:</span>
             <span className="font-bold text-slate-900">Rs {parseInt(booking.processingCharges || 0).toLocaleString()}</span>
           </div>
-          <div className="flex justify-between py-0.5 bg-emerald-50 rounded px-1">
+          <div className="flex justify-between py-1.5 bg-emerald-50 rounded px-1">
             <span className="text-emerald-700 font-bold">Total Receivable Amount:</span>
             <span className="font-extrabold text-emerald-800">Rs {parseInt(computedTotal).toLocaleString()}</span>
           </div>
         </div>
       )}
 
-      <div className="bg-slate-100 border border-slate-300 text-slate-900 rounded p-2 grid grid-cols-3 gap-2 text-center text-[10px]">
+      <div className="bg-slate-100 border border-slate-300 text-slate-900 rounded p-3 grid grid-cols-3 gap-3 text-center text-[10px]">
         <div className="border-r border-slate-300 pr-1">
           <div className="text-slate-500 text-[8.5px] uppercase font-bold">Total Receivable</div>
           <div className="font-extrabold text-slate-900">Rs {parseInt(computedTotal).toLocaleString()}</div>
@@ -563,7 +563,7 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
         </div>
       </div>
 
-      <div className="pt-1 grid grid-cols-3 gap-4 text-center text-[9.5px]">
+      <div className="pt-3 grid grid-cols-3 gap-4 text-center text-[9.5px]">
         <div><div className="border-b border-slate-400 min-h-[20px]"></div><span className="text-slate-600 font-semibold">Accounts Signature</span></div>
         <div><div className="border-b border-slate-400 min-h-[20px]"></div><span className="text-slate-600 font-semibold">Manager Signature</span></div>
         <div><div className="border-b border-slate-400 min-h-[20px]"></div><span className="text-slate-600 font-semibold">Authorized Signature</span></div>
@@ -617,8 +617,8 @@ export default function BookingReceiptModal({ booking, onSaveBooking, onDeleteBo
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md flex justify-center items-start">
-      <div className="bg-white text-slate-900 border border-slate-200 rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl relative my-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 bg-slate-950/85 backdrop-blur-md flex justify-center items-start">
+      <div className="bg-white text-slate-900 border border-slate-200 rounded-2xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl relative my-auto">
 
         {/* Top Action Header */}
         <div className="flex justify-between items-center pb-3 mb-4 border-b border-slate-200 gap-2">
