@@ -303,5 +303,3 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
     </>
   );
 };
-
-export default Navbar;
