@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 import { MEDIA } from "@/lib/media";
+import { logout } from "@/app/login/actions";
+import type { User } from "@supabase/supabase-js";
 
 const navLinks = [
   { name: "Home", href: "/" },
