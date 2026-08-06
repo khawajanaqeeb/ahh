@@ -35,18 +35,15 @@ export default function BookingForm({
   const [tokenExpiryDate, setTokenExpiryDate] = useState('');
   const [balance, setBalance] = useState(0);
 
-  // Cost breakdown fields
   const [costOfLand, setCostOfLand] = useState('');
   const [extraCharges, setExtraCharges] = useState('');
   const [processingCharges, setProcessingCharges] = useState('');
 
-  // Amount in Words, Installment Mode, and Full Payment Popup
   const [amountInWords, setAmountInWords] = useState('');
   const [installmentMonth, setInstallmentMonth] = useState('');
   const [installmentAmount, setInstallmentAmount] = useState('');
   const [showFullPaymentModal, setShowFullPaymentModal] = useState(false);
 
-  // Auto-compute Total Receivable Amount from cost breakdown
   const totalReceivableAmount = (parseFloat(costOfLand) || 0) + (parseFloat(extraCharges) || 0) + (parseFloat(processingCharges) || 0);
 
   const getCurrentMonthYear = () => {
@@ -229,7 +226,6 @@ export default function BookingForm({
 
     onSaveBooking(payload);
 
-    // Check if total amount is fully paid (balance == 0)
     const rem = (parseFloat(payload.totalPrice) || 0) - (parseFloat(payload.paidAmount) || 0);
     if (rem <= 0 && payload.totalPrice > 0) {
       setShowFullPaymentModal(true);
@@ -318,311 +314,327 @@ export default function BookingForm({
     e.target.value = '';
   };
 
+  /* ─── shared input className helpers ─── */
+  const inputBase = 'w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-colors';
+  const labelBase = 'block text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-2';
+
   return (
     <div className="w-full h-full flex flex-col gap-6">
 
       {/* PANEL A: BOOKING DETAILS FORM */}
       {appMode === 'booking' && (
-        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 backdrop-blur-lg flex flex-col">
-          <h2 className="text-lg font-bold text-white pb-3 border-b border-slate-800 flex items-center justify-between gap-2 mb-4">
-            <span className="flex items-center gap-2">
-              <FileText className="w-5 h-5 text-blue-500" />
-              <span>{existingBooking ? 'Add Plot Installment Entry' : 'Booking Details Form'}</span>
-            </span>
-            {existingBooking && (
-              <span className="text-[10px] bg-purple-950 text-purple-300 border border-purple-800/60 px-2.5 py-0.5 rounded-md font-bold">
-                🗓️ Installment Mode
-              </span>
-            )}
-          </h2>
+        <div className="p-7 rounded-3xl bg-slate-900 border border-slate-800/80 shadow-2xl flex flex-col gap-0">
 
-          <form onSubmit={handleFormSubmit} className="space-y-5">
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Date (dd/mm/yy)</label>
-                <span className="text-[11px] font-mono font-bold text-blue-400 bg-blue-950/60 border border-blue-800/40 px-2 py-0.5 rounded">
-                  📅 {formatDateDDMMYY(bookingDate)}
-                </span>
+          {/* ── Form Header ── */}
+          <header className="mb-8 pb-6 border-b border-slate-800">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-black text-white flex items-center gap-2.5 mb-1">
+                  <FileText className="w-6 h-6 text-blue-500 shrink-0" />
+                  {existingBooking ? 'Add Installment Entry' : 'Booking Details Form'}
+                </h2>
+                <p className="text-slate-500 text-xs">
+                  {existingBooking
+                    ? 'Record a new installment payment against an existing ledger entry.'
+                    : 'Fill in all required fields to register a new plot booking.'}
+                </p>
               </div>
-              <input type="date" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none" required />
-            </div>
-
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Plot Number</label>
-                {resolvedPreviewId && (() => {
-                  const isMapped = plots.some(p => p.id === resolvedPreviewId);
-                  if (!isMapped) return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 border border-slate-700">⚠ Not On Map</span>);
-                  if (existingBooking?.status === 'Booking Received') return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 animate-pulse">🟢 Booking Received (Green)</span>);
-                  if (existingBooking?.status === 'Token Received') return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-yellow-950/60 text-yellow-400 border border-yellow-800/50 animate-pulse">🟡 Token Received (Yellow)</span>);
-                  return (<span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">⚪ Available (Unbooked)</span>);
-                })()}
-              </div>
-              <input type="text" value={plotIdInput} onChange={handlePlotInputChange}
-                className={`w-full bg-slate-950 border rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none focus:ring-1 ${(() => {
-                  if (!resolvedPreviewId) return 'border-slate-800 focus:border-blue-500 focus:ring-blue-500';
-                  if (status === 'Booking Received') return 'border-emerald-600/60 focus:border-emerald-500 focus:ring-emerald-500';
-                  if (status === 'Token Received') return 'border-yellow-600/60 focus:border-yellow-500 focus:ring-yellow-500';
-                  return 'border-slate-800 focus:border-blue-500 focus:ring-blue-500';
-                })()}`}
-                placeholder="Click plot or type number (e.g. 8, 120-8, SR-1)" required />
-
-              {/* INSTALLMENT MODE SUMMARY BANNER */}
               {existingBooking && (
-                <div className="p-3 rounded-xl bg-blue-950/80 border border-blue-500/60 text-blue-200 text-xs flex flex-col gap-1 shadow-lg mt-2">
+                <span className="shrink-0 text-[10px] bg-purple-950 text-purple-300 border border-purple-800/60 px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider">
+                  🗓️ Installment Mode
+                </span>
+              )}
+            </div>
+          </header>
+
+          <form onSubmit={handleFormSubmit} className="space-y-8">
+
+            {/* ══ SECTION 1: TRANSACTION BASICS ══ */}
+            <section>
+              <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">
+                <span className="w-2 h-2 rounded-full bg-blue-500 inline-block"></span>
+                Transaction Basics
+              </h3>
+              <div className="grid grid-cols-2 gap-5">
+                <div>
+                  <label className={labelBase}>
+                    Date
+                    <span className="ml-auto float-right text-blue-400 font-mono normal-case tracking-normal font-bold">
+                      {formatDateDDMMYY(bookingDate)}
+                    </span>
+                  </label>
+                  <input type="date" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)}
+                    className={inputBase} required />
+                </div>
+                <div>
+                  <label className={labelBase}>
+                    Plot Number
+                    {resolvedPreviewId && (() => {
+                      const isMapped = plots.some(p => p.id === resolvedPreviewId);
+                      if (!isMapped) return <span className="float-right ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700 normal-case tracking-normal">⚠ Not on map</span>;
+                      if (existingBooking?.status === 'Booking Received') return <span className="float-right ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-950/70 text-emerald-400 border border-emerald-800/50 normal-case tracking-normal animate-pulse">🟢 Booked</span>;
+                      if (existingBooking?.status === 'Token Received') return <span className="float-right ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-yellow-950/70 text-yellow-400 border border-yellow-800/50 normal-case tracking-normal animate-pulse">🟡 Token</span>;
+                      return <span className="float-right ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 normal-case tracking-normal">⚪ Available</span>;
+                    })()}
+                  </label>
+                  <input type="text" value={plotIdInput} onChange={handlePlotInputChange}
+                    className={`${inputBase} ${resolvedPreviewId && existingBooking?.status === 'Token Received' ? 'border-yellow-600/50 focus:border-yellow-500' : resolvedPreviewId && existingBooking?.status === 'Booking Received' ? 'border-emerald-600/50 focus:border-emerald-500' : ''}`}
+                    placeholder="e.g. 8, 120-8, SR-1" required />
+                </div>
+              </div>
+
+              {/* Installment mode banner */}
+              {existingBooking && (
+                <div className="mt-4 p-3.5 rounded-xl bg-blue-950/70 border border-blue-500/50 text-blue-200 text-xs flex flex-col gap-1.5">
                   <div className="font-bold flex items-center justify-between text-blue-300">
                     <span className="flex items-center gap-1.5">
                       <Calendar className="w-4 h-4 text-blue-400 shrink-0" />
-                      <span>Existing Plot Record Found &mdash; Adding Installment</span>
+                      Existing Record — Adding Installment
                     </span>
-                    <span className="font-mono text-[10px] text-blue-300 bg-blue-900/60 px-2 py-0.5 rounded">
+                    <span className="font-mono text-[10px] bg-blue-900/60 px-2 py-0.5 rounded">
                       Paid: Rs {parseInt(existingBooking.paidAmount || 0).toLocaleString()}
                     </span>
                   </div>
-                  <div className="text-[11px] text-blue-300/90 mt-0.5">
-                    Client: <strong>{existingBooking.clientName}</strong> | Total Price: <strong>Rs {parseInt(existingBooking.totalPrice || 0).toLocaleString()}</strong>
+                  <div className="text-[11px] text-blue-300/80">
+                    Client: <strong>{existingBooking.clientName}</strong> &mdash; Total: <strong>Rs {parseInt(existingBooking.totalPrice || 0).toLocaleString()}</strong>
                   </div>
                 </div>
               )}
-            </div>
+            </section>
 
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Client Full Name</label>
-              <input type="text" value={clientName} onChange={(e) => setClientName(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
-                placeholder="e.g. Muhammad Ali" required />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Father / Husband Name</label>
-                <input type="text" value={relativeName} onChange={(e) => setRelativeName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
-                  placeholder="e.g. Muhammad Usman" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Block</label>
-                <input type="text" value={block} onChange={(e) => setBlock(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
-                  placeholder="e.g. Block A" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Client CNIC</label>
-                <input type="text" value={cnic} onChange={(e) => setCnic(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
-                  placeholder="42101-XXXXXXX-X" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Contact No.</label>
-                <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
-                  placeholder="e.g. 0300-1234567" required />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Email</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
-                  placeholder="name@mail.com" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Payment Mode</label>
-                <select value={paymentMode} onChange={(e) => { setPaymentMode(e.target.value); setBankName(''); }}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white cursor-pointer transition-all outline-none font-medium">
-                  <option value="Cash">💵 Cash</option>
-                  <option value="Cheque">🏦 Cheque</option>
-                  <option value="Online">📱 Online Transfer</option>
-                </select>
-              </div>
-            </div>
-
-            {paymentMode !== 'Cash' && (
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Bank Name</label>
-                <input type="text" value={bankName} onChange={(e) => setBankName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-white transition-all outline-none"
-                  placeholder={paymentMode === 'Cheque' ? 'e.g. HBL, MCB, Allied Bank' : 'e.g. Meezan Bank, UBL'} />
-              </div>
-            )}
-
-            {/* DYNAMIC FIELD: IF EXISTING BOOKING, SHOW INSTALLMENT MONTH & DISAPPEAR TOKEN/FULLY BOOKED DROPDOWN */}
-            {existingBooking ? (
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-blue-400 mb-1 flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-blue-400" />
-                  <span>Installment for the Month of</span>
-                </label>
-                <input
-                  type="text"
-                  value={installmentMonth}
-                  onChange={(e) => setInstallmentMonth(e.target.value)}
-                  className="w-full bg-slate-950 border border-blue-600/60 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2.5 text-sm text-blue-300 font-semibold transition-all outline-none"
-                  placeholder="e.g. August 2026, September 2026"
-                  required
-                />
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-4">
+            {/* ══ SECTION 2: CLIENT PROFILE ══ */}
+            <section>
+              <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">
+                <span className="w-2 h-2 rounded-full bg-violet-500 inline-block"></span>
+                Client Profile
+              </h3>
+              <div className="space-y-5">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Plot Dimension</label>
-                  <select value={plotType} onChange={handlePlotTypeChange}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm text-white cursor-pointer transition-all outline-none">
-                    {(currentProject?.plotTypes || [
-                      { label: 'Residential 60SQY' },
-                      { label: 'Residential 120SQY' },
-                      { label: 'Commercial Shop 100SQFT' },
-                      { label: 'Residential 150SQY' },
-                      { label: 'Commercial 150SQY' },
-                      { label: 'Custom Size' }
-                    ]).map((pt, idx) => (
-                      <option key={`pt-${idx}`} value={pt.label}>
-                        {pt.label} {pt.total > 0 ? `(Rs ${pt.total.toLocaleString()})` : ''}
-                      </option>
-                    ))}
-                  </select>
+                  <label className={labelBase}>Full Name</label>
+                  <input type="text" value={clientName} onChange={(e) => setClientName(e.target.value)}
+                    className={inputBase} placeholder="e.g. Muhammad Ali Khan" required />
+                </div>
+                <div className="grid grid-cols-2 gap-5">
+                  <div>
+                    <label className={labelBase}>Father / Husband Name</label>
+                    <input type="text" value={relativeName} onChange={(e) => setRelativeName(e.target.value)}
+                      className={inputBase} placeholder="e.g. Muhammad Usman" />
+                  </div>
+                  <div>
+                    <label className={labelBase}>Block</label>
+                    <input type="text" value={block} onChange={(e) => setBlock(e.target.value)}
+                      className={inputBase} placeholder="e.g. Block A" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-5">
+                  <div>
+                    <label className={labelBase}>CNIC Number</label>
+                    <input type="text" value={cnic} onChange={(e) => setCnic(e.target.value)}
+                      className={`${inputBase} font-mono`} placeholder="42101-XXXXXXX-X" />
+                  </div>
+                  <div>
+                    <label className={labelBase}>Contact No.</label>
+                    <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
+                      className={inputBase} placeholder="0300-1234567" required />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Plot Status Color</label>
-                  <select value={status} onChange={handleStatusChange}
-                    className={`w-full bg-slate-950 border focus:ring-1 focus:ring-blue-500 rounded-lg px-3 py-2 text-sm font-semibold cursor-pointer transition-all outline-none ${
-                      status === 'Token Received' ? 'border-yellow-600/60 text-yellow-400 focus:border-yellow-500' : 'border-emerald-600/60 text-emerald-400 focus:border-emerald-500'
-                    }`}>
-                    <option value="Token Received" className="text-yellow-400 font-semibold">🟡 Token Received (Yellow)</option>
-                    <option value="Booking Received" className="text-emerald-400 font-semibold">🟢 Booking Received (Green)</option>
-                  </select>
+                  <label className={labelBase}>Email Address <span className="text-slate-600 normal-case tracking-normal font-normal text-[10px]">(optional)</span></label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                    className={inputBase} placeholder="client@example.com" />
                 </div>
               </div>
-            )}
+            </section>
 
-            {!existingBooking && status === 'Token Received' && (
-              <div>
-                <div className="flex justify-between items-center mb-1">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-yellow-400 flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5 text-yellow-400" />
-                    <span>Token Expires On (dd/mm/yy)</span>
-                  </label>
-                  <span className="text-[11px] font-mono font-bold text-yellow-400 bg-yellow-950/60 border border-yellow-800/40 px-2 py-0.5 rounded">
-                    📅 {formatDateDDMMYY(tokenExpiryDate)}
+            {/* ══ SECTION 3: BOOKING CONFIGURATION ══ */}
+            <section>
+              <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">
+                <span className="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span>
+                Booking Configuration
+              </h3>
+              <div className="space-y-5">
+                <div className="grid grid-cols-2 gap-5">
+                  <div>
+                    <label className={labelBase}>Payment Mode</label>
+                    <select value={paymentMode} onChange={(e) => { setPaymentMode(e.target.value); setBankName(''); }}
+                      className={`${inputBase} cursor-pointer`}>
+                      <option value="Cash">💵 Cash</option>
+                      <option value="Cheque">🏦 Cheque</option>
+                      <option value="Online">📱 Online Transfer</option>
+                    </select>
+                  </div>
+                  {paymentMode !== 'Cash' ? (
+                    <div>
+                      <label className={labelBase}>Bank Name</label>
+                      <input type="text" value={bankName} onChange={(e) => setBankName(e.target.value)}
+                        className={inputBase}
+                        placeholder={paymentMode === 'Cheque' ? 'e.g. HBL, MCB' : 'e.g. Meezan Bank, UBL'} />
+                    </div>
+                  ) : <div />}
+                </div>
+
+                {existingBooking ? (
+                  <div>
+                    <label className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-blue-400 mb-2">
+                      <Calendar className="w-3.5 h-3.5" /> Installment Month
+                    </label>
+                    <input type="text" value={installmentMonth} onChange={(e) => setInstallmentMonth(e.target.value)}
+                      className={`${inputBase} border-blue-600/50 focus:border-blue-500 text-blue-300 font-semibold`}
+                      placeholder="e.g. August 2026" required />
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-5">
+                    <div>
+                      <label className={labelBase}>Plot Dimension</label>
+                      <select value={plotType} onChange={handlePlotTypeChange}
+                        className={`${inputBase} cursor-pointer`}>
+                        {(currentProject?.plotTypes || [
+                          { label: 'Residential 60SQY' }, { label: 'Residential 120SQY' },
+                          { label: 'Commercial Shop 100SQFT' }, { label: 'Residential 150SQY' },
+                          { label: 'Commercial 150SQY' }, { label: 'Custom Size' }
+                        ]).map((pt, idx) => (
+                          <option key={`pt-${idx}`} value={pt.label}>
+                            {pt.label} {pt.total > 0 ? `(Rs ${pt.total.toLocaleString()})` : ''}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className={labelBase}>Plot Status</label>
+                      <select value={status} onChange={handleStatusChange}
+                        className={`${inputBase} cursor-pointer font-semibold ${
+                          status === 'Token Received'
+                            ? 'border-yellow-600/50 text-yellow-400 focus:border-yellow-500'
+                            : 'border-emerald-600/50 text-emerald-400 focus:border-emerald-500'
+                        }`}>
+                        <option value="Token Received">🟡 Token Received</option>
+                        <option value="Booking Received">🟢 Booking Received</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                {!existingBooking && status === 'Token Received' && (
+                  <div>
+                    <label className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-yellow-400 mb-2">
+                      <Calendar className="w-3.5 h-3.5" /> Token Expiry Date
+                      <span className="ml-auto text-[10px] font-mono font-bold bg-yellow-950/60 border border-yellow-800/40 px-2 py-0.5 rounded normal-case tracking-normal">
+                        {formatDateDDMMYY(tokenExpiryDate)}
+                      </span>
+                    </label>
+                    <input type="date" value={tokenExpiryDate} onChange={(e) => setTokenExpiryDate(e.target.value)}
+                      className={`${inputBase} border-yellow-600/50 text-yellow-300 focus:border-yellow-500`}
+                      required />
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* ══ SECTION 4: FINANCIAL SUMMARY ══ */}
+            <section>
+              <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                Financial Summary
+              </h3>
+              <div className="space-y-5">
+
+                {/* Cost Breakdown card */}
+                <div className="rounded-2xl border border-slate-800 overflow-hidden">
+                  <div className="bg-slate-800/30 px-4 py-3">
+                    <span className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-slate-500">📋 Cost Breakdown</span>
+                  </div>
+                  <div className="p-4 space-y-4">
+                    <div className="grid grid-cols-3 gap-4">
+                      {[
+                        { label: 'Cost of Land', val: costOfLand, set: setCostOfLand },
+                        { label: 'Extra Charges', val: extraCharges, set: setExtraCharges },
+                        { label: 'Processing & Doc', val: processingCharges, set: setProcessingCharges }
+                      ].map(({ label, val, set }) => (
+                        <div key={label}>
+                          <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">{label}</label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-medium">Rs</span>
+                            <input type="number" value={val} onChange={(e) => set(e.target.value)}
+                              className="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-8 pr-2 py-2.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20"
+                              placeholder="0" min="0" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between bg-emerald-950/40 border border-emerald-800/40 rounded-xl px-4 py-3">
+                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">Total Receivable</span>
+                      <span className="text-base font-black text-emerald-400">
+                        Rs {(totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0)).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Price & Paid row */}
+                <div className="grid grid-cols-2 gap-5">
+                  <div>
+                    <label className={labelBase}>Total Plot Price</label>
+                    <div className="relative">
+                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-medium">Rs</span>
+                      <input type="number"
+                        value={totalReceivableAmount > 0 ? totalReceivableAmount : totalPrice}
+                        onChange={(e) => { if (totalReceivableAmount <= 0) setTotalPrice(e.target.value); }}
+                        className={`${inputBase} pl-9 ${totalReceivableAmount > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        placeholder="0" min="0" readOnly={totalReceivableAmount > 0} required />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelBase}>
+                      {existingBooking ? 'Installment Amount' : 'Token / Paid Amount'}
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-medium">Rs</span>
+                      {existingBooking ? (
+                        <input type="number" value={installmentAmount} onChange={handleInstallmentAmountChange}
+                          className={`${inputBase} pl-9 border-emerald-600/50 font-bold focus:border-emerald-500`}
+                          placeholder="0" min="0" required />
+                      ) : (
+                        <input type="number" value={paidAmount} onChange={handlePaidAmountChange}
+                          className={`${inputBase} pl-9`}
+                          placeholder="0" min="0" required />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Amount in words */}
+                <div>
+                  <label className={labelBase}>Amount in Words</label>
+                  <input type="text" value={amountInWords} onChange={(e) => setAmountInWords(e.target.value)}
+                    className="w-full bg-slate-950/50 border border-slate-800/50 rounded-xl px-4 py-3 text-xs text-blue-400/80 italic placeholder:text-slate-700 outline-none"
+                    placeholder="Auto-generated in words..." />
+                </div>
+
+                {/* Remaining balance */}
+                <div className={`flex items-center justify-between rounded-xl px-4 py-3.5 border ${
+                  balance <= 0
+                    ? 'bg-emerald-950/30 border-emerald-800/50'
+                    : 'bg-slate-950/40 border-slate-700/50'
+                }`}>
+                  <span className={`text-xs font-bold uppercase tracking-wider ${balance <= 0 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                    Remaining Balance
+                  </span>
+                  <span className={`font-extrabold ${balance <= 0 ? 'text-emerald-400 text-sm' : 'text-slate-200 text-sm'}`}>
+                    {balance <= 0 ? '✓ Fully Paid — Rs 0' : `Rs ${balance.toLocaleString()}`}
                   </span>
                 </div>
-                <input
-                  type="date"
-                  value={tokenExpiryDate}
-                  onChange={(e) => setTokenExpiryDate(e.target.value)}
-                  className="w-full bg-slate-950 border border-yellow-600/60 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 rounded-lg px-3 py-2 text-sm text-yellow-300 font-medium transition-all outline-none"
-                  required={status === 'Token Received'}
-                />
               </div>
-            )}
+            </section>
 
-            {/* COST BREAKDOWN FIELDS */}
-            <div className="p-3 rounded-xl bg-slate-950/50 border border-slate-800/60 space-y-3">
-              <label className="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-1">📋 Cost Breakdown</label>
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Cost of Land</label>
-                  <div className="relative">
-                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[11px]">Rs</span>
-                    <input type="number" value={costOfLand} onChange={(e) => setCostOfLand(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-2.5 text-sm text-white transition-all outline-none"
-                      placeholder="0" min="0" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Extra Charges</label>
-                  <div className="relative">
-                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[11px]">Rs</span>
-                    <input type="number" value={extraCharges} onChange={(e) => setExtraCharges(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-2.5 text-sm text-white transition-all outline-none"
-                      placeholder="0" min="0" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Processing & Doc</label>
-                  <div className="relative">
-                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[11px]">Rs</span>
-                    <input type="number" value={processingCharges} onChange={(e) => setProcessingCharges(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-2 py-2.5 text-sm text-white transition-all outline-none"
-                      placeholder="0" min="0" />
-                  </div>
-                </div>
-              </div>
-              <div>
-                <label className="block text-[10px] font-semibold uppercase tracking-wider text-emerald-400 mb-1">Total Receivable Amount</label>
-                <div className="w-full bg-slate-950 border border-emerald-600/50 rounded-lg px-3 py-1.5 text-sm font-bold text-emerald-400">
-                  Rs {totalReceivableAmount > 0 ? totalReceivableAmount.toLocaleString() : (parseFloat(totalPrice) || 0).toLocaleString()}
-                </div>
-              </div>
-            </div>
-
-            {/* DYNAMIC PAYMENT / INSTALLMENT AMOUNT */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Total Plot Price</label>
-                <div className="relative">
-                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">Rs</span>
-                  <input type="number" value={totalReceivableAmount > 0 ? totalReceivableAmount : totalPrice} onChange={(e) => { if (totalReceivableAmount <= 0) setTotalPrice(e.target.value); }}
-                    className={`w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-3 py-2.5 text-sm text-white transition-all outline-none ${totalReceivableAmount > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
-                    placeholder="0" min="0" readOnly={totalReceivableAmount > 0} required />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                  {existingBooking ? 'New Installment Amount' : 'Token / Paid Amount'}
-                </label>
-                <div className="relative">
-                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">Rs</span>
-                  {existingBooking ? (
-                    <input type="number" value={installmentAmount} onChange={handleInstallmentAmountChange}
-                      className="w-full bg-slate-950 border border-emerald-600/60 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg pl-8 pr-3 py-2.5 text-sm text-white font-bold transition-all outline-none"
-                      placeholder="0" min="0" required />
-                  ) : (
-                    <input type="number" value={paidAmount} onChange={handlePaidAmountChange}
-                      className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-8 pr-3 py-2.5 text-sm text-white transition-all outline-none"
-                      placeholder="0" min="0" required />
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* AUTOMATIC AMOUNT IN WORDS FIELD */}
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Amount in Words</label>
-              <input
-                type="text"
-                value={amountInWords}
-                onChange={(e) => setAmountInWords(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800/80 focus:border-blue-500 rounded-lg px-3 py-2.5 text-xs text-blue-400 font-medium italic transition-all outline-none"
-                placeholder="Automatically generated in words..."
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Remaining Balance</label>
-              <div className={`w-full bg-slate-950 border rounded-lg px-3 py-2 text-sm font-bold ${
-                balance <= 0 ? 'border-emerald-600/60 text-emerald-400' : 'border-slate-800/40 text-slate-300'
-              }`}>
-                {balance <= 0 ? 'Rs 0 (FULL AMOUNT RECEIVED)' : `Rs ${balance.toLocaleString()}`}
-              </div>
-            </div>
-
-            <div className="pt-4 space-y-3">
+            {/* ══ ACTION BUTTONS ══ */}
+            <div className="flex flex-col gap-3 pt-2">
               <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="submit"
-                  className="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md shadow-emerald-600/20 active:scale-[0.98]"
-                >
+                <button type="submit"
+                  className="py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-emerald-900/25 active:scale-[0.98]">
                   <Save className="w-4 h-4" />
-                  <span>Save</span>
+                  Save Booking
                 </button>
-                <button
-                  type="button"
+                <button type="button"
                   onClick={(e) => {
                     if (e) e.preventDefault();
                     if (existingBooking && !installmentAmount) {
@@ -631,21 +643,19 @@ export default function BookingForm({
                       handleFormSubmit(e, true);
                     }
                   }}
-                  className="py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md shadow-blue-600/20 active:scale-[0.98]"
-                >
+                  className="py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-blue-900/25 active:scale-[0.98]">
                   <Printer className="w-4 h-4" />
-                  <span>Print</span>
+                  Save & Print
                 </button>
               </div>
-              <button
-                type="button"
+              <button type="button"
                 onClick={() => { clearFields(true); onClearFormSelection(); }}
-                className="w-full py-2 rounded-xl bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-400 text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
-              >
+                className="w-full py-2.5 rounded-2xl border border-slate-700/50 bg-transparent hover:bg-slate-800/50 text-slate-500 hover:text-slate-300 text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-all">
                 <Eraser className="w-3.5 h-3.5" />
-                <span>Clear Form</span>
+                Clear Form
               </button>
             </div>
+
           </form>
         </div>
       )}
@@ -676,7 +686,7 @@ export default function BookingForm({
               onClick={() => setShowFullPaymentModal(false)}
               className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all cursor-pointer shadow-lg shadow-emerald-600/30"
             >
-              Dismiss & Continue
+              Dismiss &amp; Continue
             </button>
           </div>
         </div>
