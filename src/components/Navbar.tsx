@@ -80,19 +80,6 @@ const Navbar = () => {
     <>
       <nav className={`navbar ${scrolled ? "navbar-scrolled" : ""}`}>
         <div className="navbar-inner">
-          {/* Admin Panel Trigger — left of logo */}
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new CustomEvent('open-admin-panel'))}
-            className="navbar-admin-icon-btn cursor-pointer"
-            title="Open Admin Panel"
-            aria-label="Open Admin Panel"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </button>
-
           {/* Logo */}
           <Link href="/" className="navbar-logo">
             <div className="logo-img-wrapper">
