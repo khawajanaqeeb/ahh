@@ -33,7 +33,7 @@ const navLinks = [
   { name: "Contact", href: "/contact" },
 ];
 
-const Navbar = () => {
+export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boolean, user?: User | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -151,25 +151,36 @@ const Navbar = () => {
 
 
           <div className="flex items-center gap-3">
-            {/* CTA Button */}
-            <Link href="/contact" className="navbar-cta-pill">
-              <span>Get In Touch</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </Link>
+            {/* CTA Button / Auth */}
+            {!user ? (
+              <Link href="/login" className="navbar-cta-pill" style={{ padding: '0.5rem 1.2rem' }}>
+                <span>Login</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </Link>
+            ) : (
+              <form action={logout}>
+                <button type="submit" className="navbar-cta-pill" style={{ padding: '0.5rem 1.2rem', borderColor: 'rgba(255,255,255,0.1)', color: '#a1a1aa' }}>
+                  <span>Logout</span>
+                </button>
+              </form>
+            )}
 
-            {/* Admin Panel Icon Button (Right side) */}
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent('open-admin-panel'))}
-              className="navbar-admin-icon-btn cursor-pointer hidden md:flex items-center justify-center w-[42px] h-[42px] rounded-full border border-slate-700/80 bg-slate-900/50 text-slate-400 hover:bg-blue-950/50 hover:text-blue-400 hover:border-blue-500/50 transition-all shadow-lg"
-              title="Admin Dashboard"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-            </button>
+            {/* Admin Panel Icon Button (Right side) - Only visible to Admins */}
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent('open-admin-panel'))}
+                className="navbar-admin-icon-btn cursor-pointer hidden md:flex items-center justify-center w-[42px] h-[42px] rounded-full border border-slate-700/80 bg-slate-900/50 text-slate-400 hover:bg-blue-950/50 hover:text-blue-400 hover:border-blue-500/50 transition-all shadow-lg"
+                title="Admin Dashboard"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </button>
+            )}
           </div>
 
           {/* Mobile hamburger */}

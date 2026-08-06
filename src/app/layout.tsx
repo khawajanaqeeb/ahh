@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import AdminLeftSidebar from "@/components/AdminLeftSidebar";
-
+import { createClient } from "@/utils/supabase/server";
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
@@ -57,11 +57,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch user role for admin access control
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  let isAdmin = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+    
+    isAdmin = profile?.role === 'admin';
+  }
   return (
     <html lang="en" className="dark" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body
@@ -73,7 +87,7 @@ export default function RootLayout({
         <Header />
 
         {/* Sticky Navbar */}
-        <Navbar />
+        <Navbar isAdmin={isAdmin} user={user} />
 
         {/* Main content */}
         <main>{children}</main>
@@ -84,8 +98,8 @@ export default function RootLayout({
         {/* WhatsApp floating button */}
         <WhatsAppButton />
 
-        {/* Left Side Admin Panel */}
-        <AdminLeftSidebar />
+        {/* Left Side Admin Panel (Only injected for admins) */}
+        {isAdmin && <AdminLeftSidebar />}
       </body>
     </html>
   );
