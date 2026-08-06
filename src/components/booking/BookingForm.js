@@ -450,7 +450,7 @@ export default function BookingForm({
             <section>
               <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">
                 <span className="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span>
-                Booking Configuration
+                Payment Configuration
               </h3>
               <div className="space-y-5">
                 <div className="grid grid-cols-2 gap-5">
