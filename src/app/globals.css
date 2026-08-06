@@ -2804,28 +2804,58 @@ select.form-input {
         }
 
 /* ============================================
-   NAVBAR — Admin Icon Button (left of logo)
+   NAVBAR — Admin Panel Button (left of logo)
    ============================================ */
 
-.navbar-admin-icon-btn {
+.navbar-admin-pill {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #8A8A9E;
+  gap: 0.45rem;
+  padding: 0.65rem 1.4rem;
+  background: transparent;
+  border: 1.5px solid rgba(96, 165, 250, 0.5);
+  color: #93c5fd;
+  font-weight: 600;
+  font-size: 0.88rem;
+  letter-spacing: 0.4px;
+  border-radius: 30px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
   flex-shrink: 0;
-  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.navbar-admin-icon-btn:hover {
-  background: rgba(212, 175, 55, 0.1);
-  border-color: rgba(212, 175, 55, 0.3);
-  color: #D4AF37;
-  transform: scale(1.05);
+.navbar-admin-pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.navbar-admin-pill span,
+.navbar-admin-pill svg {
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s;
+}
+
+.navbar-admin-pill:hover {
+  border-color: transparent;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.35);
+}
+
+.navbar-admin-pill:hover::before {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .navbar-admin-pill { display: none; }
 }
 
 

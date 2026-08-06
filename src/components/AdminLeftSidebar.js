@@ -31,21 +31,6 @@ export default function AdminLeftSidebar() {
 
   return (
     <>
-      {/* Floating Left Side Admin Panel Trigger Button (Visible on Landing Page & Site-wide) */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed top-28 left-0 z-50 bg-slate-900/90 border-r border-t border-b border-blue-500/60 text-blue-400 font-bold text-xs px-3.5 py-3 rounded-r-xl shadow-2xl backdrop-blur-md flex items-center gap-2 hover:bg-slate-800 hover:text-white transition-all cursor-pointer group"
-          title="Open Left Admin Panel"
-        >
-          <Shield className="w-4 h-4 text-blue-400 group-hover:rotate-12 transition-transform" />
-          <span className="font-outfit uppercase tracking-wider font-extrabold text-[11px] hidden sm:inline">
-            Admin Panel
-          </span>
-          <ChevronRight className="w-3.5 h-3.5 text-blue-400 group-hover:translate-x-0.5 transition-transform" />
-        </button>
-      )}
-
       {/* Backdrop overlay when Admin Panel is open */}
       {isOpen && (
         <div
