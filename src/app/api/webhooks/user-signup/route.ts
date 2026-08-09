@@ -1,20 +1,18 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-// Make sure to add RESEND_API_KEY to your .env.local
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 // The email address you want to receive notifications at
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@ahhbrothers.com' 
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'ahhbrothers.developers@gmail.com'
 
 export async function POST(req: Request) {
   try {
-    // Optional: Validate a secret header to ensure this request comes from YOUR Supabase
-    // const authHeader = req.headers.get('Authorization')
-    // if (authHeader !== `Bearer ${process.env.SUPABASE_WEBHOOK_SECRET}`) {
-    //   return new NextResponse('Unauthorized', { status: 401 })
-    // }
+    const apiKey = process.env.RESEND_API_KEY
+    if (!apiKey || apiKey.includes('your_resend_api_key_here')) {
+      console.warn('RESEND_API_KEY is missing or invalid.')
+      return NextResponse.json({ message: 'Resend API key not configured' }, { status: 200 })
+    }
 
+    const resend = new Resend(apiKey)
     const body = await req.json()
     
     // The payload shape depends on how you configured the Supabase webhook.
@@ -22,7 +20,7 @@ export async function POST(req: Request) {
     const record = body.record || body
 
     const { data, error } = await resend.emails.send({
-      from: 'AHH Brothers <onboarding@resend.dev>', // Update this to your verified domain later
+      from: 'AHH Brothers <onboarding@resend.dev>',
       to: [ADMIN_EMAIL],
       subject: `🚨 New User Registration: ${record.full_name || 'A user'}`,
       html: `
