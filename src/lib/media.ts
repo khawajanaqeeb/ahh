@@ -20,6 +20,11 @@ export const MEDIA = {
   haroonAnsari: `${SUPABASE_STORAGE_BASE}/directors/haroon-ansari.png`,
   hassaanMemon: `${SUPABASE_STORAGE_BASE}/directors/hassaan-memon.jpeg`,
 
+  // Management Team
+  khawajaNaqeeb: '/team/khawaja-naqeeb.png',
+  mirzaAdeel: '/team/mirza-adeel.jpg',
+  mirzaKhalil: '/team/mirza-khalil.jpg',
+
   // Renders & Gallery
   h1: `${SUPABASE_STORAGE_BASE}/gallery/projects/h1.jpg`,
   h2: `${SUPABASE_STORAGE_BASE}/gallery/projects/h2.jpg`,

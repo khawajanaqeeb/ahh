@@ -37,8 +37,10 @@ const directors = [
 const managers = [
   {
     name: "Khawaja Naqeeb Uddin",
-    title: "Manager Operations",
+    title: "Operations Manager",
     initials: "KN",
+    image: MEDIA.khawajaNaqeeb,
+    objectPosition: "center top",
     desc: "Khawaja Naqeeb Uddin is the operational backbone of AHH Brothers, coordinating day-to-day site activities, vendor relations, and project workflows. His systematic approach ensures every development phase runs smoothly from groundbreaking to handover.",
     color: "#D4AF37",
   },
@@ -46,6 +48,8 @@ const managers = [
     name: "Mirza Adeel Baig",
     title: "Sales & Marketing Manager",
     initials: "MA",
+    image: MEDIA.mirzaAdeel,
+    objectPosition: "center 10%",
     desc: "Mirza Adeel Baig drives the sales strategy and marketing campaigns that have positioned AHH Brothers as a trusted name in Karachi real estate. His customer-first philosophy and deep market knowledge help buyers find the right investment every time.",
     color: "#C5A028",
   },
@@ -53,6 +57,8 @@ const managers = [
     name: "Mirza Khalil Baig",
     title: "Sales & Accounts Manager",
     initials: "MK",
+    image: MEDIA.mirzaKhalil,
+    objectPosition: "center center",
     desc: "Mirza Khalil Baig manages the financial records, installment plans, and sales accounts with precision and integrity. His transparent handling of transactions gives buyers and investors complete peace of mind throughout the purchase process.",
     color: "#E8CC6E",
   },
@@ -242,7 +248,7 @@ export default function About() {
                 onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-6px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 20px 60px rgba(212,175,55,0.15)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLDivElement).style.boxShadow = ""; }}
               >
-                <div style={{
+                <div className="rounded-full circle-avatar" style={{
                   width: 110, height: 110, borderRadius: "50%",
                   margin: "0 auto 1.25rem",
                   position: "relative",
@@ -257,6 +263,7 @@ export default function About() {
                       alt={d.name}
                       fill
                       sizes="110px"
+                      className="rounded-full"
                       style={{ objectFit: "cover", objectPosition: d.objectPosition || "center top" }}
                     />
                   ) : (
@@ -305,17 +312,36 @@ export default function About() {
                 onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLDivElement).style.boxShadow = ""; }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                  <div style={{
-                    width: 56, height: 56, borderRadius: "14px",
+                  <div className="rounded-full circle-avatar" style={{
+                    width: 68, height: 68,
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    position: "relative",
                     background: `linear-gradient(135deg, ${m.color}33, ${m.color}11)`,
-                    border: `1px solid ${m.color}44`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "1rem", fontWeight: 700,
-                    color: m.color,
-                    fontFamily: "var(--font-heading)",
+                    border: `2px solid ${m.color}`,
+                    boxShadow: `0 6px 20px ${m.color}35`,
                     flexShrink: 0,
                   }}>
-                    {m.initials}
+                    {m.image ? (
+                      <Image
+                        src={m.image}
+                        alt={m.name}
+                        fill
+                        sizes="68px"
+                        className="rounded-full"
+                        style={{ objectFit: "cover", objectPosition: m.objectPosition || "center top" }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: "100%", height: "100%",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: "1.1rem", fontWeight: 700,
+                        color: m.color,
+                        fontFamily: "var(--font-heading)",
+                      }}>
+                        {m.initials}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <h3 style={{ color: "#F5F5F7", fontSize: "1rem", marginBottom: "0.2rem", lineHeight: 1.3 }}>{m.name}</h3>

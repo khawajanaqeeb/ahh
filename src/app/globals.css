@@ -80,6 +80,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  border-radius: 0 !important;
+}
+
+.rounded-full,
+.circle-avatar {
+  border-radius: 9999px !important;
 }
 
 html {
@@ -128,7 +134,6 @@ img {
 
 ::-webkit-scrollbar-thumb {
   background: var(--gold-dark);
-  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -144,7 +149,6 @@ img {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
   transition: all var(--transition-base);
 }
 
@@ -160,7 +164,6 @@ img {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
 }
 
 .glass-gold {
@@ -168,7 +171,6 @@ img {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border-gold);
-  border-radius: var(--radius-md);
 }
 
 .glass-dark {
@@ -176,7 +178,6 @@ img {
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
 }
 
 /* ============================================
@@ -194,7 +195,6 @@ img {
   font-weight: 600;
   font-size: 0.95rem;
   border: none;
-  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition-base);
   letter-spacing: 0.5px;
@@ -233,7 +233,6 @@ img {
   font-weight: 600;
   font-size: 0.95rem;
   border: 2px solid var(--gold);
-  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition-base);
   letter-spacing: 0.5px;
@@ -257,7 +256,6 @@ img {
   font-weight: 500;
   font-size: 0.95rem;
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition-base);
 }
@@ -314,7 +312,6 @@ img {
   height: 3px;
   background: var(--gradient-gold);
   margin: 1rem auto;
-  border-radius: 2px;
 }
 
 .gold-line-left {
@@ -322,7 +319,6 @@ img {
   height: 3px;
   background: var(--gradient-gold);
   margin: 1rem 0;
-  border-radius: 2px;
 }
 
 /* ============================================
@@ -494,7 +490,6 @@ img {
   z-index: 1000;
   width: 60px;
   height: 60px;
-  border-radius: 50%;
   background: #25D366;
   display: flex;
   align-items: center;
@@ -569,7 +564,6 @@ img {
    ============================================ */
 
 .project-card {
-  border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -605,7 +599,6 @@ img {
   top: 12px;
   right: 12px;
   padding: 0.25rem 0.7rem;
-  border-radius: 12px;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.4px;
@@ -702,7 +695,6 @@ img {
   padding: 0.875rem 1.25rem;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-sm);
   color: var(--white);
   font-family: var(--font-body);
   font-size: 1rem;
@@ -778,7 +770,6 @@ select.form-input {
     padding: 5.5rem 0.85rem 2rem;
   }
   .glass-card {
-    border-radius: 10px;
   }
 }
 
@@ -878,7 +869,6 @@ select.form-input {
           padding: 2.5rem;
         }
         .about-large-logo {
-          border-radius: 12px;
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
         }
         
@@ -935,7 +925,6 @@ select.form-input {
           background-color: var(--black);
           border: 3px solid var(--gold);
           top: 30px;
-          border-radius: 50%;
           z-index: 1;
         }
         .left {
@@ -994,7 +983,6 @@ select.form-input {
 /* From: page.tsx */
 .blog-card {
           overflow: hidden;
-          border-radius: var(--radius-md);
           display: flex;
           flex-direction: column;
           height: 100%;
@@ -1015,7 +1003,6 @@ select.form-input {
           background: rgba(10, 10, 26, 0.85);
           color: var(--white);
           padding: 0.25rem 0.75rem;
-          border-radius: 4px;
           font-size: 0.75rem;
         }
         .blog-content {
@@ -1086,7 +1073,6 @@ select.form-input {
           width: 50px;
           height: 50px;
           background: rgba(212, 175, 55, 0.08);
-          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1138,7 +1124,6 @@ select.form-input {
           height: 60px;
           background: var(--green);
           color: white;
-          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1192,7 +1177,6 @@ select.form-input {
           display: grid;
           grid-template-columns: 1fr 1.2fr;
           overflow: hidden;
-          border-radius: var(--radius-lg);
           transition: all var(--transition-base);
         }
         .project-detail-row:hover {
@@ -1214,7 +1198,6 @@ select.form-input {
           display: inline-flex;
           align-items: center;
           padding: 0.28rem 0.75rem;
-          border-radius: 20px;
           font-size: 0.75rem;
           font-weight: 700;
           text-transform: uppercase;
@@ -1269,7 +1252,6 @@ select.form-input {
           background: rgba(212, 175, 55, 0.08);
           border-left: 4px solid var(--gold);
           padding: 0.8rem 1.2rem;
-          border-radius: 0 8px 8px 0;
           font-size: 0.92rem;
           margin-bottom: 1.5rem;
           color: var(--white);
@@ -1399,7 +1381,6 @@ select.form-input {
           background: rgba(212, 175, 55, 0.05);
           border: 1px solid rgba(212, 175, 55, 0.1);
           padding: 0.75rem;
-          border-radius: 8px;
           text-align: center;
         }
         .d-stat {
@@ -1419,7 +1400,6 @@ select.form-input {
           display: grid;
           grid-template-columns: 0.8fr 1.2fr;
           overflow: hidden;
-          border-radius: var(--radius-md);
         }
         .event-img-side {
           height: 100%;
@@ -1441,7 +1421,6 @@ select.form-input {
           border: 1px solid var(--gold);
           color: var(--gold);
           padding: 0.25rem 0.75rem;
-          border-radius: 4px;
           font-size: 0.78rem;
           font-weight: 600;
           align-self: flex-start;
@@ -1485,7 +1464,6 @@ select.form-input {
 /* From: page.tsx */
 .gallery-card {
           overflow: hidden;
-          border-radius: var(--radius-md);
         }
         .gallery-img-wrapper {
           position: relative;
@@ -1509,7 +1487,6 @@ select.form-input {
           color: var(--gold);
           border: 1px solid var(--gold);
           padding: 0.3rem 0.8rem;
-          border-radius: 20px;
           font-size: 0.75rem;
           font-weight: 600;
           text-transform: uppercase;
@@ -1539,7 +1516,6 @@ select.form-input {
           width: 70px;
           height: 70px;
           background: rgba(212, 175, 55, 0.08);
-          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1591,7 +1567,6 @@ select.form-input {
             padding: 0.4rem 1.25rem;
             background: rgba(212, 175, 55, 0.1);
             border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 30px;
             margin-bottom: 2rem;
             animation: fadeInDown 0.8s ease-out;
           }
@@ -1652,7 +1627,6 @@ select.form-input {
             width: 24px;
             height: 38px;
             border: 2px solid rgba(212, 175, 55, 0.3);
-            border-radius: 12px;
             display: flex;
             justify-content: center;
             padding-top: 6px;
@@ -1661,7 +1635,6 @@ select.form-input {
             width: 4px;
             height: 8px;
             background: #D4AF37;
-            border-radius: 2px;
             animation: scrollAnim 1.8s infinite;
           }
           @keyframes scrollAnim {
@@ -1707,7 +1680,6 @@ select.form-input {
             background: linear-gradient(135deg, #D4AF37 0%, #B8942E 100%);
             color: #0A0A0A;
             padding: 1.25rem;
-            border-radius: 16px;
             text-align: center;
             box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
           }
@@ -1768,7 +1740,6 @@ select.form-input {
             width: 72px;
             height: 72px;
             margin: 0 auto 1.25rem;
-            border-radius: 16px;
             background: rgba(212, 175, 55, 0.08);
             border: 1px solid rgba(212, 175, 55, 0.15);
             display: flex;
@@ -1839,7 +1810,6 @@ select.form-input {
           .testimonial-avatar {
             width: 44px;
             height: 44px;
-            border-radius: 12px;
             background: linear-gradient(135deg, #D4AF37, #B8942E);
             color: #0A0A0A;
             display: flex;
@@ -1968,7 +1938,6 @@ select.form-input {
           gap: 0.75rem;
         }
         .footer-logo-img {
-          border-radius: 10px;
         }
         .footer-brand-name {
           font-family: var(--font-heading);
@@ -2002,7 +1971,6 @@ select.form-input {
         .social-icon {
           width: 40px;
           height: 40px;
-          border-radius: 10px;
           background: rgba(255, 255, 255, 0.05);
           border: 1px solid rgba(255, 255, 255, 0.08);
           display: flex;
@@ -2041,7 +2009,6 @@ select.form-input {
           width: 40px;
           height: 2px;
           background: linear-gradient(90deg, #D4AF37, #E8CC6E);
-          border-radius: 2px;
         }
 
         /* Links */
@@ -2060,7 +2027,7 @@ select.form-input {
           gap: 0.3rem;
         }
         .footer-links a::before {
-          content: 'â€º';
+          content: '\203A';
           color: #D4AF37;
           font-size: 1.2rem;
           opacity: 0;
@@ -2128,7 +2095,6 @@ select.form-input {
           border: 1px solid rgba(212, 175, 55, 0.2);
           color: #D4AF37;
           padding: 0.5rem 1rem;
-          border-radius: 8px;
           cursor: pointer;
           font-size: 0.82rem;
           font-weight: 500;
@@ -2292,7 +2258,6 @@ select.form-input {
           position: relative;
           padding: 4px;
           border: 1px solid rgba(212, 175, 55, 0.4);
-          border-radius: 14px;
           background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.18), rgba(12, 12, 24, 0.95));
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
@@ -2323,7 +2288,6 @@ select.form-input {
         }
 
         .navbar-logo-img {
-          border-radius: 10px;
           object-fit: cover;
           display: block;
         }
@@ -2372,7 +2336,6 @@ select.form-input {
           width: 14px;
           height: 1.5px;
           background: linear-gradient(90deg, #D4AF37, transparent);
-          border-radius: 1px;
         }
 
         .navbar-links {
@@ -2430,7 +2393,6 @@ select.form-input {
           width: 0;
           height: 2px;
           background: linear-gradient(90deg, #D4AF37, #E8CC6E);
-          border-radius: 2px;
           transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -2450,7 +2412,6 @@ select.form-input {
           -webkit-backdrop-filter: blur(25px);
           border: 1px solid rgba(212, 175, 55, 0.18);
           box-shadow: 0 15px 40px rgba(0, 0, 0, 0.65);
-          border-radius: 12px;
           padding: 0.6rem;
           width: 220px;
           opacity: 0;
@@ -2497,7 +2458,6 @@ select.form-input {
           font-size: 0.88rem;
           font-weight: 500;
           text-decoration: none;
-          border-radius: 8px;
           transition: all 0.2s;
         }
 
@@ -2524,7 +2484,6 @@ select.form-input {
           font-weight: 600;
           font-size: 0.88rem;
           letter-spacing: 0.5px;
-          border-radius: 30px;
           text-decoration: none;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           position: relative;
@@ -2567,7 +2526,6 @@ select.form-input {
           border: 1px solid rgba(255, 255, 255, 0.08);
           cursor: pointer;
           padding: 0.75rem 0.85rem;
-          border-radius: 12px;
           z-index: 60;
           transition: all 0.3s;
         }
@@ -2582,7 +2540,6 @@ select.form-input {
           width: 22px;
           height: 2px;
           background: #D4AF37;
-          border-radius: 2px;
           transition: all 0.3s;
         }
 
@@ -2651,7 +2608,6 @@ select.form-input {
           color: #C5C5D3;
           width: 36px;
           height: 36px;
-          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -2721,7 +2677,6 @@ select.form-input {
           transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           padding-left: 1rem;
           background: rgba(255, 255, 255, 0.02);
-          border-radius: 8px;
         }
         
         .accordion-open {
@@ -2818,7 +2773,6 @@ select.form-input {
   font-weight: 600;
   font-size: 0.88rem;
   letter-spacing: 0.4px;
-  border-radius: 30px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
@@ -2962,7 +2916,6 @@ select.form-input {
   height: 56px;
   background: linear-gradient(135deg, #25D366 0%, #1EBE57 100%);
   color: #ffffff;
-  border-radius: 50%;
   box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
   z-index: 999;
   display: flex;
@@ -3056,7 +3009,6 @@ select.form-input {
   color: #0A0A0A;
   font-weight: 800;
   font-size: 0.88rem;
-  border-radius: 30px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.4);
   cursor: pointer;

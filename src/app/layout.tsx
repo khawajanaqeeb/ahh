@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import AdminLeftSidebar from "@/components/AdminLeftSidebar";
 import { createClient } from "@/utils/supabase/server";
+import { isEmailAdmin } from "@/lib/constants";
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
@@ -68,13 +69,19 @@ export default async function RootLayout({
   
   let isAdmin = false;
   if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single();
+    const hasAdminEmail = isEmailAdmin(user.email);
     
-    isAdmin = profile?.role === 'admin';
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .maybeSingle();
+      
+      isAdmin = profile?.role === 'admin' || profile?.role === 'accounts' || hasAdminEmail || user.user_metadata?.role === 'admin';
+    } catch {
+      isAdmin = hasAdminEmail || user.user_metadata?.role === 'admin';
+    }
   }
   return (
     <html lang="en" className="dark" data-scroll-behavior="smooth" suppressHydrationWarning>

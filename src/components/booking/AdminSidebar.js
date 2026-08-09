@@ -1,4 +1,4 @@
-// src/components/booking/AdminSidebar.js
+﻿// src/components/booking/AdminSidebar.js
 'use client';
 
 import React, { useState } from 'react';
@@ -35,7 +35,7 @@ export default function AdminSidebar({
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed top-24 right-0 z-50 bg-slate-900 border-l border-t border-b border-blue-500/60 text-blue-400 font-bold text-xs px-3 py-2.5 rounded-l-xl shadow-2xl flex items-center gap-2 hover:bg-slate-800 transition-all cursor-pointer group"
+          className="fixed top-24 right-0 z-50 bg-slate-900 border-l border-t border-b border-blue-500/60 text-blue-400 font-bold text-xs px-3 py-2.5 rounded-none shadow-2xl flex items-center gap-2 hover:bg-slate-800 transition-all cursor-pointer group"
           title="Open Admin Dashboard"
         >
           <ChevronLeft className="w-4 h-4 text-blue-400 group-hover:-translate-x-0.5 transition-transform" />
@@ -55,7 +55,7 @@ export default function AdminSidebar({
         {/* Admin Header */}
         <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center shadow-inner">
+            <div className="w-9 h-9 rounded-none bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center shadow-inner">
               <Shield className="w-5 h-5" />
             </div>
             <div>
@@ -70,7 +70,7 @@ export default function AdminSidebar({
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-none text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
             title="Collapse Sidebar"
           >
             <ChevronRight className="w-5 h-5" />
@@ -98,14 +98,14 @@ export default function AdminSidebar({
                   <Link
                     key={proj.id}
                     href={proj.route}
-                    className={`p-4 rounded-xl border text-left transition-all flex items-center justify-between cursor-pointer group ${
+                    className={`p-4 rounded-none border text-left transition-all flex items-center justify-between cursor-pointer group ${
                       isActive
                         ? 'bg-slate-900 border-blue-500 shadow-lg shadow-blue-500/10'
                         : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <span className="w-8 h-8 p-1 rounded-md bg-white border border-slate-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform overflow-hidden shadow-sm">
+                      <span className="w-8 h-8 p-1 rounded-none bg-white border border-slate-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform overflow-hidden shadow-sm">
                         <img src={proj.logo} alt={`${proj.name} logo`} className="w-full h-full object-contain" />
                       </span>
                       <div>
@@ -114,7 +114,7 @@ export default function AdminSidebar({
                             {proj.name}
                           </h4>
                           {isActive && (
-                            <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-blue-950 text-blue-400 border border-blue-800/60">
+                            <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-none bg-blue-950 text-blue-400 border border-blue-800/60">
                               Active
                             </span>
                           )}
@@ -135,7 +135,7 @@ export default function AdminSidebar({
           </div>
 
           {/* ACTIVE PROJECT STATS CARD */}
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-4 shadow-lg">
+          <div className="p-4 rounded-none bg-slate-900 border border-slate-800 space-y-4 shadow-lg">
             <div className="flex items-center justify-between pb-2 border-b border-slate-800">
               <span className="text-xs font-bold text-slate-300 flex items-center gap-2">
                 <span className="w-6 h-6 p-0.5 rounded bg-white border border-slate-700 flex items-center justify-center overflow-hidden">
@@ -143,25 +143,25 @@ export default function AdminSidebar({
                 </span>
                 <span>{activeProject.name} Live Overview</span>
               </span>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${activeProject.badgeBg} ${activeProject.badgeText} ${activeProject.badgeBorder} border`}>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-none ${activeProject.badgeBg} ${activeProject.badgeText} ${activeProject.badgeBorder} border`}>
                 Live Ledger
               </span>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800/80">
+              <div className="p-3.5 rounded-none bg-slate-950 border border-slate-800/80">
                 <span className="text-[10px] text-slate-400 uppercase font-semibold block">Mapped Plots</span>
                 <span className="text-sm font-bold font-outfit text-white">{totalPlotsCount}</span>
               </div>
-              <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
+              <div className="p-2.5 rounded-none bg-slate-950 border border-slate-800/80">
                 <span className="text-[10px] text-slate-400 uppercase font-semibold block">Tokens Recv</span>
                 <span className="text-sm font-bold font-outfit text-yellow-400">{tokenCount}</span>
               </div>
-              <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
+              <div className="p-2.5 rounded-none bg-slate-950 border border-slate-800/80">
                 <span className="text-[10px] text-slate-400 uppercase font-semibold block">Bookings Recv</span>
                 <span className="text-sm font-bold font-outfit text-emerald-400">{bookedCount}</span>
               </div>
-              <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
+              <div className="p-2.5 rounded-none bg-slate-950 border border-slate-800/80">
                 <span className="text-[10px] text-slate-400 uppercase font-semibold block">Total Funds</span>
                 <span className="text-xs font-extrabold font-outfit text-emerald-400">Rs {totalRevenue.toLocaleString()}</span>
               </div>
@@ -169,14 +169,14 @@ export default function AdminSidebar({
           </div>
 
           {/* PROJECT MANAGEMENT QUICK ACTIONS */}
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+          <div className="p-4 rounded-none bg-slate-900 border border-slate-800 space-y-3">
             <span className="text-[10px] uppercase font-extrabold tracking-widest text-slate-400 block mb-1">
               🛠️ Project Quick Actions
             </span>
 
             <button
               onClick={onExportCSV}
-              className="w-full py-3 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
+              className="w-full py-3 px-3 rounded-none bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
             >
               <FileSpreadsheet className="w-3.5 h-3.5" />
               <span>Export {activeProject.name} Ledger (Excel)</span>
@@ -184,7 +184,7 @@ export default function AdminSidebar({
 
             <button
               onClick={onClearProjectBookings}
-              className="w-full py-3 px-3 rounded-lg bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+              className="w-full py-3 px-3 rounded-none bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear {activeProject.name} Receipts</span>

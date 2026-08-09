@@ -1,4 +1,4 @@
-// src/app/booking/page.js
+﻿// src/app/booking/page.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -326,9 +326,9 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
       <div className="flex flex-col gap-6 max-w-[1700px] w-full mx-auto p-4 sm:p-6 pb-20">
 
         {/* Header Panel */}
-        <header className="flex flex-col md:flex-row justify-between items-center px-6 py-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md gap-4 shadow-xl">
+        <header className="flex flex-col md:flex-row justify-between items-center px-6 py-4 rounded-none bg-slate-900/80 border border-slate-800 backdrop-blur-md gap-4 shadow-xl">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 p-1.5 bg-white rounded-xl shadow-lg shadow-blue-500/20 flex items-center justify-center overflow-hidden border border-slate-200">
+            <div className="w-12 h-12 p-1.5 bg-white rounded-none shadow-lg shadow-blue-500/20 flex items-center justify-center overflow-hidden border border-slate-200">
               <img src={activeProject.logo} alt={`${activeProject.name} logo`} className="w-full h-full object-contain" />
             </div>
             <div>
@@ -336,7 +336,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
                 <h1 className="text-2xl font-extrabold tracking-tight text-white font-outfit uppercase">
                   {activeProject.name}
                 </h1>
-                <span className="text-xs bg-blue-950 text-blue-400 border border-blue-800/60 px-2.5 py-0.5 rounded-md font-bold">
+                <span className="text-xs bg-blue-950 text-blue-400 border border-blue-800/60 px-2.5 py-0.5 rounded-none font-bold">
                   {activeProject.survey}
                 </span>
               </div>
@@ -347,7 +347,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
           </div>
 
           <div className="flex flex-wrap gap-2.5 items-center">
-            <span className="text-xs bg-blue-950/80 text-blue-400 border border-blue-800/60 px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5">
+            <span className="text-xs bg-blue-950/80 text-blue-400 border border-blue-800/60 px-3.5 py-1.5 rounded-none font-bold flex items-center gap-1.5">
               <Eye className="w-4 h-4 text-blue-400" />
               <span>{activeProject.name} Dashboard</span>
             </span>
@@ -356,36 +356,36 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
 
         {/* Stats Counter Banner */}
         <section className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
-            <div className="w-12 h-12 rounded-xl bg-blue-950/40 text-blue-400 border border-blue-800/30 flex items-center justify-center"><Building className="w-6 h-6" /></div>
+          <div className="p-4 rounded-none bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
+            <div className="w-12 h-12 rounded-none bg-blue-950/40 text-blue-400 border border-blue-800/30 flex items-center justify-center"><Building className="w-6 h-6" /></div>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Total Mapped</span>
               <span className="text-xl font-bold font-outfit text-white">{stats.total}</span>
             </div>
           </div>
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
-            <div className="w-12 h-12 rounded-xl bg-emerald-950/40 text-emerald-400 border border-emerald-800/30 flex items-center justify-center"><CheckCircle className="w-6 h-6" /></div>
+          <div className="p-4 rounded-none bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
+            <div className="w-12 h-12 rounded-none bg-emerald-950/40 text-emerald-400 border border-emerald-800/30 flex items-center justify-center"><CheckCircle className="w-6 h-6" /></div>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Available</span>
               <span className="text-xl font-bold font-outfit text-white">{stats.available}</span>
             </div>
           </div>
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
-            <div className="w-12 h-12 rounded-xl bg-yellow-950/40 text-yellow-400 border border-yellow-800/30 flex items-center justify-center"><Clock className="w-6 h-6" /></div>
+          <div className="p-4 rounded-none bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
+            <div className="w-12 h-12 rounded-none bg-yellow-950/40 text-yellow-400 border border-yellow-800/30 flex items-center justify-center"><Clock className="w-6 h-6" /></div>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Tokens Recv</span>
               <span className="text-xl font-bold font-outfit text-white">{stats.token}</span>
             </div>
           </div>
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
-            <div className="w-12 h-12 rounded-xl bg-emerald-950/40 text-emerald-400 border border-emerald-800/30 flex items-center justify-center"><CheckCircle className="w-6 h-6" /></div>
+          <div className="p-4 rounded-none bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
+            <div className="w-12 h-12 rounded-none bg-emerald-950/40 text-emerald-400 border border-emerald-800/30 flex items-center justify-center"><CheckCircle className="w-6 h-6" /></div>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Booking Recv</span>
               <span className="text-xl font-bold font-outfit text-white">{stats.booked}</span>
             </div>
           </div>
-          <div className="col-span-2 md:col-span-1 p-4 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
-            <div className="w-12 h-12 rounded-xl bg-purple-950/40 text-purple-400 border border-purple-800/30 flex items-center justify-center"><Wallet className="w-6 h-6" /></div>
+          <div className="col-span-2 md:col-span-1 p-4 rounded-none bg-slate-900 border border-slate-800/80 flex items-center gap-3 shadow-md">
+            <div className="w-12 h-12 rounded-none bg-purple-950/40 text-purple-400 border border-purple-800/30 flex items-center justify-center"><Wallet className="w-6 h-6" /></div>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">Funds Collected</span>
               <span className="text-lg font-bold font-outfit text-white">Rs {stats.revenue.toLocaleString()}</span>
@@ -435,11 +435,11 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
         </main>
 
         {/* BOTTOM SECTION: LEDGER TABLE & SEARCH */}
-        <section className="mt-4 p-6 rounded-2xl bg-slate-900 border border-slate-800 backdrop-blur-lg space-y-4 shadow-xl">
+        <section className="mt-4 p-6 rounded-none bg-slate-900 border border-slate-800 backdrop-blur-lg space-y-4 shadow-xl">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-800">
             <div>
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <span className="w-8 h-8 p-1 rounded-md bg-white border border-slate-700 flex items-center justify-center overflow-hidden">
+                <span className="w-8 h-8 p-1 rounded-none bg-white border border-slate-700 flex items-center justify-center overflow-hidden">
                   <img src={activeProject.logo} alt={`${activeProject.name} logo`} className="w-full h-full object-contain" />
                 </span>
                 <span>{activeProject.name} Customer Booking Ledger</span>
@@ -458,7 +458,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
                   placeholder="Search plot #, name, cnic..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white outline-none"
+                  className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-none pl-9 pr-3 py-1.5 text-xs text-white outline-none"
                 />
               </div>
 
@@ -466,7 +466,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-lg px-3 py-1.5 text-xs text-slate-300 outline-none cursor-pointer"
+                className="bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-none px-3 py-1.5 text-xs text-slate-300 outline-none cursor-pointer"
               >
                 <option value="ALL">Show All Listings</option>
                 <option value="Token Received">Token Received</option>
@@ -476,7 +476,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
               {/* Export CSV */}
               <button
                 onClick={handleExportCSV}
-                className="flex items-center gap-1.5 text-xs font-semibold px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white cursor-pointer transition-colors shadow-md shadow-blue-500/10 w-full sm:w-auto justify-center"
+                className="flex items-center gap-1.5 text-xs font-semibold px-4 py-1.5 rounded-none bg-blue-600 hover:bg-blue-500 text-white cursor-pointer transition-colors shadow-md shadow-blue-500/10 w-full sm:w-auto justify-center"
               >
                 <FileSpreadsheet className="w-3.5 h-3.5" />
                 <span>Export to Excel</span>
@@ -485,7 +485,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
               {/* Clear All Bookings */}
               <button
                 onClick={handleClearAllBookings}
-                className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 cursor-pointer transition-colors w-full sm:w-auto justify-center"
+                className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-none bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 cursor-pointer transition-colors w-full sm:w-auto justify-center"
                 title="Wipe all bookings and receipts for active project"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -495,7 +495,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
           </div>
 
           {/* Ledger grid table */}
-          <div className="overflow-x-auto border border-slate-800 bg-slate-950/30 rounded-xl">
+          <div className="overflow-x-auto border border-slate-800 bg-slate-950/30 rounded-none">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="border-b border-slate-800 bg-slate-950/80">
@@ -528,7 +528,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
                       <tr key={`ledger-${b.plotId}-${idx}`} className="hover:bg-slate-800/10 transition-colors">
                         <td className="px-4 py-3 font-bold text-blue-400">Plot {b.plotId}</td>
                         <td className="px-4 py-3">
-                          <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                          <span className={`px-2 py-0.5 rounded-none text-[10px] font-bold border ${
                             b.status === 'Booking Received'
                               ? 'bg-emerald-950/30 text-emerald-400 border-emerald-800/30'
                               : 'bg-yellow-950/30 text-yellow-400 border-yellow-800/30'
@@ -559,14 +559,14 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
                           <div className="flex items-center justify-center gap-1.5">
                             <button
                               onClick={() => setActiveReceiptBooking(b)}
-                              className="p-1.5 rounded-lg bg-blue-950 border border-blue-800/60 hover:bg-blue-900 text-blue-400 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-none bg-blue-950 border border-blue-800/60 hover:bg-blue-900 text-blue-400 transition-colors cursor-pointer"
                               title="Print A4 Receipt Voucher"
                             >
                               <Printer className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => handleDeleteBooking(b.plotId)}
-                              className="p-1.5 rounded-lg bg-red-950 border border-red-800/60 hover:bg-red-900 text-red-400 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-none bg-red-950 border border-red-800/60 hover:bg-red-900 text-red-400 transition-colors cursor-pointer"
                               title="Delete Receipt Entry"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -594,7 +594,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
 
         {/* TOAST ALERTS */}
         {toast.show && (
-          <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-xl font-bold text-xs shadow-2xl flex items-center gap-2 border animate-bounce ${
+          <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-none font-bold text-xs shadow-2xl flex items-center gap-2 border animate-bounce ${
             toast.isError ? 'bg-red-950 text-red-200 border-red-800' : 'bg-emerald-950 text-emerald-200 border-emerald-800'
           }`}>
             <span>{toast.isError ? '⚠️' : '✅'}</span>

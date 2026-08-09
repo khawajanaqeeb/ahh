@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Save, Eraser, Trash2, Download, Upload, Compass, Info, FileText, Printer, Calendar, AlertTriangle, AlertOctagon, CheckCircle2 } from 'lucide-react';
 import { formatDateDDMMYY } from '@/lib/dateUtils';
 import { numberToWords } from '@/lib/numberToWords';
@@ -315,7 +315,7 @@ export default function BookingForm({
   };
 
   /* ─── shared input className helpers ─── */
-  const inputBase = 'w-full bg-slate-950 border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-colors';
+  const inputBase = 'w-full bg-slate-950 border border-slate-700/80 rounded-none px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-colors';
   const labelBase = 'block text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-2';
 
   return (
@@ -323,7 +323,7 @@ export default function BookingForm({
 
       {/* PANEL A: BOOKING DETAILS FORM */}
       {appMode === 'booking' && (
-        <div className="p-7 rounded-3xl bg-slate-900 border border-slate-800/80 shadow-2xl flex flex-col gap-0">
+        <div className="p-7 rounded-none bg-slate-900 border border-slate-800/80 shadow-2xl flex flex-col gap-0">
 
           {/* ── Form Header ── */}
           <header className="mb-8 pb-6 border-b border-slate-800">
@@ -340,7 +340,7 @@ export default function BookingForm({
                 </p>
               </div>
               {existingBooking && (
-                <span className="shrink-0 text-[10px] bg-purple-950 text-purple-300 border border-purple-800/60 px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider">
+                <span className="shrink-0 text-[10px] bg-purple-950 text-purple-300 border border-purple-800/60 px-2.5 py-1 rounded-none font-bold uppercase tracking-wider">
                   🗓️ Installment Mode
                 </span>
               )}
@@ -385,7 +385,7 @@ export default function BookingForm({
 
               {/* Installment mode banner */}
               {existingBooking && (
-                <div className="mt-4 p-3.5 rounded-xl bg-blue-950/70 border border-blue-500/50 text-blue-200 text-xs flex flex-col gap-1.5">
+                <div className="mt-4 p-3.5 rounded-none bg-blue-950/70 border border-blue-500/50 text-blue-200 text-xs flex flex-col gap-1.5">
                   <div className="font-bold flex items-center justify-between text-blue-300">
                     <span className="flex items-center gap-1.5">
                       <Calendar className="w-4 h-4 text-blue-400 shrink-0" />
@@ -539,7 +539,7 @@ export default function BookingForm({
               <div className="space-y-5">
 
                 {/* Cost Breakdown card */}
-                <div className="rounded-2xl border border-slate-800 overflow-hidden">
+                <div className="rounded-none border border-slate-800 overflow-hidden">
                   <div className="bg-slate-800/30 px-4 py-3">
                     <span className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-slate-500">📋 Cost Breakdown</span>
                   </div>
@@ -555,13 +555,13 @@ export default function BookingForm({
                           <div className="relative">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-medium">Rs</span>
                             <input type="number" value={val} onChange={(e) => set(e.target.value)}
-                              className="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-8 pr-2 py-2.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20"
+                              className="w-full bg-slate-900 border border-slate-700/80 rounded-none pl-8 pr-2 py-2.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20"
                               placeholder="0" min="0" />
                           </div>
                         </div>
                       ))}
                     </div>
-                    <div className="flex items-center justify-between bg-emerald-950/40 border border-emerald-800/40 rounded-xl px-4 py-3">
+                    <div className="flex items-center justify-between bg-emerald-950/40 border border-emerald-800/40 rounded-none px-4 py-3">
                       <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">Total Receivable</span>
                       <span className="text-base font-black text-emerald-400">
                         Rs {(totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0)).toLocaleString()}
@@ -606,12 +606,12 @@ export default function BookingForm({
                 <div>
                   <label className={labelBase}>Amount in Words</label>
                   <input type="text" value={amountInWords} onChange={(e) => setAmountInWords(e.target.value)}
-                    className="w-full bg-slate-950/50 border border-slate-800/50 rounded-xl px-4 py-3 text-xs text-blue-400/80 italic placeholder:text-slate-700 outline-none"
+                    className="w-full bg-slate-950/50 border border-slate-800/50 rounded-none px-4 py-3 text-xs text-blue-400/80 italic placeholder:text-slate-700 outline-none"
                     placeholder="Auto-generated in words..." />
                 </div>
 
                 {/* Remaining balance */}
-                <div className={`flex items-center justify-between rounded-xl px-4 py-3.5 border ${
+                <div className={`flex items-center justify-between rounded-none px-4 py-3.5 border ${
                   balance <= 0
                     ? 'bg-emerald-950/30 border-emerald-800/50'
                     : 'bg-slate-950/40 border-slate-700/50'
@@ -630,7 +630,7 @@ export default function BookingForm({
             <div className="flex flex-col gap-3 pt-2">
               <div className="grid grid-cols-2 gap-3">
                 <button type="submit"
-                  className="py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-emerald-900/25 active:scale-[0.98]">
+                  className="py-3.5 rounded-none bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-emerald-900/25 active:scale-[0.98]">
                   <Save className="w-4 h-4" />
                   Save Booking
                 </button>
@@ -643,14 +643,14 @@ export default function BookingForm({
                       handleFormSubmit(e, true);
                     }
                   }}
-                  className="py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-blue-900/25 active:scale-[0.98]">
+                  className="py-3.5 rounded-none bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-blue-900/25 active:scale-[0.98]">
                   <Printer className="w-4 h-4" />
                   Save & Print
                 </button>
               </div>
               <button type="button"
                 onClick={() => { clearFields(true); onClearFormSelection(); }}
-                className="w-full py-2.5 rounded-2xl border border-slate-700/50 bg-transparent hover:bg-slate-800/50 text-slate-500 hover:text-slate-300 text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-all">
+                className="w-full py-2.5 rounded-none border border-slate-700/50 bg-transparent hover:bg-slate-800/50 text-slate-500 hover:text-slate-300 text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-all">
                 <Eraser className="w-3.5 h-3.5" />
                 Clear Form
               </button>
@@ -663,12 +663,12 @@ export default function BookingForm({
       {/* POPUP MODAL: FULL AMOUNT RECEIVED (BALANCE ZERO) */}
       {showFullPaymentModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
-          <div className="bg-slate-900 border-2 border-emerald-500 rounded-2xl max-w-md w-full p-6 shadow-2xl text-center space-y-4 relative animate-bounce-short">
+          <div className="bg-slate-900 border-2 border-emerald-500 rounded-none max-w-md w-full p-6 shadow-2xl text-center space-y-4 relative animate-bounce-short">
             <div className="w-16 h-16 rounded-full bg-emerald-950 border-2 border-emerald-500 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">
               <CheckCircle2 className="w-10 h-10 animate-pulse" />
             </div>
             <div>
-              <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 px-3 py-1 rounded-md">
+              <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 px-3 py-1 rounded-none">
                 🎉 Full Amount Received
               </span>
               <h3 className="text-xl font-black text-white mt-3 font-outfit">Total Plot Amount Received</h3>
@@ -676,7 +676,7 @@ export default function BookingForm({
                 Plot <strong className="text-emerald-400">#{resolvedPreviewId || plotIdInput}</strong> is now completely paid off! The remaining balance is <strong>Rs 0</strong> and plot status color is set to <strong>Booking Received (Green)</strong>.
               </p>
             </div>
-            <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs space-y-1 text-left">
+            <div className="p-3 bg-slate-950 border border-slate-800 rounded-none text-xs space-y-1 text-left">
               <div className="flex justify-between text-slate-400"><span>Client Name:</span> <strong className="text-white">{clientName}</strong></div>
               <div className="flex justify-between text-slate-400"><span>Total Receivable Amount:</span> <strong className="text-white">Rs {(totalReceivableAmount > 0 ? totalReceivableAmount : parseInt(totalPrice || 0)).toLocaleString()}</strong></div>
               <div className="flex justify-between text-slate-400"><span>Total Amount Received:</span> <strong className="text-emerald-400">Rs {(totalReceivableAmount > 0 ? totalReceivableAmount : parseInt(totalPrice || 0)).toLocaleString()}</strong></div>
@@ -684,7 +684,7 @@ export default function BookingForm({
             </div>
             <button
               onClick={() => setShowFullPaymentModal(false)}
-              className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all cursor-pointer shadow-lg shadow-emerald-600/30"
+              className="w-full py-2.5 rounded-none bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all cursor-pointer shadow-lg shadow-emerald-600/30"
             >
               Dismiss &amp; Continue
             </button>

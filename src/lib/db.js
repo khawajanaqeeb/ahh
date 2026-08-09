@@ -303,6 +303,8 @@ export async function saveBookingToDb(booking) {
           console.error('Error saving booking to Supabase:', error);
         }
       }
+      // Sync to master_bookings table
+      await syncBookingToMaster(booking);
       return true;
     } catch (err) {
       console.error('Error saving booking to Supabase:', err);
@@ -310,6 +312,125 @@ export async function saveBookingToDb(booking) {
   }
 
   return true;
+}
+
+// --- MASTER BOOKINGS UNIFIED SERVICE ---
+
+export function formatCNIC(raw) {
+  if (!raw) return '';
+  const digits = raw.replace(/\D/g, '');
+  if (digits.length === 13) {
+    return `${digits.slice(0, 5)}-${digits.slice(5, 12)}-${digits.slice(12)}`;
+  }
+  return raw;
+}
+
+export async function syncBookingToMaster(booking) {
+  const formattedCnic = formatCNIC(booking.cnic);
+  const projectNameMap = {
+    'ahh-city': 'AHH City',
+    'labour-city': 'Labour City',
+    'hooria-villas': 'Hooria Villas',
+    'summer-farm-houses': 'Summer Farmhouses'
+  };
+
+  const payload = {
+    project_name: projectNameMap[booking.projectId] || booking.projectName || 'AHH City',
+    client_name: booking.clientName || '',
+    cnic: formattedCnic,
+    phone: booking.phone || '',
+    plot_no: booking.plotId || '',
+    block: booking.block || '',
+    nominee: booking.relativeName || booking.nominee || '',
+    booking_date: booking.date || new Date().toISOString().split('T')[0]
+  };
+
+  // LocalStorage master sync
+  if (typeof window !== 'undefined') {
+    const localMaster = localStorage.getItem('ahh_master_bookings_data');
+    const masterList = localMaster ? JSON.parse(localMaster) : [];
+    const idx = masterList.findIndex(m => m.plot_no === payload.plot_no && m.project_name === payload.project_name);
+    if (idx > -1) masterList[idx] = { ...masterList[idx], ...payload };
+    else masterList.push({ id: `master-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`, ...payload, created_at: new Date().toISOString() });
+    localStorage.setItem('ahh_master_bookings_data', JSON.stringify(masterList));
+  }
+
+  if (supabase) {
+    try {
+      await supabase.from('master_bookings').upsert(payload, { onConflict: 'project_name,plot_no' });
+    } catch (err) {
+      console.warn('Supabase master_bookings sync notice:', err);
+    }
+  }
+}
+
+/**
+ * @param {string | null} [cnicSearch]
+ */
+export async function fetchMasterBookings(cnicSearch = null) {
+  if (supabase) {
+    try {
+      let query = supabase.from('master_bookings').select('*').order('created_at', { ascending: false });
+      
+      if (cnicSearch) {
+        const formatted = formatCNIC(cnicSearch);
+        const rawDigits = cnicSearch.replace(/\D/g, '');
+        query = query.or(`cnic.eq.${formatted},cnic.eq.${cnicSearch},cnic.ilike.%${rawDigits}%`);
+      }
+
+      const { data, error } = await query;
+      if (!error && data && data.length > 0) {
+        return data;
+      }
+    } catch (err) {
+      console.warn('Fetch master_bookings cloud notice:', err);
+    }
+  }
+
+  // LocalStorage Fallback & Consolidated Project Bookings mapping
+  if (typeof window !== 'undefined') {
+    const localMaster = localStorage.getItem('ahh_master_bookings_data');
+    let masterList = localMaster ? JSON.parse(localMaster) : [];
+
+    // Combine with all ahh_city_bookings_data
+    const localBookings = localStorage.getItem('ahh_city_bookings_data');
+    if (localBookings) {
+      const cityBookings = JSON.parse(localBookings);
+      cityBookings.forEach(b => {
+        const projName = b.projectId === 'labour-city' ? 'Labour City' :
+                         b.projectId === 'hooria-villas' ? 'Hooria Villas' :
+                         b.projectId === 'summer-farm-houses' ? 'Summer Farmhouses' : 'AHH City';
+        const formattedCnic = formatCNIC(b.cnic);
+        if (!masterList.some(m => m.plot_no === b.plotId && m.project_name === projName)) {
+          masterList.push({
+            id: `local-${b.plotId}`,
+            project_name: projName,
+            client_name: b.clientName,
+            cnic: formattedCnic,
+            phone: b.phone,
+            plot_no: b.plotId,
+            block: b.block || '',
+            nominee: b.relativeName || '',
+            booking_date: b.date || new Date().toISOString().split('T')[0],
+            created_at: new Date().toISOString()
+          });
+        }
+      });
+    }
+
+    if (cnicSearch) {
+      const formatted = formatCNIC(cnicSearch);
+      const rawDigits = cnicSearch.replace(/\D/g, '');
+      return masterList.filter(m => 
+        (m.cnic && formatCNIC(m.cnic) === formatted) || 
+        (m.cnic && m.cnic.replace(/\D/g, '').includes(rawDigits))
+      );
+    }
+
+    return masterList;
+  }
+
+  return [];
 }
 
 export async function deleteBookingFromDb(plotId) {
@@ -340,10 +461,12 @@ export async function deleteBookingFromDb(plotId) {
 export async function clearAllBookingsFromDb() {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('ahh_city_bookings_data');
+    localStorage.removeItem('ahh_master_bookings_data');
   }
 
   if (supabase) {
     try {
+      await supabase.from('master_bookings').delete().neq('project_name', 'SYSTEM_DUMMY_UNUSED');
       const { error } = await supabase
         .from('ahh_city_bookings')
         .delete()
@@ -356,3 +479,4 @@ export async function clearAllBookingsFromDb() {
 
   return true;
 }
+

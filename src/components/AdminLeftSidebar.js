@@ -1,11 +1,11 @@
-// src/components/AdminLeftSidebar.js
+﻿// src/components/AdminLeftSidebar.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Shield, FileText, ChevronDown, ChevronRight, X,
+  Shield, FileText, ChevronDown, ChevronRight, X, Database, Clock,
   Building, Home, Factory, Trees, Layers, Sparkles, Settings
 } from 'lucide-react';
 import { PROJECTS } from '@/lib/projectsData';
@@ -48,7 +48,7 @@ export default function AdminLeftSidebar() {
         {/* Admin Header */}
         <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center shadow-inner">
+            <div className="w-10 h-10 rounded-none bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center shadow-inner">
               <Shield className="w-5 h-5" />
             </div>
             <div>
@@ -63,7 +63,7 @@ export default function AdminLeftSidebar() {
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2 rounded-none text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
             title="Close Admin Panel"
           >
             <X className="w-5 h-5" />
@@ -73,15 +73,67 @@ export default function AdminLeftSidebar() {
         {/* Scrollable Navigation Body */}
         <div className="flex-grow overflow-y-auto p-4 space-y-4 custom-scrollbar">
 
+          {/* MASTER RECORDS NAV ITEM */}
+          <Link
+            href="/admin/master-records"
+            onClick={() => setIsOpen(false)}
+            className={`w-full p-3.5 flex items-center justify-between rounded-none border transition-all cursor-pointer ${
+              pathname === '/admin/master-records'
+                ? 'bg-amber-950/80 border-amber-500/80 text-white shadow-md'
+                : 'bg-slate-900/80 border-slate-800 text-slate-300 hover:bg-slate-850 hover:border-slate-700'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-none bg-amber-950 text-amber-400 border border-amber-800/50">
+                <Database className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-xs font-bold font-outfit block text-white">
+                  Master Records
+                </span>
+                <span className="text-[10px] text-slate-400 block">
+                  Unified Booking Database
+                </span>
+              </div>
+            </div>
+            <ChevronRight className="w-4 h-4 text-slate-400" />
+          </Link>
+
+          {/* USER LOGIN ACTIVITY LOGS NAV ITEM */}
+          <Link
+            href="/admin/login-logs"
+            onClick={() => setIsOpen(false)}
+            className={`w-full p-3.5 flex items-center justify-between rounded-none border transition-all cursor-pointer ${
+              pathname === '/admin/login-logs'
+                ? 'bg-amber-950/80 border-amber-500/80 text-white shadow-md'
+                : 'bg-slate-900/80 border-slate-800 text-slate-300 hover:bg-slate-850 hover:border-slate-700'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-none bg-amber-950 text-amber-400 border border-amber-800/50">
+                <Clock className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-xs font-bold font-outfit block text-white">
+                  Login Logs
+                </span>
+                <span className="text-[10px] text-slate-400 block">
+                  User Activity Audit Trail
+                </span>
+              </div>
+            </div>
+            <ChevronRight className="w-4 h-4 text-slate-400" />
+          </Link>
+
           {/* MAIN MODULE 1: BOOKING RECEIPTS TAB & DROPDOWN MENU */}
-          <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 overflow-hidden shadow-md">
+          <div className="rounded-none border border-slate-800/80 bg-slate-900/60 overflow-hidden shadow-md">
             {/* Tab Header / Trigger */}
             <button
               onClick={() => setBookingDropdownOpen(!bookingDropdownOpen)}
               className="w-full p-3.5 flex items-center justify-between bg-slate-900 hover:bg-slate-850 transition-colors cursor-pointer text-left group"
             >
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-950 text-blue-400 border border-blue-800/50">
+                <div className="p-2 rounded-none bg-blue-950 text-blue-400 border border-blue-800/50">
                   <FileText className="w-4 h-4" />
                 </div>
                 <div>
@@ -110,14 +162,14 @@ export default function AdminLeftSidebar() {
                       key={proj.id}
                       href={proj.route}
                       onClick={() => setIsOpen(false)}
-                      className={`p-2.5 rounded-lg border text-left transition-all flex items-center justify-between cursor-pointer group ${
+                      className={`p-2.5 rounded-none border text-left transition-all flex items-center justify-between cursor-pointer group ${
                         isActive
                           ? 'bg-blue-950/80 border-blue-500/80 text-white shadow-md'
                           : 'bg-slate-900/40 border-slate-800/60 text-slate-300 hover:bg-slate-900 hover:border-slate-700'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className="w-8 h-8 p-1 rounded-md bg-white border border-slate-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform overflow-hidden shadow-sm">
+                        <span className="w-8 h-8 p-1 rounded-none bg-white border border-slate-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform overflow-hidden shadow-sm">
                           <img src={proj.logo} alt={`${proj.name} logo`} className="w-full h-full object-contain" />
                         </span>
                         <div>
@@ -129,7 +181,7 @@ export default function AdminLeftSidebar() {
                           </div>
                         </div>
                       </div>
-                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md ${
+                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-none ${
                         isActive
                           ? 'bg-blue-900 text-blue-200 border border-blue-700'
                           : 'bg-slate-800 text-slate-400 border border-slate-700'
@@ -144,7 +196,7 @@ export default function AdminLeftSidebar() {
           </div>
 
           {/* FUTURE ADMIN MODULES PLACEHOLDER */}
-          <div className="p-4 rounded-xl border border-dashed border-slate-800/80 bg-slate-950/40 space-y-2 text-center">
+          <div className="p-4 rounded-none border border-dashed border-slate-800/80 bg-slate-950/40 space-y-2 text-center">
             <Settings className="w-5 h-5 text-slate-500 mx-auto" />
             <div className="text-xs font-bold text-slate-400">Additional Admin Modules</div>
             <p className="text-[10px] text-slate-500">
