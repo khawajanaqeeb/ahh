@@ -20,10 +20,10 @@ export async function POST(request: NextRequest) {
     }
 
     const resend = new Resend(resendApiKey)
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: 'AHH Brothers <onboarding@resend.dev>',
       to: [companyEmail],
-      subject: `🔐 User Login – Antigravity Platform`,
+      subject: `🔐 User Login – ${fullName || email}`,
       html: `
         <div style="font-family: Arial, sans-serif; padding: 24px; background-color: #0f172a; color: #ffffff; border-radius: 16px; border: 1px solid #334155; max-width: 560px; margin: 0 auto;">
           <h2 style="color: #38bdf8; margin-top: 0; font-size: 20px;">🔐 User Login Notification</h2>
@@ -53,13 +53,18 @@ export async function POST(request: NextRequest) {
           </table>
           <hr style="border: 0; border-top: 1px solid #334155; margin: 16px 0;" />
           <p style="font-size: 11px; color: #64748b; margin-bottom: 0;">
-            Subject: User Login – Antigravity Platform<br/>
             This notification was sent automatically to ${companyEmail}.
           </p>
         </div>
       `,
     })
 
+    if (result.error) {
+      console.error('Resend login email error:', result.error)
+      return NextResponse.json({ ok: false, error: result.error }, { status: 500 })
+    }
+
+    console.log(`[notify-login] Email sent to ${companyEmail} for user: ${email}`)
     return NextResponse.json({ ok: true })
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error'

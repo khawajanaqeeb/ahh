@@ -234,6 +234,20 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess, initialTab =
         return
       }
 
+      // Fire-and-forget registration notification — runs regardless of email confirmation setting
+      const registrationTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Karachi' }) + ' (PKT)'
+      fetch('/api/notify-registration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: regName.trim(),
+          email: regEmail.trim(),
+          phone: regPhone.trim(),
+          cnic: regCnic,
+          registrationTime,
+        }),
+      }).catch(() => {/* fire-and-forget */ })
+
       // If email confirmation is ON, session will be null
       if (!data.session) {
         setSuccess('Account created! Please check your email to confirm, then log in.')
@@ -253,20 +267,6 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess, initialTab =
         },
         { onConflict: 'id' }
       )
-
-      // Fire-and-forget registration notification
-      const registrationTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Karachi' }) + ' (PKT)'
-      fetch('/api/notify-registration', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName: regName.trim(),
-          email: regEmail.trim(),
-          phone: regPhone.trim(),
-          cnic: regCnic,
-          registrationTime,
-        }),
-      }).catch(() => {/* fire-and-forget */ })
 
       onClose()
       onAuthSuccess()
