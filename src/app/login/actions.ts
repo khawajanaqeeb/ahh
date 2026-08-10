@@ -127,20 +127,23 @@ export async function signup(formData: FormData) {
       return { error: error.message }
     }
 
-    // Try fallback profile insert in case trigger isn't active
+    // Fallback profile upsert in case the DB trigger isn't active.
+    // The profiles table now has email & cnic columns (see migration).
     if (data.user) {
       try {
-        await supabase.from('profiles').upsert({
-          id: data.user.id,
-          email: data.user.email || email,
-          full_name: fullName,
-          phone: phone || '',
-          cnic: cnic || '',
-          role: 'user',
-          created_at: new Date().toISOString(),
-        })
+        await supabase.from('profiles').upsert(
+          {
+            id: data.user.id,
+            email: data.user.email || email,
+            full_name: fullName,
+            phone: phone || '',
+            cnic: cnic || '',
+            role: 'user',
+          },
+          { onConflict: 'id' }
+        )
       } catch (profileErr) {
-        console.warn('Profile fallback insert notice:', profileErr)
+        console.warn('Profile fallback upsert notice:', profileErr)
       }
 
       // Send Automated Company Notification Email via Resend
@@ -200,9 +203,8 @@ export async function signup(formData: FormData) {
       }
     }
 
-    // If Supabase has email confirmation enabled, session will be null
-    // Ideally, disable email confirmation in Supabase Dashboard:
-    // Authentication → Providers → Email → Confirm email → OFF
+    // If Supabase has email confirmation enabled, session will be null.
+    // Disable it at: Supabase Dashboard → Authentication → Providers → Email → Confirm email → OFF
     if (!data.session) {
       requiresConfirmation = true
     }
@@ -210,16 +212,19 @@ export async function signup(formData: FormData) {
     return { error: err.message || 'An unexpected error occurred during sign up.' }
   }
 
+  const redirectTo = (formData.get('redirect') as string)?.trim()
+  const safeRedirect = redirectTo && redirectTo.startsWith('/') ? redirectTo : '/'
+
   if (requiresConfirmation) {
-    // Email confirmation is enabled in Supabase — inform user but do not block
+    // Email confirmation is enabled — user must verify before they can log in.
     return {
       requiresConfirmation: true,
-      message: 'Account created successfully! You can now log in with your credentials.',
+      message: 'Account created! Please check your email to confirm your account, then log in.',
     }
   }
 
   revalidatePath('/', 'layout')
-  redirect('/')
+  redirect(safeRedirect)
 }
 
 export async function logout() {

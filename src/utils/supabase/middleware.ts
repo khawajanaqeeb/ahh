@@ -36,7 +36,6 @@ export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
   const isAdminRoute = pathname.startsWith('/admin')
-  const isMyPlotsRoute = pathname.startsWith('/my-plots')
   const isAuthPage = pathname.startsWith('/login') || pathname.startsWith('/signup')
 
   // 1. Protection for /admin/* routes: requires 'admin' or 'accounts' role
@@ -67,16 +66,7 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // 2. Protection for /my-plots route: requires any authenticated user
-  if (isMyPlotsRoute) {
-    if (!user) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/login'
-      url.searchParams.set('error', 'Please log in or register to view your booked plots.')
-      url.searchParams.set('redirect', pathname)
-      return NextResponse.redirect(url)
-    }
-  }
+  // 2. /my-plots is handled client-side via AuthModal — no server redirect needed.
 
   // 3. If authenticated user tries to access /login or /signup, redirect to home
   if (user && isAuthPage) {

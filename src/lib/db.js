@@ -3,22 +3,23 @@
 // Transparently switches between browser LocalStorage and cloud PostgreSQL (Supabase) if API keys are configured.
 
 import { createClient } from '@supabase/supabase-js';
+// In the browser we import the shared singleton so only ONE GoTrueClient ever
+// exists per page, eliminating the "Multiple GoTrueClient instances" warning.
+import { createClient as getBrowserClient } from '@/utils/supabase/client';
 
 // Read credentials from environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-// Singleton Supabase client instance (prevents duplicate GoTrueClient warnings on Next.js hot-reload)
 const isSupabaseConfigured = supabaseUrl !== '' && supabaseAnonKey !== '';
 
 function getSupabaseClient() {
   if (!isSupabaseConfigured) return null;
+  // Browser: reuse the shared singleton from utils/supabase/client.ts
   if (typeof window !== 'undefined') {
-    if (!window._supabaseInstance) {
-      window._supabaseInstance = createClient(supabaseUrl, supabaseAnonKey);
-    }
-    return window._supabaseInstance;
+    return getBrowserClient();
   }
+  // Server: create a plain client (no shared auth state, no conflict)
   return createClient(supabaseUrl, supabaseAnonKey);
 }
 
