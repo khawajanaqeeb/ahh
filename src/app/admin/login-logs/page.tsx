@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import React, { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
@@ -38,17 +38,18 @@ export default function AdminLoginLogsPage() {
     setLoading(true)
     setError(null)
     try {
-      const supabase = createClient()
-      const { data, error: fetchErr } = await supabase
-        .from('user_activity_logs')
-        .select('*')
-        .order('timestamp', { ascending: false })
+      const res = await fetch('/api/admin/activity-logs')
+      const json = await res.json()
 
-      if (fetchErr) {
-        console.error('Fetch activity logs error:', fetchErr)
-        setError('Failed to fetch activity logs. The table \'user_activity_logs\' may not exist. Apply the database schema in Supabase SQL Editor to fix this.')
+      if (!res.ok) {
+        console.error('Fetch activity logs error:', json.error)
+        if (res.status === 401 || res.status === 403) {
+          setError('Access denied. You must be logged in as an Admin or Accounts user to view this page.')
+        } else {
+          setError(json.error || 'Failed to fetch activity logs. Please try again.')
+        }
       } else {
-        setLogs(data || [])
+        setLogs(json.data || [])
       }
     } catch (err) {
       console.error('Unexpected error fetching logs:', err)
