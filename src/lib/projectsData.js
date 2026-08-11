@@ -3,6 +3,7 @@
 
 import { MEDIA } from './media';
 import { generateLabourCityPlots } from './labourCitySitePlanData';
+import { generateHooriaVillasPlots } from './hooriaVillasSitePlanData';
 
 export const PROJECTS = [
   {
@@ -86,27 +87,7 @@ export function getProjectById(id) {
 // Generate clean sample placeholder plots for new projects before machine readable site plan is uploaded
 export function getPlaceholderPlotsForProject(projectId) {
   if (projectId === 'hooria-villas') {
-    return Array.from({ length: 12 }, (_, i) => {
-      const num = i + 1;
-      const col = i % 4;
-      const row = Math.floor(i / 4);
-      const x = 150 + col * 260;
-      const y = 150 + row * 180;
-      const w = 220;
-      const h = 140;
-      return {
-        id: `HV-${num}`,
-        label: `HV-${num}`,
-        type: i % 2 === 0 ? 'Villa 120SQY' : 'Luxury Villa 150SQY',
-        rawCoords: `${x},${y} ${x+w},${y} ${x+w},${y+h} ${x},${y+h}`,
-        coords: [
-          { x, y },
-          { x: x + w, y },
-          { x: x + w, y: y + h },
-          { x, y: y + h }
-        ]
-      };
-    });
+    return generateHooriaVillasPlots();
   }
 
   if (projectId === 'labour-city') {
