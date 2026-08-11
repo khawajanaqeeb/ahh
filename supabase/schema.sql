@@ -179,46 +179,40 @@ CREATE TRIGGER on_ahh_booking_saved
   FOR EACH ROW EXECUTE FUNCTION public.sync_ahh_booking_to_master();
 
 -- ========================================================================
--- 8. CREATE USER ACTIVITY LOGS TABLE (Task 7)
+-- 8. CREATE USER ACTIVITY LOGS TABLE
 -- ========================================================================
 CREATE TABLE IF NOT EXISTS public.user_activity_logs (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-    user_email TEXT NOT NULL,
-    user_role TEXT NOT NULL DEFAULT 'user',
-    event_type TEXT NOT NULL CHECK (event_type IN ('login', 'logout')),
-    timestamp TIMESTAMPTZ DEFAULT NOW(),
-    ip_address TEXT,
-    user_agent TEXT
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  user_email TEXT NOT NULL DEFAULT 'Unknown',
+  user_role TEXT NOT NULL DEFAULT 'user',
+  event_type TEXT NOT NULL,
+  ip_address TEXT,
+  user_agent TEXT,
+  timestamp TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Enable RLS on Activity Logs
 ALTER TABLE public.user_activity_logs ENABLE ROW LEVEL SECURITY;
 
--- RLS Policy: Authenticated users can insert their own logs
-DROP POLICY IF EXISTS "Authenticated users can insert activity logs" ON public.user_activity_logs;
-CREATE POLICY "Authenticated users can insert activity logs" 
-    ON public.user_activity_logs FOR INSERT 
-    WITH CHECK (auth.uid() = user_id OR auth.uid() IS NOT NULL);
+-- RLS Policy: Admins and Accounts can view all logs
+DROP POLICY IF EXISTS "Admins can read activity logs" ON public.user_activity_logs;
+CREATE POLICY "Admins can read activity logs"
+  ON public.user_activity_logs FOR SELECT
+  USING (EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE profiles.id = auth.uid()
+    AND profiles.role IN ('admin', 'accounts')
+  ));
 
--- RLS Policy: Admin and Accounts can view all logs
-DROP POLICY IF EXISTS "Admins and Accounts can view activity logs" ON public.user_activity_logs;
-CREATE POLICY "Admins and Accounts can view activity logs" 
-    ON public.user_activity_logs FOR SELECT 
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE profiles.id = auth.uid()
-            AND profiles.role IN ('admin', 'accounts')
-        )
-        OR (
-            SELECT email FROM auth.users WHERE id = auth.uid()
-        ) IN ('ahhbrothers.developers@gmail.com', 'naqeebkns@gmail.com')
-    );
+-- RLS Policy: Allow all inserts (logs come from server actions)
+DROP POLICY IF EXISTS "Allow insert activity logs" ON public.user_activity_logs;
+CREATE POLICY "Allow insert activity logs"
+  ON public.user_activity_logs FOR INSERT
+  WITH CHECK (true);
 
--- Indexes for Fast Querying
-CREATE INDEX IF NOT EXISTS idx_activity_logs_timestamp ON public.user_activity_logs (timestamp DESC);
-CREATE INDEX IF NOT EXISTS idx_activity_logs_role ON public.user_activity_logs (user_role);
+-- Indexes for fast querying
+CREATE INDEX IF NOT EXISTS idx_activity_logs_timestamp  ON public.user_activity_logs (timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_role       ON public.user_activity_logs (user_role);
 CREATE INDEX IF NOT EXISTS idx_activity_logs_event_type ON public.user_activity_logs (event_type);
 
 -- ========================================================================
