@@ -1,11 +1,12 @@
-﻿// src/app/booking/page.js
+// src/app/booking/page.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
   Building, CheckCircle, Clock, Wallet,
   Search, FileSpreadsheet, Eye, DraftingCompass,
-  Trash2, Edit, AlertTriangle, Printer, Layers, Shield
+  Trash2, Edit, AlertTriangle, Printer, Layers, Shield, ArrowLeft
 } from 'lucide-react';
 
 import MapCanvas from '@/components/booking/MapCanvas';
@@ -324,6 +325,17 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
     <div className="relative min-h-screen bg-slate-950 text-slate-100">
 
       <div className="flex flex-col gap-6 max-w-[1700px] w-full mx-auto p-4 sm:p-6 pb-20">
+
+        {/* Back to Admin Panel */}
+        <div className="flex items-center">
+          <Link
+            href="/admin"
+            className="inline-flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 font-semibold transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Admin Panel</span>
+          </Link>
+        </div>
 
         {/* Header Panel */}
         <header className="flex flex-col md:flex-row justify-between items-center px-6 py-4 rounded-none bg-slate-900/80 border border-slate-800 backdrop-blur-md gap-4 shadow-xl">
