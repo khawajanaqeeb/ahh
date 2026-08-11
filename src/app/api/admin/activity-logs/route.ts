@@ -6,36 +6,38 @@ export async function GET() {
   try {
     const supabase = await createClient()
 
-    // Verify the requesting user is an admin or accounts role
+    // Verify the requesting user is authenticated
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Check admin role
+    // Check admin role via email allowlist + user metadata (no DB query needed
+    // for known admin emails, avoids profiles RLS recursion entirely)
     const hasAdminEmail = isEmailAdmin(user.email)
-    let isAuthorized = hasAdminEmail || user.user_metadata?.role === 'admin'
+    const hasAdminMeta = user.user_metadata?.role === 'admin'
 
-    if (!isAuthorized) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .maybeSingle()
+    if (!hasAdminEmail && !hasAdminMeta) {
+      // Only hit the DB as a last resort — use the SECURITY DEFINER function
+      // to avoid RLS recursion on profiles
+      const { data: roleData, error: roleErr } = await supabase
+        .rpc('get_user_role', { lookup_user_id: user.id })
 
-      isAuthorized = profile?.role === 'admin' || profile?.role === 'accounts'
+      if (roleErr) {
+        console.error('Role check error:', roleErr.message)
+        return NextResponse.json({ error: 'Failed to verify permissions' }, { status: 500 })
+      }
+
+      const role = roleData as string | null
+      if (role !== 'admin' && role !== 'accounts') {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      }
     }
 
-    if (!isAuthorized) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
-    // Fetch all activity logs (server client carries the admin session → RLS passes)
+    // Fetch all activity logs via SECURITY DEFINER function (bypasses all RLS)
     const { data, error: fetchError } = await supabase
-      .from('user_activity_logs')
-      .select('*')
-      .order('timestamp', { ascending: false })
+      .rpc('get_all_activity_logs')
 
     if (fetchError) {
       console.error('Activity logs fetch error:', fetchError)

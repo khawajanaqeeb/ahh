@@ -14,7 +14,9 @@ export interface UserActivityLog {
 }
 
 /**
- * Server-side helper to record login/logout activity events in Supabase
+ * Server-side helper to record login/logout activity events in Supabase.
+ * Uses a SECURITY DEFINER RPC function to bypass RLS and avoid
+ * infinite recursion on profiles policies.
  */
 export async function recordUserActivityLog(
   user: { id: string; email?: string | null },
@@ -32,29 +34,28 @@ export async function recordUserActivityLog(
     // Extract User Agent
     const userAgent = headerList.get('user-agent') || 'Unknown Device'
 
-    // Determine user role
+    // Determine user role — use email check first to avoid hitting profiles RLS
     let role = 'user'
     if (isEmailAdmin(user.email)) {
       role = 'admin'
     } else {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .maybeSingle()
+      // Use SECURITY DEFINER function to bypass profiles RLS recursion
+      const { data: roleData } = await supabase
+        .rpc('get_user_role', { lookup_user_id: user.id })
         
-      if (profile?.role) {
-        role = profile.role
+      if (roleData) {
+        role = roleData as string
       }
     }
 
-    const { error } = await supabase.from('user_activity_logs').insert({
-      user_id: user.id,
-      user_email: user.email || 'Unknown',
-      user_role: role,
-      event_type: eventType,
-      ip_address: ipAddress,
-      user_agent: userAgent,
+    // Use SECURITY DEFINER function to insert the log (bypasses RLS)
+    const { error } = await supabase.rpc('insert_activity_log', {
+      p_user_id: user.id,
+      p_user_email: user.email || 'Unknown',
+      p_user_role: role,
+      p_event_type: eventType,
+      p_ip_address: ipAddress,
+      p_user_agent: userAgent,
     })
 
     if (error) {
