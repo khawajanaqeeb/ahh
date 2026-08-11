@@ -1,10 +1,11 @@
-﻿// src/components/booking/BookingReceiptModal.js
+// src/components/booking/BookingReceiptModal.js
 'use client';
 
 import React, { useState } from 'react';
 import { ArrowLeft, X, Printer, Calendar, AlertTriangle, AlertOctagon, CheckCircle2, Trash2 } from 'lucide-react';
 import { formatDateDDMMYY } from '@/lib/dateUtils';
 import { numberToWords } from '@/lib/numberToWords';
+import { getProjectById } from '@/lib/projectsData';
 
 function getExpiryStatus(tokenExpiryDate) {
   if (!tokenExpiryDate) return { isExpired: false, isExpiringSoon: false, text: '' };
@@ -93,9 +94,9 @@ function buildReceiptHTML(booking) {
       <!-- Header -->
       <div class="header-box">
         <div>
-          <div class="brand-name">AHH CITY</div>
+          <div class="brand-name">${currentProject?.name?.toUpperCase() || 'AHH CITY'}</div>
           <div class="brand-sub">AHH Brothers Builders &amp; Developers</div>
-          <div class="brand-tag">Survey No. 297 &mdash; Master Planned Housing Scheme</div>
+          <div class="brand-tag">${currentProject?.survey || 'Survey No. 297 &mdash; Master Planned Housing Scheme'}</div>
         </div>
         <div style="text-align:right;">
           <span class="copy-badge" style="background:${badgeBg};color:${badgeColor};border:1.5px solid ${badgeBorder};">${copyType}</span>
@@ -469,9 +470,9 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
     <div className="border-2 border-slate-900 rounded-none p-4 sm:p-5 bg-white space-y-2.5 text-[11px] flex flex-col justify-between shadow-sm">
       <div className="flex justify-between items-start border-b-2 border-slate-900 pb-2">
         <div>
-          <div className="text-xl font-black text-blue-900 tracking-tight">AHH CITY</div>
+          <div className="text-xl font-black text-blue-900 tracking-tight">{currentProject?.name?.toUpperCase() || 'AHH CITY'}</div>
           <p className="text-[9px] text-slate-700 font-bold uppercase tracking-wider">AHH Brothers Builders & Developers</p>
-          <p className="text-[8px] text-slate-500">Survey No. 297 — Master Planned Housing Scheme</p>
+          <p className="text-[8px] text-slate-500">{currentProject?.survey || 'Survey No. 297 — Master Planned Housing Scheme'}</p>
         </div>
         <div className="text-right">
           <span className="inline-block font-extrabold text-[9px] px-2 py-0.5 rounded uppercase tracking-wider border"
@@ -572,7 +573,8 @@ function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder })
   );
 }
 
-export default function BookingReceiptModal({ booking, onSaveBooking, onDeleteBooking, onClose }) {
+export default function BookingReceiptModal({ booking, currentProject: propProject, onSaveBooking, onDeleteBooking, onClose }) {
+  const currentProject = propProject || getProjectById(booking?.projectId || 'ahh-city');
   const [editExpiryMode, setEditExpiryMode] = useState(false);
   const [newExpiryInput, setNewExpiryInput] = useState(booking?.tokenExpiryDate || '');
 

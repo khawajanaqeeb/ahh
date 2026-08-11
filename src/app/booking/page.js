@@ -598,6 +598,7 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
         {activeReceiptBooking && (
           <BookingReceiptModal
             booking={activeReceiptBooking}
+            currentProject={activeProject}
             onSaveBooking={handleSaveBooking}
             onDeleteBooking={handleDeleteBooking}
             onClose={() => setActiveReceiptBooking(null)}

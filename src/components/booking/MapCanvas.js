@@ -1,4 +1,4 @@
-﻿// G:\ahh-city-booking-app\src\components\MapCanvas.js
+// G:\ahh-city-booking-app\src\components\MapCanvas.js
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -496,10 +496,10 @@ export default function MapCanvas({
 
                 {/* Master Header Titles */}
                 <text x={layoutFeatures.headerTitleX || 280} y="58" fontSize="26" fontWeight="900" fill="#000000" fontFamily="sans-serif" textAnchor="middle">
-                  AHH CITY
+                  {currentProject?.name ? currentProject.name.toUpperCase() : 'AHH CITY'}
                 </text>
-                <text x={layoutFeatures.headerSurveyX || 650} y="58" fontSize="26" fontWeight="900" fill="#000000" fontFamily="sans-serif" textAnchor="middle">
-                  SURVEY NO 297
+                <text x={layoutFeatures.headerSurveyX || 650} y="58" fontSize="22" fontWeight="900" fill="#000000" fontFamily="sans-serif" textAnchor="middle">
+                  {currentProject?.survey ? currentProject.survey.toUpperCase() : 'SURVEY NO 297'}
                 </text>
 
                 {/* WATERMARKS */}
