@@ -42,9 +42,8 @@ export async function updateSession(request: NextRequest) {
   if (isAdminRoute) {
     if (!user) {
       const url = request.nextUrl.clone()
-      url.pathname = '/login'
+      url.pathname = '/'
       url.searchParams.set('error', 'Please sign in to access the admin panel.')
-      url.searchParams.set('redirect', pathname)
       return NextResponse.redirect(url)
     }
 
@@ -66,16 +65,9 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // 2. /my-plots is handled client-side via AuthModal — no server redirect needed.
+  // 2. /my-plots is publicly accessible — no auth redirect needed.
 
-  // 3. If authenticated user tries to access /login or /signup, redirect to home
-  if (user && isAuthPage) {
-    const redirectUrl = request.nextUrl.searchParams.get('redirect')
-    const url = request.nextUrl.clone()
-    url.pathname = redirectUrl && redirectUrl.startsWith('/') ? redirectUrl : '/'
-    url.searchParams.delete('redirect')
-    return NextResponse.redirect(url)
-  }
+  // 3. /login and /signup are unlinked but remain accessible — no forced redirects.
 
   return supabaseResponse
 }

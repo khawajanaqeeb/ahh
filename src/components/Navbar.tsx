@@ -2,16 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Settings, UserCircle, LogOut, LogIn } from "lucide-react";
+import { Settings } from "lucide-react";
 
 import { MEDIA } from "@/lib/media";
-import { logout } from "@/app/login/actions";
 import { createClient } from "@/utils/supabase/client";
 import AdminLoginModal from "@/components/AdminLoginModal";
 import { isEmailAdmin } from "@/lib/constants";
-import type { User } from "@supabase/supabase-js";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -40,36 +38,30 @@ const navLinks = [
   { name: "Contact", href: "/contact" },
 ];
 
-export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boolean, user?: User | null }) {
+export default function Navbar({ isAdmin = false }: { isAdmin?: boolean }) {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState<string | null>(null);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
-  const [currentUser, setCurrentUser] = useState<User | null>(user);
   const [currentIsAdmin, setCurrentIsAdmin] = useState<boolean>(isAdmin);
 
   const pathname = usePathname();
-  const userDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setCurrentUser(user);
     setCurrentIsAdmin(isAdmin);
-  }, [user, isAdmin]);
+  }, [isAdmin]);
 
-  // Client-side authentication & role sync with Supabase
+  // Client-side admin role sync with Supabase (admin gear routing only)
   useEffect(() => {
     const supabase = createClient();
 
-    async function syncAuth() {
+    async function syncAdminRole() {
       try {
         const { data: { user: activeUser } } = await supabase.auth.getUser();
         if (activeUser) {
-          setCurrentUser(activeUser);
-          
           const { data: profile } = await supabase
             .from('profiles')
             .select('role')
@@ -77,22 +69,25 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
             .maybeSingle();
 
           const hasAdminEmail = isEmailAdmin(activeUser.email);
-          const hasAdminRole = profile?.role === 'admin' || profile?.role === 'accounts' || hasAdminEmail || activeUser.user_metadata?.role === 'admin';
-          
+          const hasAdminRole =
+            profile?.role === 'admin' ||
+            profile?.role === 'accounts' ||
+            hasAdminEmail ||
+            activeUser.user_metadata?.role === 'admin';
+
           if (hasAdminRole) {
             setCurrentIsAdmin(true);
           }
         }
       } catch (err) {
-        console.error("Client auth sync notice:", err);
+        console.error("Admin role sync notice:", err);
       }
     }
 
-    syncAuth();
+    syncAdminRole();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
-        setCurrentUser(session.user);
         const { data: profile } = await supabase
           .from('profiles')
           .select('role')
@@ -100,10 +95,13 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
           .maybeSingle();
 
         const hasAdminEmail = isEmailAdmin(session.user.email);
-        const hasAdminRole = profile?.role === 'admin' || profile?.role === 'accounts' || hasAdminEmail || session.user.user_metadata?.role === 'admin';
+        const hasAdminRole =
+          profile?.role === 'admin' ||
+          profile?.role === 'accounts' ||
+          hasAdminEmail ||
+          session.user.user_metadata?.role === 'admin';
         setCurrentIsAdmin(hasAdminRole);
       } else {
-        setCurrentUser(null);
         setCurrentIsAdmin(false);
       }
     });
@@ -125,7 +123,6 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
   useEffect(() => {
     setMobileOpen(false);
     setMobileDropdownOpen(null);
-    setUserDropdownOpen(false);
   }, [pathname]);
 
   // Prevent body scroll when mobile menu is open
@@ -139,19 +136,6 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
-
-  // Close user dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (userDropdownRef.current && !userDropdownRef.current.contains(e.target as Node)) {
-        setUserDropdownOpen(false);
-      }
-    };
-    if (userDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [userDropdownOpen]);
 
   const isLinkActive = (href: string, dropdownItems?: Array<{ href: string }>) => {
     if (pathname === href) return true;
@@ -168,26 +152,6 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
       setIsAdminModalOpen(true);
     }
   };
-
-  const handleNavClick = (e: React.MouseEvent, href: string) => {
-    if (href === '/my-plots' && !currentUser) {
-      e.preventDefault();
-      router.push('/login?error=' + encodeURIComponent('Please log in or register to view your booked plots.') + '&redirect=/my-plots');
-    }
-  };
-
-  const handleUserIconClick = () => {
-    if (currentUser) {
-      setUserDropdownOpen((prev) => !prev);
-    } else {
-      router.push('/login');
-    }
-  };
-
-  // Display name: prefer full_name from metadata, fallback to email prefix
-  const displayName = currentUser?.user_metadata?.full_name
-    || currentUser?.email?.split('@')[0]
-    || 'User';
 
   return (
     <>
@@ -222,7 +186,7 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
             </div>
             <div className="navbar-logo-text">
               <span className="logo-title">AHH Brothers</span>
-              <span className="logo-subtitle">Builders & Developers</span>
+              <span className="logo-subtitle">Builders &amp; Developers</span>
             </div>
           </Link>
 
@@ -267,7 +231,6 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
                 ) : (
                   <Link
                     href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
                     className={`nav-link ${isLinkActive(link.href) ? "nav-link-active" : ""}`}
                   >
                     {link.name}
@@ -277,86 +240,6 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
               </li>
             ))}
           </ul>
-
-          {/* Right-side — User Login Icon only (Admin is on the left) */}
-          <div className="flex items-center gap-2">
-
-            {/* User Icon Button — always visible, extreme right */}
-            <div className="relative" ref={userDropdownRef}>
-              <button
-                type="button"
-                id="navbar-user-btn"
-                onClick={handleUserIconClick}
-                className="relative group p-2 text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all cursor-pointer flex items-center justify-center border border-slate-700/50 bg-slate-900/60"
-                aria-label={currentUser ? `Logged in as ${displayName}` : "Login"}
-                title={currentUser ? displayName : "Login"}
-              >
-                <UserCircle
-                  className={`w-5 h-5 transition-colors ${currentUser ? 'text-emerald-400' : 'text-slate-400 group-hover:text-white'}`}
-                />
-                {/* Online pulse dot when logged in */}
-                {currentUser && (
-                  <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-                )}
-                {/* Tooltip */}
-                <span className="absolute right-0 top-full mt-2 px-2 py-1 bg-slate-900 border border-slate-700 text-slate-200 text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 shadow-xl">
-                  {currentUser ? displayName : 'Login / Register'}
-                </span>
-              </button>
-
-              {/* User Dropdown — only when logged in */}
-              {currentUser && userDropdownOpen && (
-                <div
-                  className="absolute right-0 top-full mt-2 w-56 bg-slate-900 border border-slate-700/80 shadow-2xl z-50 overflow-hidden"
-                  style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.6)' }}
-                >
-                  {/* User info header */}
-                  <div className="px-4 py-3 border-b border-slate-800">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse flex-shrink-0" />
-                      <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Signed In</span>
-                    </div>
-                    <p className="text-xs font-bold text-white truncate">{displayName}</p>
-                    <p className="text-[10px] text-slate-400 truncate mt-0.5">{currentUser.email}</p>
-                    {currentIsAdmin && (
-                      <span className="inline-block mt-1.5 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                        Admin
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Quick nav */}
-                  <div className="py-1">
-                    <Link
-                      href="/my-plots"
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
-                      onClick={() => setUserDropdownOpen(false)}
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-                      </svg>
-                      My Plots
-                    </Link>
-                  </div>
-
-                  {/* Logout */}
-                  <div className="border-t border-slate-800 p-2">
-                    <form action={logout}>
-                      <button
-                        type="submit"
-                        className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors cursor-pointer"
-                        onClick={() => setUserDropdownOpen(false)}
-                      >
-                        <LogOut className="w-3.5 h-3.5" />
-                        Sign Out
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              )}
-            </div>
-
-          </div>
 
           {/* Mobile hamburger */}
           <button
@@ -387,7 +270,7 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
             />
             <div className="navbar-logo-text">
               <span className="logo-title" style={{ fontSize: "1.15rem" }}>AHH Brothers</span>
-              <span className="logo-subtitle" style={{ fontSize: "0.58rem" }}>Builders & Developers</span>
+              <span className="logo-subtitle" style={{ fontSize: "0.58rem" }}>Builders &amp; Developers</span>
             </div>
           </div>
           <button
@@ -401,40 +284,6 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
             </svg>
           </button>
         </div>
-
-        {/* Mobile user info banner */}
-        {currentUser ? (
-          <div className="px-4 py-3 bg-slate-900/60 border-b border-slate-800 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2 min-w-0">
-              <UserCircle className="w-8 h-8 text-emerald-400 flex-shrink-0" />
-              <div className="min-w-0">
-                <p className="text-xs font-bold text-white truncate">{displayName}</p>
-                <p className="text-[10px] text-slate-400 truncate">{currentUser.email}</p>
-              </div>
-            </div>
-            <form action={logout}>
-              <button
-                type="submit"
-                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold text-red-400 border border-red-500/20 hover:bg-red-500/10 transition-colors flex-shrink-0"
-                onClick={() => setMobileOpen(false)}
-              >
-                <LogOut className="w-3 h-3" />
-                Sign Out
-              </button>
-            </form>
-          </div>
-        ) : (
-          <div className="px-4 py-3 bg-slate-900/60 border-b border-slate-800">
-            <Link
-              href="/login"
-              className="flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-white transition-colors"
-              onClick={() => setMobileOpen(false)}
-            >
-              <LogIn className="w-4 h-4 text-slate-400" />
-              Login / Register
-            </Link>
-          </div>
-        )}
 
         <ul className="mobile-links">
           {/* Admin access in Mobile Drawer */}
@@ -488,10 +337,7 @@ export default function Navbar({ isAdmin = false, user = null }: { isAdmin?: boo
               ) : (
                 <Link
                   href={link.href}
-                  onClick={(e) => {
-                    handleNavClick(e, link.href);
-                    setMobileOpen(false);
-                  }}
+                  onClick={() => setMobileOpen(false)}
                   className={`mobile-link ${isLinkActive(link.href) ? "mobile-link-active" : ""}`}
                 >
                   {link.name}

@@ -94,7 +94,7 @@ export default async function RootLayout({
         <Header />
 
         {/* Sticky Navbar */}
-        <Navbar isAdmin={isAdmin} user={user} />
+        <Navbar isAdmin={isAdmin} />
 
         {/* Main content */}
         <main>{children}</main>
