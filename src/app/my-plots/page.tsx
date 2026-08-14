@@ -18,6 +18,9 @@ interface BookingRecord {
   block: string
   nominee: string
   booking_date: string
+  status?: string
+  total_price?: number
+  paid_amount?: number
 }
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
@@ -34,7 +37,10 @@ export default function MyPlotsPage() {
 
   const runSearch = useCallback(async (cnic: string) => {
     const digits = cnic.replace(/\D/g, '')
-    if (digits.length !== 13) return
+    if (digits.length !== 13) {
+      setSearchError('Please enter a valid 13-digit CNIC number (e.g. 42101-1234567-1).')
+      return
+    }
 
     setSearching(true)
     setSearchError(null)
@@ -76,7 +82,7 @@ export default function MyPlotsPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-amber-500 selection:text-slate-950 flex flex-col items-center">
 
-      <div className="max-w-2xl w-full px-4 sm:px-6">
+      <div className="max-w-4xl w-full px-4 sm:px-6">
 
         {/* ── Header Banner ── */}
         <div className="text-center space-y-4 pt-32 pb-6">
@@ -87,15 +93,15 @@ export default function MyPlotsPage() {
           <h1 className="text-3xl sm:text-5xl font-black text-white font-outfit tracking-tight">
             My Booked Plots
           </h1>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
-            Enter your CNIC to view your registered plot records across all AHH Brothers projects.
+          <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-xl mx-auto">
+            Enter your National ID Card (CNIC) to view your registered plot records across all AHH Brothers real estate projects.
           </p>
         </div>
 
         {/* ── CNIC Search Card ── */}
         <div className="space-y-6 pb-16">
-          <div className="bg-slate-900/90 border border-slate-800 p-6 sm:p-8 shadow-2xl space-y-6 backdrop-blur-xl">
-            <div className="space-y-1">
+          <div className="bg-slate-900/90 border border-slate-800 p-6 sm:p-8 shadow-2xl space-y-6 backdrop-blur-xl max-w-2xl mx-auto">
+            <div className="space-y-1 text-center">
               <h2 className="text-sm font-bold uppercase tracking-widest text-slate-300">Search by CNIC</h2>
               <p className="text-xs text-slate-500">
                 Enter your 13-digit National Identity Card number to find your booked plots.
@@ -151,7 +157,7 @@ export default function MyPlotsPage() {
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-black text-white font-outfit">
-                    Search Results ({results.length})
+                    Registered Plots ({results.length})
                   </h2>
                   <p className="text-xs text-slate-400 font-mono mt-0.5">
                     Showing records matching CNIC:{' '}
@@ -178,7 +184,7 @@ export default function MyPlotsPage() {
               </div>
 
               {results.length === 0 ? (
-                <div className="p-12 bg-slate-900/60 border border-slate-800 text-center space-y-4">
+                <div className="p-12 bg-slate-900/60 border border-slate-800 text-center space-y-4 max-w-2xl mx-auto">
                   <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
                     <FileText className="w-8 h-8" />
                   </div>
@@ -186,8 +192,8 @@ export default function MyPlotsPage() {
                     <h3 className="text-lg font-bold text-white font-outfit">No Bookings Found</h3>
                     <p className="text-xs text-slate-400">
                       No plot bookings found for CNIC{' '}
-                      <span className="text-amber-400 font-mono font-bold">{cnicInput}</span>.
-                      Please verify the number or contact our support team.
+                      <span className="text-amber-400 font-mono font-bold">{formatCNIC(cnicInput)}</span>.
+                      Please verify the CNIC digits or contact our support team.
                     </p>
                   </div>
                 </div>
@@ -204,6 +210,8 @@ export default function MyPlotsPage() {
                           <th className="py-4 px-5 font-bold">Plot No.</th>
                           <th className="py-4 px-5 font-bold">Block</th>
                           <th className="py-4 px-5 font-bold">Nominee</th>
+                          <th className="py-4 px-5 font-bold">Date</th>
+                          <th className="py-4 px-5 font-bold">Status</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-800/60">
@@ -220,6 +228,12 @@ export default function MyPlotsPage() {
                             <td className="py-4 px-5 font-extrabold text-amber-400 font-outfit">{item.plot_no}</td>
                             <td className="py-4 px-5 text-slate-300">{item.block || 'Main'}</td>
                             <td className="py-4 px-5 text-slate-300">{item.nominee || 'N/A'}</td>
+                            <td className="py-4 px-5 text-slate-400 font-mono text-xs">{item.booking_date || 'N/A'}</td>
+                            <td className="py-4 px-5">
+                              <span className="px-2 py-0.5 text-[10px] font-bold bg-slate-800 text-emerald-400 border border-emerald-500/30">
+                                {item.status || 'Booked'}
+                              </span>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -234,3 +248,4 @@ export default function MyPlotsPage() {
     </div>
   )
 }
+

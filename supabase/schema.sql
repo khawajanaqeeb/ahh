@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS public.master_bookings (
     plot_no TEXT,
     block TEXT,
     nominee TEXT,
-    booking_date DATE,
+    booking_date TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     CONSTRAINT unique_project_plot UNIQUE (project_name, plot_no)
 );
@@ -126,16 +126,17 @@ CREATE INDEX IF NOT EXISTS idx_master_bookings_project ON public.master_bookings
 -- Enable RLS for Master Bookings
 ALTER TABLE public.master_bookings ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies for Master Bookings
-DROP POLICY IF EXISTS "Allow authenticated users to read master_bookings" ON public.master_bookings;
-CREATE POLICY "Allow authenticated users to read master_bookings"
+-- RLS Policies for Master Bookings (Public read for CNIC plot search, public write for booking sync)
+DROP POLICY IF EXISTS "Allow public read master_bookings" ON public.master_bookings;
+CREATE POLICY "Allow public read master_bookings"
     ON public.master_bookings FOR SELECT
-    USING (auth.role() = 'authenticated');
+    USING (true);
 
-DROP POLICY IF EXISTS "Allow authenticated write master_bookings" ON public.master_bookings;
-CREATE POLICY "Allow authenticated write master_bookings"
+DROP POLICY IF EXISTS "Allow public write master_bookings" ON public.master_bookings;
+CREATE POLICY "Allow public write master_bookings"
     ON public.master_bookings FOR ALL
-    USING (auth.role() = 'authenticated');
+    USING (true);
+
 
 -- Sync Trigger Function from ahh_city_bookings to master_bookings
 CREATE OR REPLACE FUNCTION public.sync_ahh_booking_to_master()

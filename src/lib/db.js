@@ -326,24 +326,30 @@ export function formatCNIC(raw) {
   return raw;
 }
 
+export const PROJECT_NAME_MAP = {
+  'ahh-city': 'AHH City',
+  'labour-city': 'Labour City',
+  'hooria-villas': 'Hooria Villas',
+  'summer-farm-houses': 'Summer Farmhouses',
+  'AHH City': 'AHH City',
+  'Labour City': 'Labour City',
+  'Hooria Villas': 'Hooria Villas',
+  'Summer Farmhouses': 'Summer Farmhouses'
+};
+
 export async function syncBookingToMaster(booking) {
   const formattedCnic = formatCNIC(booking.cnic);
-  const projectNameMap = {
-    'ahh-city': 'AHH City',
-    'labour-city': 'Labour City',
-    'hooria-villas': 'Hooria Villas',
-    'summer-farm-houses': 'Summer Farmhouses'
-  };
+  const projName = PROJECT_NAME_MAP[booking.projectId] || booking.projectName || 'AHH City';
 
   const payload = {
-    project_name: projectNameMap[booking.projectId] || booking.projectName || 'AHH City',
+    project_name: projName,
     client_name: booking.clientName || '',
     cnic: formattedCnic,
     phone: booking.phone || '',
-    plot_no: booking.plotId || '',
+    plot_no: booking.plotId || booking.plot_no || '',
     block: booking.block || '',
     nominee: booking.relativeName || booking.nominee || '',
-    booking_date: booking.date || new Date().toISOString().split('T')[0]
+    booking_date: booking.date || booking.booking_date || new Date().toISOString().split('T')[0]
   };
 
   // LocalStorage master sync
@@ -366,72 +372,146 @@ export async function syncBookingToMaster(booking) {
 }
 
 /**
+ * Fetch consolidated master bookings from Supabase & LocalStorage with CNIC search support.
  * @param {string | null} [cnicSearch]
  */
 export async function fetchMasterBookings(cnicSearch = null) {
+  let combinedRecords = [];
+  const recordMap = new Map(); // key: `project_name|plot_no`
+
+  // Helper to add or update deduplicated record
+  const addRecord = (item) => {
+    const proj = PROJECT_NAME_MAP[item.projectId || item.project_name] || item.project_name || 'AHH City';
+    const plot = item.plot_no || item.plotId || item.plot_id || '';
+    const key = `${proj.toLowerCase()}|${plot.toLowerCase()}`;
+
+    if (!plot) return;
+
+    const formattedCnic = formatCNIC(item.cnic);
+
+    const record = {
+      id: item.id || `rec-${key}`,
+      project_name: proj,
+      client_name: item.client_name || item.clientName || '',
+      cnic: formattedCnic,
+      phone: item.phone || '',
+      plot_no: plot,
+      block: item.block || 'Main',
+      nominee: item.nominee || item.relative_name || item.relativeName || '',
+      booking_date: item.booking_date || item.date || (item.created_at ? item.created_at.split('T')[0] : new Date().toISOString().split('T')[0]),
+      status: item.status || 'Booked',
+      total_price: item.total_price || item.totalPrice || 0,
+      paid_amount: item.paid_amount || item.paidAmount || 0,
+      created_at: item.created_at || new Date().toISOString()
+    };
+
+    if (!recordMap.has(key)) {
+      recordMap.set(key, record);
+    } else {
+      // Merge extra details if available
+      const existing = recordMap.get(key);
+      recordMap.set(key, { ...existing, ...record, cnic: record.cnic || existing.cnic });
+    }
+  };
+
+  // 1. Fetch from Supabase master_bookings
   if (supabase) {
     try {
-      let query = supabase.from('master_bookings').select('*').order('created_at', { ascending: false });
-      
-      if (cnicSearch) {
-        const formatted = formatCNIC(cnicSearch);
-        const rawDigits = cnicSearch.replace(/\D/g, '');
-        query = query.or(`cnic.eq.${formatted},cnic.eq.${cnicSearch},cnic.ilike.%${rawDigits}%`);
-      }
+      const { data: masterData, error: masterErr } = await supabase
+        .from('master_bookings')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-      const { data, error } = await query;
-      if (!error && data && data.length > 0) {
-        return data;
+      if (!masterErr && masterData) {
+        masterData.forEach(addRecord);
       }
     } catch (err) {
-      console.warn('Fetch master_bookings cloud notice:', err);
+      console.warn('Supabase fetch master_bookings notice:', err);
+    }
+
+    // 2. Fetch from Supabase ahh_city_bookings
+    try {
+      const { data: cityData, error: cityErr } = await supabase
+        .from('ahh_city_bookings')
+        .select('*');
+
+      if (!cityErr && cityData) {
+        cityData.forEach(item => {
+          addRecord({
+            ...item,
+            plot_no: item.plot_id,
+            project_name: PROJECT_NAME_MAP[item.project_id] || 'AHH City'
+          });
+        });
+      }
+    } catch (err) {
+      console.warn('Supabase fetch ahh_city_bookings notice:', err);
     }
   }
 
-  // LocalStorage Fallback & Consolidated Project Bookings mapping
+  // 3. Combine with LocalStorage fallback records
   if (typeof window !== 'undefined') {
     const localMaster = localStorage.getItem('ahh_master_bookings_data');
-    let masterList = localMaster ? JSON.parse(localMaster) : [];
+    if (localMaster) {
+      try { JSON.parse(localMaster).forEach(addRecord); } catch (e) {}
+    }
 
-    // Combine with all ahh_city_bookings_data
-    const localBookings = localStorage.getItem('ahh_city_bookings_data');
-    if (localBookings) {
-      const cityBookings = JSON.parse(localBookings);
-      cityBookings.forEach(b => {
-        const projName = b.projectId === 'labour-city' ? 'Labour City' :
-                         b.projectId === 'hooria-villas' ? 'Hooria Villas' :
-                         b.projectId === 'summer-farm-houses' ? 'Summer Farmhouses' : 'AHH City';
-        const formattedCnic = formatCNIC(b.cnic);
-        if (!masterList.some(m => m.plot_no === b.plotId && m.project_name === projName)) {
-          masterList.push({
-            id: `local-${b.plotId}`,
-            project_name: projName,
-            client_name: b.clientName,
-            cnic: formattedCnic,
-            phone: b.phone,
+    const localCity = localStorage.getItem('ahh_city_bookings_data');
+    if (localCity) {
+      try {
+        JSON.parse(localCity).forEach(b => {
+          addRecord({
+            ...b,
             plot_no: b.plotId,
-            block: b.block || '',
-            nominee: b.relativeName || '',
-            booking_date: b.date || new Date().toISOString().split('T')[0],
-            created_at: new Date().toISOString()
+            project_name: PROJECT_NAME_MAP[b.projectId] || 'AHH City'
           });
-        }
-      });
+        });
+      } catch (e) {}
     }
-
-    if (cnicSearch) {
-      const formatted = formatCNIC(cnicSearch);
-      const rawDigits = cnicSearch.replace(/\D/g, '');
-      return masterList.filter(m => 
-        (m.cnic && formatCNIC(m.cnic) === formatted) || 
-        (m.cnic && m.cnic.replace(/\D/g, '').includes(rawDigits))
-      );
-    }
-
-    return masterList;
   }
 
-  return [];
+  combinedRecords = Array.from(recordMap.values());
+
+  // 4. Apply CNIC search filter if provided
+  if (cnicSearch && cnicSearch.trim()) {
+    const searchFormatted = formatCNIC(cnicSearch);
+    const searchRaw = cnicSearch.replace(/\D/g, '');
+
+    combinedRecords = combinedRecords.filter(r => {
+      if (!r.cnic) return false;
+      const recFormatted = formatCNIC(r.cnic);
+      const recRaw = r.cnic.replace(/\D/g, '');
+      return recFormatted === searchFormatted || recRaw.includes(searchRaw) || r.cnic.includes(cnicSearch.trim());
+    });
+  }
+
+  return combinedRecords;
+}
+
+/**
+ * Utility to backfill & sync all local and database records to Supabase.
+ */
+export async function syncAllBookingsToSupabase() {
+  if (typeof window === 'undefined') return { success: false, synced: 0 };
+
+  const masterList = await fetchMasterBookings();
+  let count = 0;
+
+  for (const record of masterList) {
+    await syncBookingToMaster({
+      projectId: record.project_name,
+      clientName: record.client_name,
+      cnic: record.cnic,
+      phone: record.phone,
+      plotId: record.plot_no,
+      block: record.block,
+      relativeName: record.nominee,
+      date: record.booking_date
+    });
+    count++;
+  }
+
+  return { success: true, synced: count };
 }
 
 export async function deleteBookingFromDb(plotId) {
@@ -480,4 +560,5 @@ export async function clearAllBookingsFromDb() {
 
   return true;
 }
+
 

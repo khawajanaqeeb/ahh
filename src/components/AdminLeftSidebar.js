@@ -1,4 +1,4 @@
-﻿// src/components/AdminLeftSidebar.js
+// src/components/AdminLeftSidebar.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -89,10 +89,10 @@ export default function AdminLeftSidebar() {
               </div>
               <div>
                 <span className="text-xs font-bold font-outfit block text-white">
-                  Master Records
+                  Plots Record Sheets
                 </span>
-                <span className="text-[10px] text-slate-400 block">
-                  Unified Booking Database
+                <span className="text-[10px] text-amber-400 font-medium block">
+                  Consolidated & Individual Sheets
                 </span>
               </div>
             </div>

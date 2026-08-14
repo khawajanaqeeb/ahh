@@ -39,6 +39,7 @@ function getExpiryStatus(tokenExpiryDate) {
 
 // Build raw HTML string for the printable receipt (no React, pure HTML+CSS)
 function buildReceiptHTML(booking) {
+  const currentProject = getProjectById(booking.projectId || 'ahh-city');
   const computedTotal = ((parseFloat(booking.costOfLand) || 0) + (parseFloat(booking.extraCharges) || 0) + (parseFloat(booking.processingCharges) || 0)) || (parseFloat(booking.totalPrice) || 0);
   const remaining = computedTotal - (parseFloat(booking.paidAmount) || 0);
   const receiptNo = `REC-${booking.plotId}-${booking.date?.replace(/-/g, '') || '01'}`;
@@ -46,6 +47,7 @@ function buildReceiptHTML(booking) {
   const statusColor = remaining <= 0 || booking.status === 'Booking Received' ? '#15803d' : '#b45309';
   const statusBg = remaining <= 0 || booking.status === 'Booking Received' ? '#f0fdf4' : '#fffbeb';
   const statusBorder = remaining <= 0 || booking.status === 'Booking Received' ? '#bbf7d0' : '#fde68a';
+
 
   const paymentModeLabel = booking.paymentMode === 'Cash'
     ? '💵 Cash'
@@ -451,7 +453,8 @@ function buildReceiptHTML(booking) {
 </html>`;
 }
 
-function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder }) {
+function ReceiptPreview({ booking, copyType, badgeBg, badgeColor, badgeBorder, currentProject: propProject }) {
+  const currentProject = propProject || getProjectById(booking?.projectId || 'ahh-city');
   const computedTotal = ((parseFloat(booking.costOfLand) || 0) + (parseFloat(booking.extraCharges) || 0) + (parseFloat(booking.processingCharges) || 0)) || (parseFloat(booking.totalPrice) || 0);
   const remaining = computedTotal - (parseFloat(booking.paidAmount) || 0);
   const receiptNo = `REC-${booking.plotId}-${booking.date?.replace(/-/g, '') || '01'}`;
@@ -717,13 +720,13 @@ export default function BookingReceiptModal({ booking, currentProject: propProje
         </p>
 
         <div className="space-y-2">
-          <ReceiptPreview booking={booking} copyType="CUSTOMER COPY" badgeBg="#dbeafe" badgeColor="#1e40af" />
+          <ReceiptPreview booking={booking} currentProject={currentProject} copyType="CUSTOMER COPY" badgeBg="#dbeafe" badgeColor="#1e40af" />
           <div className="relative flex items-center justify-center border-t-2 border-dashed border-slate-300 my-1">
             <span className="absolute bg-white px-3 text-[9.5px] text-slate-400 font-mono uppercase tracking-wider">
               ✂ Cut Here for Office Records ✂
             </span>
           </div>
-          <ReceiptPreview booking={booking} copyType="OFFICE COPY" badgeBg="#fef3c7" badgeColor="#92400e" />
+          <ReceiptPreview booking={booking} currentProject={currentProject} copyType="OFFICE COPY" badgeBg="#fef3c7" badgeColor="#92400e" />
         </div>
 
         <div className="pt-4 mt-4 border-t border-slate-200 flex justify-between items-center">

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -140,22 +140,22 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Module 2: Master Booking Records */}
+          {/* Module 2: Consolidated & Individual Project Plots Record Sheets */}
           <div className="p-6 rounded-none bg-slate-900/90 border border-slate-800 shadow-xl space-y-4 hover:border-slate-700 transition-all flex flex-col justify-between">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-none bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center">
                 <Database className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white font-outfit">Master Records</h3>
-                <p className="text-xs text-slate-400 mt-1">Unified database search, filter, and CSV exports across all client plot bookings.</p>
+                <h3 className="text-lg font-bold text-white font-outfit">Plots Record Sheets</h3>
+                <p className="text-xs text-slate-400 mt-1">Consolidated & individual project plot record sheets with CNIC search, filter, and CSV exports.</p>
               </div>
             </div>
             <Link
               href="/admin/master-records"
               className="w-full py-3 px-4 rounded-none bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-500/20"
             >
-              <span>View Master Database</span>
+              <span>View Record Sheets</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
