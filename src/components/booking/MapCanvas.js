@@ -607,50 +607,52 @@ export default function MapCanvas({
                 )}
 
                 {/* RIGHT SIDEBAR — LEGEND & BRANDING matching blueprint image */}
-                <g transform={`translate(${layoutFeatures.legendBox.x - 40}, 30)`}>
-                  
-                  {/* AHH CITY Tree Logo Header */}
-                  <g transform="translate(30, 0)">
-                    <circle cx="80" cy="35" r="28" fill="#15803d" opacity="0.15" />
-                    <text x="80" y="32" fontSize="24" textAnchor="middle">🌳</text>
-                    <text x="80" y="70" fontSize="18" fontWeight="900" fill="#15803d" textAnchor="middle">
-                      AHH CITY
-                    </text>
-                  </g>
+                {layoutFeatures.legendBox && (
+                  <g transform={`translate(${layoutFeatures.legendBox.x - 40}, 30)`}>
+                    
+                    {/* AHH CITY Tree Logo Header */}
+                    <g transform="translate(30, 0)">
+                      <circle cx="80" cy="35" r="28" fill="#15803d" opacity="0.15" />
+                      <text x="80" y="32" fontSize="24" textAnchor="middle">🌳</text>
+                      <text x="80" y="70" fontSize="18" fontWeight="900" fill="#15803d" textAnchor="middle">
+                        {currentProject?.name ? currentProject.name.toUpperCase() : 'AHH CITY'}
+                      </text>
+                    </g>
 
-                  {/* Dimension Legend Table Box */}
-                  <g transform="translate(0, 100)">
-                    <rect x="0" y="0" width={layoutFeatures.legendBox.width} height={layoutFeatures.legendBox.height} fill="#ffffff" stroke="#000000" strokeWidth="2" />
-                    <text x={layoutFeatures.legendBox.width / 2} y="28" fontSize="16" fontWeight="bold" fill="#000000" textAnchor="middle">
-                      Dimension
-                    </text>
-                    <line x1="0" y1="40" x2={layoutFeatures.legendBox.width} y2="40" stroke="#000000" strokeWidth="1.5" />
+                    {/* Dimension Legend Table Box */}
+                    <g transform="translate(0, 100)">
+                      <rect x="0" y="0" width={layoutFeatures.legendBox.width} height={layoutFeatures.legendBox.height} fill="#ffffff" stroke="#000000" strokeWidth="2" />
+                      <text x={layoutFeatures.legendBox.width / 2} y="28" fontSize="16" fontWeight="bold" fill="#000000" textAnchor="middle">
+                        Dimension & Schedule
+                      </text>
+                      <line x1="0" y1="40" x2={layoutFeatures.legendBox.width} y2="40" stroke="#000000" strokeWidth="1.5" />
 
-                    {layoutFeatures.legendBox.items.map((item, idx) => (
-                      <g key={`legend-${idx}`} transform={`translate(15, ${62 + idx * 42})`}>
-                        <text x="0" y="0" fontSize="11" fontWeight="bold" fill="#000000">
-                          {item.name}
-                        </text>
-                        <text x={layoutFeatures.legendBox.width - 30} y="0" fontSize="11" fontWeight="bold" fill="#000000" textAnchor="end">
-                          {item.val}
-                        </text>
-                      </g>
-                    ))}
-                  </g>
+                      {layoutFeatures.legendBox.items.map((item, idx) => (
+                        <g key={`legend-${idx}`} transform={`translate(15, ${62 + idx * 42})`}>
+                          <text x="0" y="0" fontSize="11" fontWeight="bold" fill="#000000">
+                            {item.name}
+                          </text>
+                          <text x={layoutFeatures.legendBox.width - 30} y="0" fontSize="11" fontWeight="bold" fill="#000000" textAnchor="end">
+                            {item.val}
+                          </text>
+                        </g>
+                      ))}
+                    </g>
 
-                  {/* AHH Brothers Developer Logo */}
-                  <g transform="translate(20, 560)">
-                    <circle cx="80" cy="30" r="20" fill="#ca8a04" opacity="0.15" />
-                    <text x="80" y="34" fontSize="18" textAnchor="middle">👑</text>
-                    <text x="80" y="72" fontSize="22" fontWeight="900" fill="#b45309" textAnchor="middle" style={{ fontStyle: 'italic' }}>
+                    {/* AHH Brothers Developer Logo */}
+                    <g transform="translate(20, 560)">
+                      <circle cx="80" cy="30" r="20" fill="#ca8a04" opacity="0.15" />
+                      <text x="80" y="34" fontSize="18" textAnchor="middle">👑</text>
+                      <text x="80" y="72" fontSize="22" fontWeight="900" fill="#b45309" textAnchor="middle" style={{ fontStyle: 'italic' }}>
                       AHH Brothers
                     </text>
                     <text x="80" y="90" fontSize="9" fontWeight="bold" fill="#64748b" textAnchor="middle">
                       BUILDERS & DEVELOPERS
                     </text>
-                  </g>
+                    </g>
 
-                </g>
+                  </g>
+                )}
 
               </g>
             ) : (

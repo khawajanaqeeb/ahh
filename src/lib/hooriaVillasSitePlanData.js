@@ -274,6 +274,21 @@ export function getHooriaVillasLayoutFeatures() {
       { id: 'SEC-D', name: "BLOCK 'D' (MAIN ENTRANCE SECTOR)", color: 'rgba(245, 158, 11, 0.08)', stroke: '#f59e0b', points: "165,795 860,795 860,955 165,955" },
       { id: 'SEC-OV', name: "OVERSEAS BLOCK", color: 'rgba(236, 72, 153, 0.08)', stroke: '#ec4899', points: "40,100 125,100 125,955 40,955" }
     ],
-    entrancePos: { x: 740, y: 965 }
+    entrancePos: { x: 740, y: 965 },
+    legendBox: {
+      x: 950,
+      y: 30,
+      width: 480,
+      height: 940,
+      items: [
+        { name: "RESIDENTIAL: BLOCK 'A' (14 PLOTS)", val: "120 SQYD" },
+        { name: "COMMERCIAL: BLOCK 'A' (18 PLOTS)", val: "150/200 SQYD" },
+        { name: "RESIDENTIAL: BLOCK 'B' (77 PLOTS)", val: "120/180 SQYD" },
+        { name: "RESIDENTIAL: BLOCK 'C' (56 PLOTS)", val: "120/145 SQYD" },
+        { name: "RESIDENTIAL: BLOCK 'D' (45 PLOTS)", val: "120 SQYD" },
+        { name: "OVERSEAS BLOCK (30 PLOTS)", val: "120 SQYD" },
+        { name: "TOTAL LAND AREA", val: "15.00 ACRES" }
+      ]
+    }
   };
 }
