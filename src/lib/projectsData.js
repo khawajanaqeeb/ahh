@@ -4,6 +4,7 @@
 import { MEDIA } from './media';
 import { generateLabourCityPlots } from './labourCitySitePlanData';
 import { generateHooriaVillasPlots } from './hooriaVillasSitePlanData';
+import { generateSummerFarmhousesPlots } from './summerFarmhousesSitePlanData';
 
 export const PROJECTS = [
   {
@@ -95,27 +96,7 @@ export function getPlaceholderPlotsForProject(projectId) {
   }
 
   if (projectId === 'summer-farm-houses') {
-    return Array.from({ length: 8 }, (_, i) => {
-      const num = i + 1;
-      const col = i % 4;
-      const row = Math.floor(i / 4);
-      const x = 140 + col * 280;
-      const y = 160 + row * 240;
-      const w = 240;
-      const h = 190;
-      return {
-        id: `SFH-${num}`,
-        label: `SFH-${num}`,
-        type: i % 2 === 0 ? 'Luxury Farm 500SQY' : 'Executive Farm 1000SQY',
-        rawCoords: `${x},${y} ${x+w},${y} ${x+w},${y+h} ${x},${y+h}`,
-        coords: [
-          { x, y },
-          { x: x + w, y },
-          { x: x + w, y: y + h },
-          { x, y: y + h }
-        ]
-      };
-    });
+    return generateSummerFarmhousesPlots();
   }
 
   return [];

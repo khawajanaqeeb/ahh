@@ -19,6 +19,7 @@ import {
 } from '@/lib/db';
 import { MASTER_SITE_PLAN_JSON, generatePlotsFromMasterJson } from '@/lib/sitePlanData';
 import { generateHooriaVillasPlots } from '@/lib/hooriaVillasSitePlanData';
+import { generateSummerFarmhousesPlots } from '@/lib/summerFarmhousesSitePlanData';
 import { PROJECTS, getProjectById, getPlaceholderPlotsForProject } from '@/lib/projectsData';
 
 export default function BookingPage({ projectId = 'ahh-city' }) {
@@ -80,6 +81,8 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
         }
       } else if (projectId === 'hooria-villas') {
         setPlots(generateHooriaVillasPlots());
+      } else if (projectId === 'summer-farm-houses') {
+        setPlots(generateSummerFarmhousesPlots());
       } else {
         // For other projects (Labour City, Summer Farm Houses)
         const projPlots = dbPlots.filter(p => p.projectId === projectId);

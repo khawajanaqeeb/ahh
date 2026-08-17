@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { MASTER_SITE_PLAN_JSON, getLayoutFeatures } from '@/lib/sitePlanData';
 import { getHooriaVillasLayoutFeatures } from '@/lib/hooriaVillasSitePlanData';
+import { getSummerFarmhousesLayoutFeatures } from '@/lib/summerFarmhousesSitePlanData';
 import { MEDIA } from '@/lib/media';
 
 export default function MapCanvas({
@@ -62,6 +63,8 @@ export default function MapCanvas({
   // Get vector layout structural features dynamically per project
   const layoutFeatures = currentProject?.id === 'hooria-villas'
     ? getHooriaVillasLayoutFeatures()
+    : currentProject?.id === 'summer-farm-houses'
+    ? getSummerFarmhousesLayoutFeatures()
     : getLayoutFeatures(MASTER_SITE_PLAN_JSON);
 
   useEffect(() => {
@@ -69,6 +72,8 @@ export default function MapCanvas({
       setDimensions({ width: 900, height: 500 });
     } else if (currentProject?.id === 'hooria-villas') {
       setDimensions({ width: 1480, height: 1020 });
+    } else if (currentProject?.id === 'summer-farm-houses') {
+      setDimensions({ width: 1480, height: 1220 });
     } else {
       setDimensions({ width: 1460, height: 980 });
     }
@@ -386,7 +391,7 @@ export default function MapCanvas({
         className="flex-grow w-full relative overflow-hidden bg-[#fdfdfd] cursor-grab select-none active:cursor-grabbing"
       >
         {/* Reserved Site Plan Space Banner for New Projects */}
-        {currentProject && currentProject.id !== 'ahh-city' && currentProject.id !== 'hooria-villas' && (
+        {currentProject && currentProject.id !== 'ahh-city' && currentProject.id !== 'hooria-villas' && currentProject.id !== 'summer-farm-houses' && (
           <div className="absolute top-4 left-6 z-20 px-3.5 py-2 bg-slate-900/90 border border-slate-800/90 rounded-none backdrop-blur-md text-xs text-slate-200 flex items-center gap-2.5 shadow-lg">
             {currentProject.logo && (
               <img
@@ -516,6 +521,15 @@ export default function MapCanvas({
                     </text>
                     <text x="460" y="740" fontSize="28" fontWeight="bold" fill="rgba(0, 0, 0, 0.05)" transform="rotate(-10 460 740)" letterSpacing="5">
                       120 & 180 SQYARD RESIDENTIAL
+                    </text>
+                  </g>
+                ) : currentProject?.id === 'summer-farm-houses' ? (
+                  <g>
+                    <text x="340" y="380" fontSize="28" fontWeight="bold" fill="rgba(0, 0, 0, 0.05)" transform="rotate(-15 340 380)" letterSpacing="4">
+                      SUMMER FARMHOUSES (10.0 ACRES)
+                    </text>
+                    <text x="460" y="820" fontSize="28" fontWeight="bold" fill="rgba(0, 0, 0, 0.05)" transform="rotate(-10 460 820)" letterSpacing="5">
+                      1000 SQYARD LUXURY FARMS
                     </text>
                   </g>
                 ) : (
