@@ -7,6 +7,8 @@ import {
   Layers, Info, CheckCircle2, ShieldCheck, MapPin, Eye
 } from 'lucide-react';
 import { MASTER_SITE_PLAN_JSON, getLayoutFeatures } from '@/lib/sitePlanData';
+import { getHooriaVillasLayoutFeatures } from '@/lib/hooriaVillasSitePlanData';
+import { MEDIA } from '@/lib/media';
 
 export default function MapCanvas({
   plots,
@@ -57,12 +59,16 @@ export default function MapCanvas({
   const viewportRef = useRef(null);
   const mapContainerRef = useRef(null);
 
-  // Get vector layout structural features for default AHH City
-  const layoutFeatures = getLayoutFeatures(MASTER_SITE_PLAN_JSON);
+  // Get vector layout structural features dynamically per project
+  const layoutFeatures = currentProject?.id === 'hooria-villas'
+    ? getHooriaVillasLayoutFeatures()
+    : getLayoutFeatures(MASTER_SITE_PLAN_JSON);
 
   useEffect(() => {
     if (currentProject?.id === 'labour-city') {
       setDimensions({ width: 900, height: 500 });
+    } else if (currentProject?.id === 'hooria-villas') {
+      setDimensions({ width: 940, height: 1020 });
     } else {
       setDimensions({ width: 1460, height: 980 });
     }
