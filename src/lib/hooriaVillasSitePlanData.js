@@ -276,9 +276,9 @@ export function getHooriaVillasLayoutFeatures() {
     ],
     entrancePos: { x: 740, y: 965 },
     legendBox: {
-      x: 950,
+      x: 930,
       y: 30,
-      width: 480,
+      width: 490,
       height: 940,
       items: [
         { name: "RESIDENTIAL: BLOCK 'A' (14 PLOTS)", val: "120 SQYD" },
@@ -287,6 +287,7 @@ export function getHooriaVillasLayoutFeatures() {
         { name: "RESIDENTIAL: BLOCK 'C' (56 PLOTS)", val: "120/145 SQYD" },
         { name: "RESIDENTIAL: BLOCK 'D' (45 PLOTS)", val: "120 SQYD" },
         { name: "OVERSEAS BLOCK (30 PLOTS)", val: "120 SQYD" },
+        { name: "AMENITIES & PARKS (10 PLOTS)", val: "VARIOUS SIZES" },
         { name: "TOTAL LAND AREA", val: "15.00 ACRES" }
       ]
     }

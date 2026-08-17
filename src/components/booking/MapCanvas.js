@@ -621,7 +621,7 @@ export default function MapCanvas({
 
                 {/* RIGHT SIDEBAR — LEGEND & BRANDING matching blueprint image */}
                 {layoutFeatures.legendBox && (
-                  <g transform={`translate(${layoutFeatures.legendBox.x - 40}, 30)`}>
+                  <g transform={`translate(${layoutFeatures.legendBox.x}, ${layoutFeatures.legendBox.y || 30})`}>
                     
                     {/* AHH CITY Tree Logo Header */}
                     <g transform="translate(30, 0)">
