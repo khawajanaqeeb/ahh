@@ -72,34 +72,20 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
       let dbPlots = await fetchPlots();
 
       if (projectId === 'ahh-city') {
-        const hasDuplicateIds = dbPlots && dbPlots.length > 0 && dbPlots.some((plot, idx) => dbPlots.findIndex(p => p.id === plot.id) !== idx);
-        if (!dbPlots || dbPlots.length === 0 || hasDuplicateIds) {
-          await clearAllPlotsFromDb();
-          const masterPlots = generatePlotsFromMasterJson(MASTER_SITE_PLAN_JSON);
-          for (const plot of masterPlots) {
-            await savePlotToDb(plot);
-          }
-          dbPlots = masterPlots;
-        }
-        setPlots(dbPlots);
-      } else if (projectId === 'hooria-villas') {
-        const projPlots = dbPlots.filter(p => p.projectId === 'hooria-villas');
+        const projPlots = dbPlots.filter(p => !p.projectId || p.projectId === 'ahh-city');
         if (!projPlots || projPlots.length === 0) {
-          const masterPlots = generateHooriaVillasPlots();
-          for (const plot of masterPlots) {
-            await savePlotToDb(plot);
-          }
-          setPlots(masterPlots);
+          setPlots(generatePlotsFromMasterJson(MASTER_SITE_PLAN_JSON));
         } else {
           setPlots(projPlots);
         }
+      } else if (projectId === 'hooria-villas') {
+        setPlots(generateHooriaVillasPlots());
       } else {
         // For other projects (Labour City, Summer Farm Houses)
         const projPlots = dbPlots.filter(p => p.projectId === projectId);
         if (projPlots && projPlots.length > 0) {
           setPlots(projPlots);
         } else {
-          // Fallback placeholder plot boundaries (reserving exact same map area)
           setPlots(getPlaceholderPlotsForProject(projectId));
         }
       }
