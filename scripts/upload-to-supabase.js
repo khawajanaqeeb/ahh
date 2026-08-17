@@ -58,6 +58,14 @@ const UPLOAD_MAP = [
   { file: 'posters/labour-city-payment-plan.jpg',   bucket: 'projects', remotePath: 'posters/labour-city-payment-plan.jpg',   contentType: 'image/jpeg' },
   { file: 'posters/summer-farmhouses-payment-plan.jpg', bucket: 'projects', remotePath: 'posters/summer-farmhouses-payment-plan.jpg', contentType: 'image/jpeg' },
   { file: 'posters/ahh-city-payment-plan.jpg',          bucket: 'projects', remotePath: 'posters/ahh-city-payment-plan.jpg',          contentType: 'image/jpeg' },
+  { file: 'posters/ahh-city-growth-terms.webp',      bucket: 'projects', remotePath: 'posters/ahh-city-growth-terms.webp',      contentType: 'image/webp' },
+  { file: 'posters/investment-opportunity.webp',     bucket: 'projects', remotePath: 'posters/investment-opportunity.webp',     contentType: 'image/webp' },
+  { file: 'posters/interest-free-growth.webp',       bucket: 'projects', remotePath: 'posters/interest-free-growth.webp',       contentType: 'image/webp' },
+  { file: 'posters/hooria-villas-payment-plan.webp', bucket: 'projects', remotePath: 'posters/hooria-villas-payment-plan.webp', contentType: 'image/webp' },
+  { file: 'posters/labour-city-poster.webp',         bucket: 'projects', remotePath: 'posters/labour-city-poster.webp',         contentType: 'image/webp' },
+  { file: 'posters/labour-city-payment-plan.webp',   bucket: 'projects', remotePath: 'posters/labour-city-payment-plan.webp',   contentType: 'image/webp' },
+  { file: 'posters/summer-farmhouses-payment-plan.webp', bucket: 'projects', remotePath: 'posters/summer-farmhouses-payment-plan.webp', contentType: 'image/webp' },
+  { file: 'posters/ahh-city-payment-plan.webp',          bucket: 'projects', remotePath: 'posters/ahh-city-payment-plan.webp',          contentType: 'image/webp' },
 ];
 
 const BUCKETS_TO_CREATE = [

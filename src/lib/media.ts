@@ -44,12 +44,12 @@ export const MEDIA = {
   fourSeasonsLogo: `${SUPABASE_STORAGE_BASE}/logos/four-seasons-farmhouses-logo.png`,
 
   // Official Project & Investment Posters
-  posterAhhCityGrowthTerms: `${SUPABASE_STORAGE_BASE}/projects/posters/ahh-city-growth-terms.jpg`,
-  posterInvestmentOpportunity: `${SUPABASE_STORAGE_BASE}/projects/posters/investment-opportunity.jpg`,
-  posterInterestFreeGrowth: `${SUPABASE_STORAGE_BASE}/projects/posters/interest-free-growth.jpg`,
-  posterHooriaVillasPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/hooria-villas-payment-plan.jpg`,
-  posterLabourCity: `${SUPABASE_STORAGE_BASE}/projects/posters/labour-city-poster.jpg`,
-  posterLabourCityPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/labour-city-payment-plan.jpg`,
-  posterSummerFarmhousesPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/summer-farmhouses-payment-plan.jpg`,
-  posterAhhCityPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/ahh-city-payment-plan.jpg`,
+  posterAhhCityGrowthTerms: `${SUPABASE_STORAGE_BASE}/projects/posters/ahh-city-growth-terms.webp`,
+  posterInvestmentOpportunity: `${SUPABASE_STORAGE_BASE}/projects/posters/investment-opportunity.webp`,
+  posterInterestFreeGrowth: `${SUPABASE_STORAGE_BASE}/projects/posters/interest-free-growth.webp`,
+  posterHooriaVillasPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/hooria-villas-payment-plan.webp`,
+  posterLabourCity: `${SUPABASE_STORAGE_BASE}/projects/posters/labour-city-poster.webp`,
+  posterLabourCityPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/labour-city-payment-plan.webp`,
+  posterSummerFarmhousesPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/summer-farmhouses-payment-plan.webp`,
+  posterAhhCityPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/ahh-city-payment-plan.webp`,
 };
