@@ -40,10 +40,51 @@ export default function MapCanvas({
   const [drawingActive, setDrawingActive] = useState(false);
   const [drawingType, setDrawingType] = useState(null); // 'rect' or 'poly'
   const [drawingPoints, setDrawingPoints] = useState([]);
-  // Movable Legend State
+  // Movable Legend State (SVG)
   const [legendOffset, setLegendOffset] = useState({ x: 0, y: 0 });
   const [isDraggingLegend, setIsDraggingLegend] = useState(false);
   const [legendDragStart, setLegendDragStart] = useState({ x: 0, y: 0 });
+
+  // Movable HTML Floating Map Legend State
+  const [htmlLegendPos, setHtmlLegendPos] = useState({ x: 0, y: 0 });
+  const [isDraggingHtmlLegend, setIsDraggingHtmlLegend] = useState(false);
+  const [htmlLegendDragStart, setHtmlLegendDragStart] = useState({ x: 0, y: 0 });
+
+  const handleHtmlLegendMouseDown = (e) => {
+    e.stopPropagation();
+    setIsDraggingHtmlLegend(true);
+    setHtmlLegendDragStart({
+      x: e.clientX - htmlLegendPos.x,
+      y: e.clientY - htmlLegendPos.y
+    });
+  };
+
+  useEffect(() => {
+    const handleGlobalMouseMove = (e) => {
+      if (isDraggingHtmlLegend) {
+        setHtmlLegendPos({
+          x: e.clientX - htmlLegendDragStart.x,
+          y: e.clientY - htmlLegendDragStart.y
+        });
+      }
+    };
+
+    const handleGlobalMouseUp = () => {
+      if (isDraggingHtmlLegend) {
+        setIsDraggingHtmlLegend(false);
+      }
+    };
+
+    if (isDraggingHtmlLegend) {
+      window.addEventListener('mousemove', handleGlobalMouseMove);
+      window.addEventListener('mouseup', handleGlobalMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleGlobalMouseMove);
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [isDraggingHtmlLegend, htmlLegendDragStart]);
 
   // Tooltip state
   const [tooltip, setTooltip] = useState({ 
@@ -1025,9 +1066,31 @@ export default function MapCanvas({
           </button>
         </div>
 
-        {/* Colors Legend panel */}
-        <div className="absolute bottom-6 left-6 flex flex-col gap-2 px-4 py-3 bg-slate-900/90 border border-slate-800/90 rounded-none backdrop-blur-md z-20 text-xs text-slate-300 shadow-lg">
-          <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-0.5">Map Legend</span>
+        {/* Colors Legend panel (MOVABLE / DRAGGABLE OVERLAY WIDGET) */}
+        <div 
+          style={{
+            transform: `translate(${htmlLegendPos.x}px, ${htmlLegendPos.y}px)`
+          }}
+          className="map-legend absolute bottom-6 left-6 flex flex-col gap-2 px-4 py-3 bg-slate-900/95 border border-slate-700/90 rounded-lg backdrop-blur-md z-30 text-xs text-slate-300 shadow-2xl transition-shadow select-none"
+        >
+          <div 
+            onMouseDown={handleHtmlLegendMouseDown}
+            className="flex items-center justify-between gap-4 border-b border-slate-800 pb-1.5 mb-0.5 cursor-grab active:cursor-grabbing group"
+            title="Click and drag to move Map Legend anywhere"
+          >
+            <span className="text-[10px] uppercase font-bold text-blue-400 tracking-wider flex items-center gap-1.5">
+              <span className="text-slate-400 group-hover:text-blue-300">✋</span> MAP LEGEND
+            </span>
+            {(htmlLegendPos.x !== 0 || htmlLegendPos.y !== 0) && (
+              <button 
+                onClick={(e) => { e.stopPropagation(); setHtmlLegendPos({ x: 0, y: 0 }); }}
+                className="text-[9px] font-bold text-red-400 hover:text-red-300 bg-red-950/70 border border-red-800/80 px-1.5 py-0.5 rounded cursor-pointer transition-colors"
+                title="Reset Position to Bottom Left"
+              >
+                ↺ Reset
+              </button>
+            )}
+          </div>
           <div className="flex items-center gap-2">
             <div className="w-3.5 h-3.5 rounded bg-white border border-slate-400"></div>
             <span>Available Plot</span>
