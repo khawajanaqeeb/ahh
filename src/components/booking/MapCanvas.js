@@ -40,7 +40,10 @@ export default function MapCanvas({
   const [drawingActive, setDrawingActive] = useState(false);
   const [drawingType, setDrawingType] = useState(null); // 'rect' or 'poly'
   const [drawingPoints, setDrawingPoints] = useState([]);
-  const [currentMouse, setCurrentMouse] = useState(null);
+  // Movable Legend State
+  const [legendOffset, setLegendOffset] = useState({ x: 0, y: 0 });
+  const [isDraggingLegend, setIsDraggingLegend] = useState(false);
+  const [legendDragStart, setLegendDragStart] = useState({ x: 0, y: 0 });
 
   // Tooltip state
   const [tooltip, setTooltip] = useState({ 
@@ -128,6 +131,17 @@ export default function MapCanvas({
   const zoomIn = () => setScale(s => Math.min(5, s * 1.25));
   const zoomOut = () => setScale(s => Math.max(0.1, s / 1.25));
 
+  // Legend Drag Handler
+  const handleLegendMouseDown = (e) => {
+    e.stopPropagation();
+    setIsDraggingLegend(true);
+    const svgCoords = screenToSVGCoords(e);
+    setLegendDragStart({
+      x: svgCoords.x - legendOffset.x,
+      y: svgCoords.y - legendOffset.y
+    });
+  };
+
   // Mouse Drag / Pan handlers
   const handleMouseDown = (e) => {
     if (drawingActive) return;
@@ -141,6 +155,15 @@ export default function MapCanvas({
   };
 
   const handleMouseMove = (e) => {
+    if (isDraggingLegend) {
+      const svgCoords = screenToSVGCoords(e);
+      setLegendOffset({
+        x: svgCoords.x - legendDragStart.x,
+        y: svgCoords.y - legendDragStart.y
+      });
+      return;
+    }
+
     if (isDragging) {
       setTranslate({
         x: e.clientX - dragStart.x,
@@ -153,7 +176,10 @@ export default function MapCanvas({
     }
   };
 
-  const handleMouseUp = () => setIsDragging(false);
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setIsDraggingLegend(false);
+  };
 
   // Convert screen coordinates into SVG coordinate scale
   const screenToSVGCoords = (e) => {
@@ -633,11 +659,56 @@ export default function MapCanvas({
                   </g>
                 )}
 
-                {/* RIGHT SIDEBAR — LEGEND & BRANDING matching blueprint image */}
+                {/* RIGHT SIDEBAR — LEGEND & BRANDING (MOVABLE & DRAGGABLE) */}
                 {layoutFeatures.legendBox && (
-                  <g transform={`translate(${layoutFeatures.legendBox.x}, ${layoutFeatures.legendBox.y || 30})`}>
+                  <g 
+                    className="movable-legend-group select-none"
+                    transform={`translate(${(layoutFeatures.legendBox.x || 930) + legendOffset.x}, ${(layoutFeatures.legendBox.y || 30) + legendOffset.y})`}
+                  >
+                    {/* DRAG HANDLE HEADER BAR */}
+                    <g 
+                      onMouseDown={handleLegendMouseDown}
+                      className="cursor-grab active:cursor-grabbing group"
+                      style={{ pointerEvents: 'all' }}
+                    >
+                      <rect 
+                        x="0" 
+                        y="-30" 
+                        width={layoutFeatures.legendBox.width} 
+                        height="30" 
+                        fill="#0f172a" 
+                        rx="4" 
+                        stroke="#334155"
+                        strokeWidth="1.5"
+                      />
+                      <text 
+                        x={layoutFeatures.legendBox.width / 2} 
+                        y="-11" 
+                        fontSize="11" 
+                        fontWeight="900" 
+                        fill="#60a5fa" 
+                        textAnchor="middle"
+                        letterSpacing="1"
+                      >
+                        ✋ DRAG TO MOVE LEGEND
+                      </text>
+                    </g>
+
+                    {/* RESET POSITION BUTTON */}
+                    {(legendOffset.x !== 0 || legendOffset.y !== 0) && (
+                      <g 
+                        onClick={(e) => { e.stopPropagation(); setLegendOffset({ x: 0, y: 0 }); }}
+                        className="cursor-pointer hover:opacity-90"
+                        style={{ pointerEvents: 'all' }}
+                      >
+                        <rect x={layoutFeatures.legendBox.width - 85} y="-25" width="80" height="20" fill="#dc2626" rx="3" />
+                        <text x={layoutFeatures.legendBox.width - 45} y="-11" fontSize="10" fontWeight="bold" fill="#ffffff" textAnchor="middle">
+                          ↺ Reset Pos
+                        </text>
+                      </g>
+                    )}
                     
-                    {/* AHH CITY Tree Logo Header */}
+                    {/* AHH CITY / PROJECT Logo Header */}
                     <g transform="translate(30, 0)">
                       <circle cx="80" cy="35" r="28" fill="#15803d" opacity="0.15" />
                       <text x="80" y="32" fontSize="24" textAnchor="middle">🌳</text>
@@ -671,11 +742,11 @@ export default function MapCanvas({
                       <circle cx="80" cy="30" r="20" fill="#ca8a04" opacity="0.15" />
                       <text x="80" y="34" fontSize="18" textAnchor="middle">👑</text>
                       <text x="80" y="72" fontSize="22" fontWeight="900" fill="#b45309" textAnchor="middle" style={{ fontStyle: 'italic' }}>
-                      AHH Brothers
-                    </text>
-                    <text x="80" y="90" fontSize="9" fontWeight="bold" fill="#64748b" textAnchor="middle">
-                      BUILDERS & DEVELOPERS
-                    </text>
+                        AHH Brothers
+                      </text>
+                      <text x="80" y="90" fontSize="9" fontWeight="bold" fill="#64748b" textAnchor="middle">
+                        BUILDERS & DEVELOPERS
+                      </text>
                     </g>
 
                   </g>
