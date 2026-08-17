@@ -68,7 +68,7 @@ export default function MapCanvas({
     if (currentProject?.id === 'labour-city') {
       setDimensions({ width: 900, height: 500 });
     } else if (currentProject?.id === 'hooria-villas') {
-      setDimensions({ width: 940, height: 1020 });
+      setDimensions({ width: 1480, height: 1020 });
     } else {
       setDimensions({ width: 1460, height: 980 });
     }
@@ -386,7 +386,7 @@ export default function MapCanvas({
         className="flex-grow w-full relative overflow-hidden bg-[#fdfdfd] cursor-grab select-none active:cursor-grabbing"
       >
         {/* Reserved Site Plan Space Banner for New Projects */}
-        {currentProject && currentProject.id !== 'ahh-city' && (
+        {currentProject && currentProject.id !== 'ahh-city' && currentProject.id !== 'hooria-villas' && (
           <div className="absolute top-4 left-6 z-20 px-3.5 py-2 bg-slate-900/90 border border-slate-800/90 rounded-none backdrop-blur-md text-xs text-slate-200 flex items-center gap-2.5 shadow-lg">
             {currentProject.logo && (
               <img
@@ -509,15 +509,28 @@ export default function MapCanvas({
                 </text>
 
                 {/* WATERMARKS */}
-                <text x="230" y="260" fontSize="30" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-15 230 260)" letterSpacing="4">
-                  60 SQYARD
-                </text>
-                <text x="620" y="260" fontSize="30" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-15 620 260)" letterSpacing="4">
-                  60 SQYARD
-                </text>
-                <text x="480" y="760" fontSize="32" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-10 480 760)" letterSpacing="6">
-                  120 SQYARD
-                </text>
+                {currentProject?.id === 'hooria-villas' ? (
+                  <g>
+                    <text x="340" y="340" fontSize="28" fontWeight="bold" fill="rgba(0, 0, 0, 0.05)" transform="rotate(-15 340 340)" letterSpacing="4">
+                      HOORIA VILLAS (15.00 ACRES)
+                    </text>
+                    <text x="460" y="740" fontSize="28" fontWeight="bold" fill="rgba(0, 0, 0, 0.05)" transform="rotate(-10 460 740)" letterSpacing="5">
+                      120 & 180 SQYARD RESIDENTIAL
+                    </text>
+                  </g>
+                ) : (
+                  <g>
+                    <text x="230" y="260" fontSize="30" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-15 230 260)" letterSpacing="4">
+                      60 SQYARD
+                    </text>
+                    <text x="620" y="260" fontSize="30" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-15 620 260)" letterSpacing="4">
+                      60 SQYARD
+                    </text>
+                    <text x="480" y="760" fontSize="32" fontWeight="bold" fill="rgba(0, 0, 0, 0.06)" transform="rotate(-10 480 760)" letterSpacing="6">
+                      120 SQYARD
+                    </text>
+                  </g>
+                )}
 
                 {/* ROADS NETWORK */}
                 {layoutFeatures.roads.map((road) => (
