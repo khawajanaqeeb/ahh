@@ -155,9 +155,9 @@ export function generateHooriaVillasPlots(specJSON = HOORIA_VILLAS_SITE_PLAN_JSO
   for (let i = 1; i <= 30; i++) {
     const row = (i - 1) % 15;
     const col = Math.floor((i - 1) / 15);
-    const x = 50 + col * 36;
-    const y = 130 + row * 34;
-    plots.push(createPlot(`OV-${i}`, 'Overseas Block', i, 'Residential 120SQY', "24' x 45'", "120 sq.yd", x, y, 32, 28));
+    const x = 40 + col * 48;
+    const y = 130 + row * 36;
+    plots.push(createPlot(`OV-${i}`, 'Overseas Block', i, 'Residential 120SQY', "24' x 45'", "120 sq.yd", x, y, 42, 30));
   }
 
   // -------------------------------------------------------------

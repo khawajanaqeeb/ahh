@@ -501,10 +501,10 @@ export default function MapCanvas({
                 />
 
                 {/* Master Header Titles */}
-                <text x={layoutFeatures.headerTitleX || 280} y="58" fontSize="26" fontWeight="900" fill="#000000" fontFamily="sans-serif" textAnchor="middle">
-                  {currentProject?.name ? currentProject.name.toUpperCase() : 'AHH CITY'}
+                <text x={layoutFeatures.headerTitleX || 470} y="50" fontSize="24" fontWeight="900" fill="#000000" fontFamily="sans-serif" textAnchor="middle">
+                  {currentProject?.name ? `${currentProject.name.toUpperCase()} MASTER SITE PLAN` : 'AHH CITY MASTER SITE PLAN'}
                 </text>
-                <text x={layoutFeatures.headerSurveyX || 650} y="58" fontSize="22" fontWeight="900" fill="#000000" fontFamily="sans-serif" textAnchor="middle">
+                <text x={layoutFeatures.headerSurveyX || 470} y="76" fontSize="12" fontWeight="bold" fill="#334155" fontFamily="sans-serif" textAnchor="middle">
                   {currentProject?.survey ? currentProject.survey.toUpperCase() : 'SURVEY NO 297'}
                 </text>
 
@@ -833,9 +833,9 @@ export default function MapCanvas({
                     <text
                       x={center.x}
                       y={isSR ? center.y + 10 : center.y}
-                      fontSize={plot.type?.includes('120') ? '13px' : '11px'}
+                      fontSize={plot.id.startsWith('OV-') || plot.id.length > 6 ? '9px' : '10px'}
                       fontWeight="bold"
-                      fill={booking ? '#ffffff' : plot.id.startsWith('C-') ? '#b45309' : plot.id.startsWith('SR-') ? '#6b21a8' : '#000000'}
+                      fill={booking ? '#ffffff' : plot.id.startsWith('C-') || plot.id.includes('-C-') ? '#b45309' : plot.id.startsWith('SR-') ? '#6b21a8' : '#1e293b'}
                       textAnchor="middle"
                       dominantBaseline="middle"
                       style={{ pointerEvents: 'none' }}
