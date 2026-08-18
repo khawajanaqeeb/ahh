@@ -343,13 +343,13 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
 
       <div className="flex flex-col gap-6 max-w-[1700px] w-full mx-auto p-4 sm:p-6 pb-20">
 
-        {/* Back to Admin Panel */}
-        <div className="flex items-center">
+        {/* Back to Admin Panel Sticky Bar */}
+        <div className="sticky top-4 z-40 self-start">
           <Link
             href="/admin"
-            className="inline-flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 font-semibold transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900/95 border border-amber-500/60 hover:border-amber-400 text-amber-400 hover:text-amber-300 text-xs font-extrabold rounded-none backdrop-blur-md shadow-2xl transition-all hover:scale-105 cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="w-4 h-4 text-amber-400" />
             <span>Back to Admin Panel</span>
           </Link>
         </div>
@@ -509,16 +509,6 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
               >
                 <FileSpreadsheet className="w-3.5 h-3.5" />
                 <span>Export to Excel</span>
-              </button>
-
-              {/* Clear All Bookings */}
-              <button
-                onClick={handleClearAllBookings}
-                className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-none bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 cursor-pointer transition-colors w-full sm:w-auto justify-center"
-                title="Wipe all bookings and receipts for active project"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Clear {activeProject.name} Receipts</span>
               </button>
             </div>
           </div>

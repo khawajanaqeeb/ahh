@@ -1,4 +1,4 @@
-﻿// src/components/booking/AdminSidebar.js
+// src/components/booking/AdminSidebar.js
 'use client';
 
 import React, { useState } from 'react';
@@ -180,14 +180,6 @@ export default function AdminSidebar({
             >
               <FileSpreadsheet className="w-3.5 h-3.5" />
               <span>Export {activeProject.name} Ledger (Excel)</span>
-            </button>
-
-            <button
-              onClick={onClearProjectBookings}
-              className="w-full py-3 px-3 rounded-none bg-red-950/80 border border-red-800/60 hover:bg-red-900 text-red-300 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Clear {activeProject.name} Receipts</span>
             </button>
           </div>
 
