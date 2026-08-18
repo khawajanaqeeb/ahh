@@ -17,10 +17,18 @@ import {
   fetchPlots, savePlotToDb, deletePlotFromDb, clearAllPlotsFromDb,
   fetchBookings, saveBookingToDb, deleteBookingFromDb, clearAllBookingsFromDb
 } from '@/lib/db';
+import { MEDIA } from '@/lib/media';
 import { MASTER_SITE_PLAN_JSON, generatePlotsFromMasterJson } from '@/lib/sitePlanData';
 import { generateHooriaVillasPlots } from '@/lib/hooriaVillasSitePlanData';
 import { generateSummerFarmhousesPlots } from '@/lib/summerFarmhousesSitePlanData';
 import { PROJECTS, getProjectById, getPlaceholderPlotsForProject } from '@/lib/projectsData';
+
+const DEFAULT_PROJECT_MAPS = {
+  'ahh-city': MEDIA.ahhCityLayout,
+  'hooria-villas': MEDIA.hooriaLayout,
+  'summer-farm-houses': MEDIA.summerFarmLayout,
+  'labour-city': MEDIA.posterLabourCity,
+};
 
 export default function BookingPage({ projectId = 'ahh-city' }) {
   const activeProject = getProjectById(projectId);
@@ -33,9 +41,10 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
   // Printable Receipt Modal State
   const [activeReceiptBooking, setActiveReceiptBooking] = useState(null);
 
-  // Map Image details
-  const [imageSrc, setImageSrc] = useState('ahh_city_map.jpg');
-  const [imageLoaded, setImageLoaded] = useState(false);
+  // Map Image details default per project
+  const defaultFallbackMap = DEFAULT_PROJECT_MAPS[projectId] || MEDIA.ahhCityLayout;
+  const [imageSrc, setImageSrc] = useState(defaultFallbackMap);
+  const [imageLoaded, setImageLoaded] = useState(true);
 
   // Table Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,6 +65,11 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
   // Load project data
   useEffect(() => {
     async function loadProjectData() {
+      // Set initial fallback map for this project
+      const projectDefaultMap = DEFAULT_PROJECT_MAPS[projectId] || MEDIA.ahhCityLayout;
+      setImageSrc(projectDefaultMap);
+      setImageLoaded(true);
+
       // Fetch bookings for active project
       const allDbBookings = await fetchBookings();
 
@@ -93,16 +107,17 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
         }
       }
 
-      // Check for raster overlay image
+      // Check for project-specific raster overlay image
       try {
-        const res = await fetch('/api/upload-map');
+        const res = await fetch(`/api/upload-map?projectId=${encodeURIComponent(projectId)}`);
         const data = await res.json();
         if (data.exists && data.url) {
           setImageSrc(`${data.url}?t=${Date.now()}`);
           setImageLoaded(true);
         }
       } catch {
-        setImageLoaded(false);
+        // Keep using project default image from MEDIA
+        setImageLoaded(true);
       }
     }
     loadProjectData();
@@ -134,14 +149,15 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('projectId', projectId);
 
     try {
-      const res = await fetch('/api/upload-map', { method: 'POST', body: formData });
+      const res = await fetch(`/api/upload-map?projectId=${encodeURIComponent(projectId)}`, { method: 'POST', body: formData });
       const data = await res.json();
 
       if (data.success && data.url) {
         setImageSrc(`${data.url}?t=${Date.now()}`);
-        triggerToast(`Site plan raster overlay saved! (${data.sizeKB} KB)`);
+        triggerToast(`Site plan raster overlay saved for ${activeProject?.name || projectId}! (${data.sizeKB} KB)`);
       } else {
         triggerToast(data.error || 'Upload failed — image shown locally only.', true);
       }

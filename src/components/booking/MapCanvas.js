@@ -445,6 +445,53 @@ export default function MapCanvas({
             </span>
           </div>
         </div>
+
+        {/* View Mode & Overlay Controls */}
+        <div className="flex items-center gap-2">
+          <div className="flex bg-slate-950 p-1 rounded-none border border-slate-800">
+            <button
+              onClick={() => setMapRenderMode('vector')}
+              className={`px-3 py-1 text-xs font-semibold rounded-none transition-all flex items-center gap-1.5 cursor-pointer ${
+                mapRenderMode === 'vector'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+              title="Procedural Vector Blueprint View"
+            >
+              <Code className="w-3.5 h-3.5" />
+              <span>Blueprint Vector</span>
+            </button>
+
+            <button
+              onClick={() => setMapRenderMode('image')}
+              className={`px-3 py-1 text-xs font-semibold rounded-none transition-all flex items-center gap-1.5 cursor-pointer ${
+                mapRenderMode === 'image'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+              title="Site Plan Image Overlay View"
+            >
+              <Eye className="w-3.5 h-3.5" />
+              <span>Site Plan Overlay</span>
+            </button>
+          </div>
+
+          <label
+            htmlFor="header-map-file-upload"
+            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold rounded-none cursor-pointer transition-all flex items-center gap-1.5"
+            title="Upload new site plan map image"
+          >
+            <Upload className="w-3.5 h-3.5 text-blue-400" />
+            <span className="hidden sm:inline">Upload Map</span>
+          </label>
+          <input
+            type="file"
+            id="header-map-file-upload"
+            className="hidden"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </div>
       </div>
 
       {/* Viewport Canvas container */}
@@ -546,7 +593,7 @@ export default function MapCanvas({
             <rect width="100%" height="100%" fill="#ffffff" />
             <rect width="100%" height="100%" fill="url(#gridPattern)" />
 
-            {/* Optional Raster Image Underlay */}
+            {/* Site Plan Raster Image Underlay */}
             {mapRenderMode === 'image' && imageLoaded && (
               <image 
                 href={imageSrc} 
@@ -554,7 +601,8 @@ export default function MapCanvas({
                 y="0" 
                 width="100%" 
                 height="100%"
-                opacity="0.6"
+                preserveAspectRatio="none"
+                opacity="0.85"
               />
             )}
                  {/* VECTOR MAP STRUCTURE MATCHING BLUEPRINT IMAGE EXACTLY */}
