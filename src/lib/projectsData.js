@@ -18,11 +18,20 @@ export const PROJECTS = [
     badgeBg: 'bg-blue-950/80',
     badgeBorder: 'border-blue-800/60',
     badgeText: 'text-blue-400',
+    blocks: [], // AHH City has no blocks
+    dimensions: [
+      '60 Sq Yd',
+      '120 Sq Yd',
+      '240 Sq Yd',
+      'Commercial Shop (100 Sq.Ft.)',
+      'Custom Size'
+    ],
     plotTypes: [
-      { label: '60 SQ YARDS (Residential)', costOfLand: 350000, extraCharges: 0, processingCharges: 0, total: 350000, paid: 100000 },
-      { label: '120 SQ YARDS (Residential)', costOfLand: 500000, extraCharges: 0, processingCharges: 0, total: 500000, paid: 150000 },
-      { label: 'Commercial Shop (100 Sq.Ft.)', costOfLand: 350000, extraCharges: 0, processingCharges: 0, total: 350000, paid: 200000 },
-      { label: 'Custom Size', costOfLand: 0, extraCharges: 0, processingCharges: 0, total: 0, paid: 0 }
+      { label: '60 Sq Yd', costOfLand: 350000, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 350000, paid: 100000 },
+      { label: '120 Sq Yd', costOfLand: 500000, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 500000, paid: 150000 },
+      { label: '240 Sq Yd', costOfLand: 950000, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 950000, paid: 250000 },
+      { label: 'Commercial Shop (100 Sq.Ft.)', costOfLand: 350000, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 350000, paid: 200000 },
+      { label: 'Custom Size', costOfLand: 0, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 0, paid: 0 }
     ],
     route: '/booking'
   },
@@ -37,10 +46,19 @@ export const PROJECTS = [
     badgeBg: 'bg-purple-950/80',
     badgeBorder: 'border-purple-800/60',
     badgeText: 'text-purple-400',
+    blocks: ['Block A', 'Block B', 'Block C', 'Main Sector', 'N/A'],
+    dimensions: [
+      '120 Sq Yd',
+      '150 Sq Yd',
+      '180 Sq Yd',
+      '240 Sq Yd',
+      'Custom Villa'
+    ],
     plotTypes: [
-      { label: '120 SQ YARDS (Residential)', costOfLand: 1000000, extraCharges: 0, processingCharges: 0, total: 1000000, paid: 200000 },
-      { label: 'Commercial Plots (150 Sq Yards)', costOfLand: 1500000, extraCharges: 0, processingCharges: 0, total: 1500000, paid: 300000 },
-      { label: 'Custom Villa', costOfLand: 0, extraCharges: 0, processingCharges: 0, total: 0, paid: 0 }
+      { label: '120 Sq Yd', costOfLand: 1000000, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 1000000, paid: 200000 },
+      { label: '150 Sq Yd', costOfLand: 1350000, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 1350000, paid: 250000 },
+      { label: '180 Sq Yd', costOfLand: 1600000, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 1600000, paid: 300000 },
+      { label: 'Custom Villa', costOfLand: 0, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 0, paid: 0 }
     ],
     route: '/booking/hooria-villas'
   },
@@ -55,10 +73,17 @@ export const PROJECTS = [
     badgeBg: 'bg-emerald-950/80',
     badgeBorder: 'border-emerald-800/60',
     badgeText: 'text-emerald-400',
+    blocks: ['Block A', 'Block B', 'Block B2', 'Block C', 'Block D', 'N/A'],
+    dimensions: [
+      '80 Sq Yd',
+      '150 Sq Yd',
+      '240 Sq Yd',
+      'Custom Unit'
+    ],
     plotTypes: [
-      { label: '80 SQ YARDS (Residential)', costOfLand: 600000, extraCharges: 0, processingCharges: 0, total: 600000, paid: 200000 },
-      { label: 'Commercial Plots (150 Sq Yards)', costOfLand: 1350000, extraCharges: 0, processingCharges: 0, total: 1350000, paid: 300000 },
-      { label: 'Custom Unit', costOfLand: 0, extraCharges: 0, processingCharges: 0, total: 0, paid: 0 }
+      { label: '80 Sq Yd', costOfLand: 600000, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 600000, paid: 200000 },
+      { label: '150 Sq Yd', costOfLand: 1350000, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 1350000, paid: 300000 },
+      { label: 'Custom Unit', costOfLand: 0, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 0, paid: 0 }
     ],
     route: '/booking/labour-city'
   },
@@ -73,9 +98,15 @@ export const PROJECTS = [
     badgeBg: 'bg-amber-950/80',
     badgeBorder: 'border-amber-800/60',
     badgeText: 'text-amber-400',
+    blocks: ['Phase 1', 'Phase 2', 'Executive Block', 'N/A'],
+    dimensions: [
+      'FARM HOUSE LAND (1000 Sq Yds)',
+      '2000 Sq Yd',
+      'Custom Farm'
+    ],
     plotTypes: [
-      { label: 'FARM HOUSE LAND (1000 Sq Yds)', costOfLand: 2500000, extraCharges: 0, processingCharges: 0, total: 2500000, paid: 1000000 },
-      { label: 'Custom Farm', costOfLand: 0, extraCharges: 0, processingCharges: 0, total: 0, paid: 0 }
+      { label: 'FARM HOUSE LAND (1000 Sq Yds)', costOfLand: 2500000, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 2500000, paid: 1000000 },
+      { label: 'Custom Farm', costOfLand: 0, extraCharges: 0, processingCharges: 0, developmentCharges: 0, total: 0, paid: 0 }
     ],
     route: '/booking/summer-farm-houses'
   }

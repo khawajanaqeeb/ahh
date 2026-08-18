@@ -209,10 +209,15 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
     const success = await saveBookingToDb(bookingWithProject);
     if (success) {
       setBookings(prev => {
-        const filtered = prev.filter(b => b.plotId === booking.plotId);
-        return [...filtered.filter(b => b.plotId !== booking.plotId), bookingWithProject];
+        const idx = prev.findIndex(b => b.plotId === booking.plotId || (b.plot_no && b.plot_no === booking.plot_no));
+        if (idx > -1) {
+          const copy = [...prev];
+          copy[idx] = bookingWithProject;
+          return copy;
+        }
+        return [...prev, bookingWithProject];
       });
-      triggerToast(`Booking saved for ${activeProject.name} — Plot ${booking.plotId}!`);
+      triggerToast(`Booking saved for ${activeProject?.name || 'Project'} — Plot ${booking.plotId}!`);
     } else {
       triggerToast('Error saving booking details.', true);
     }

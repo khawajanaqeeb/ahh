@@ -1,14 +1,23 @@
-﻿import React, { useState, useEffect } from 'react';
-import { Save, Eraser, Trash2, Download, Upload, Compass, Info, FileText, Printer, Calendar, AlertTriangle, AlertOctagon, CheckCircle2 } from 'lucide-react';
+// src/components/booking/BookingForm.js
+// Comprehensive Rebuilt Booking Detail Form for All 4 Projects
+// Enforces Section Order: 1. Transaction Basics -> 2. Client Profile -> 3. Payment Configuration -> 4. Financial Summary
+
+import React, { useState, useEffect, useMemo } from 'react';
+import { 
+  Save, Eraser, Printer, Calendar, AlertCircle, CheckCircle2, 
+  Lock, FileText, ShieldCheck, Tag, DollarSign, User, Phone, 
+  CreditCard, Sparkles, Building2, MapPin
+} from 'lucide-react';
 import { formatDateDDMMYY } from '@/lib/dateUtils';
 import { numberToWords } from '@/lib/numberToWords';
+import { formatCNIC } from '@/lib/db';
 
 export default function BookingForm({
-  appMode,
-  selectedPlotId,
-  plots,
-  bookings,
-  currentProject,
+  appMode = 'booking',
+  selectedPlotId = '',
+  plots = [],
+  bookings = [],
+  currentProject = {},
   onSaveBooking,
   onClearFormSelection,
   onDeletePlot,
@@ -18,679 +27,909 @@ export default function BookingForm({
   onFormPreviewChange,
   onPrintReceipt
 }) {
-  const [plotIdInput, setPlotIdInput] = useState('');
-  const [clientName, setClientName] = useState('');
-  const [relativeName, setRelativeName] = useState('');
-  const [cnic, setCnic] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  // --- SECTION 1: TRANSACTION BASICS STATE ---
+  const [bookingDate, setBookingDate] = useState(() => new Date().toISOString().substring(0, 10));
+  const [plotNo, setPlotNo] = useState('');
   const [block, setBlock] = useState('');
+  const [plotDimensions, setPlotDimensions] = useState('');
+
+  // --- SECTION 2: CLIENT PROFILE STATE ---
+  const [fullName, setFullName] = useState('');
+  const [fatherName, setFatherName] = useState('');
+  const [cnic, setCnic] = useState('');
+  const [contactNo, setContactNo] = useState('');
+  const [email, setEmail] = useState('');
+
+  // --- SECTION 3: PAYMENT CONFIGURATION STATE ---
   const [paymentMode, setPaymentMode] = useState('Cash');
   const [bankName, setBankName] = useState('');
-  const [plotType, setPlotType] = useState('Residential 120SQY');
-  const [status, setStatus] = useState('Token Received');
-  const [totalPrice, setTotalPrice] = useState('');
-  const [paidAmount, setPaidAmount] = useState('');
-  const [bookingDate, setBookingDate] = useState('');
-  const [tokenExpiryDate, setTokenExpiryDate] = useState('');
-  const [balance, setBalance] = useState(0);
-
-  const [costOfLand, setCostOfLand] = useState('');
-  const [extraCharges, setExtraCharges] = useState('');
-  const [processingCharges, setProcessingCharges] = useState('');
-
-  const [amountInWords, setAmountInWords] = useState('');
-  const [installmentMonth, setInstallmentMonth] = useState('');
-  const [installmentAmount, setInstallmentAmount] = useState('');
-  const [showFullPaymentModal, setShowFullPaymentModal] = useState(false);
-
-  const totalReceivableAmount = (parseFloat(costOfLand) || 0) + (parseFloat(extraCharges) || 0) + (parseFloat(processingCharges) || 0);
-
-  const getCurrentMonthYear = () => {
-    const d = new Date();
-    return d.toLocaleString('default', { month: 'long', year: 'numeric' });
-  };
-
-  const getDefaultExpiryDate = () => {
+  const [paymentStatus, setPaymentStatus] = useState('Token Received');
+  const [tokenExpiryDate, setTokenExpiryDate] = useState(() => {
     const d = new Date();
     d.setDate(d.getDate() + 7);
     return d.toISOString().substring(0, 10);
-  };
+  });
 
-  const resolveTargetPlotId = (input, selectedType) => {
-    if (!input) return '';
-    const trimmed = input.trim().toUpperCase();
-    const sameTypePlots = plots.filter(p => p.type === selectedType);
-    if (sameTypePlots.some(p => p.id === trimmed)) return trimmed;
-    if (selectedType === 'Residential 120SQY' && !trimmed.startsWith('120-')) {
-      const prefixed = `120-${trimmed}`;
-      if (sameTypePlots.some(p => p.id === prefixed)) return prefixed;
+  // --- SECTION 4: FINANCIAL SUMMARY STATE ---
+  const [costOfPlot, setCostOfPlot] = useState('');
+  const [extraCharges, setExtraCharges] = useState('');
+  const [processingCharges, setProcessingCharges] = useState('');
+  const [developmentCharges, setDevelopmentCharges] = useState('');
+  const [amountReceived, setAmountReceived] = useState('');
+  const [amountInWords, setAmountInWords] = useState('');
+  const [installmentMonth, setInstallmentMonth] = useState(() => {
+    return new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
+  });
+
+  // UI / Validation State
+  const [validationError, setValidationError] = useState('');
+  const [showZeroBalanceModal, setShowZeroBalanceModal] = useState(false);
+
+  // --- PROJECT REFERENCE OPTIONS ---
+  const projectBlocks = useMemo(() => {
+    if (!currentProject) return [];
+    return currentProject.blocks || [];
+  }, [currentProject]);
+
+  const hasBlocks = projectBlocks.length > 0;
+
+  const projectDimensionOptions = useMemo(() => {
+    if (!currentProject) return [];
+    if (currentProject.dimensions && currentProject.dimensions.length > 0) {
+      return currentProject.dimensions;
     }
-    if (sameTypePlots.some(p => p.id === trimmed)) return trimmed;
-    if (plots.some(p => p.id === trimmed)) return trimmed;
+    if (currentProject.plotTypes && currentProject.plotTypes.length > 0) {
+      return currentProject.plotTypes.map(pt => pt.label);
+    }
+    return ['60 Sq Yd', '80 Sq Yd', '120 Sq Yd', '150 Sq Yd', '240 Sq Yd', 'Custom Size'];
+  }, [currentProject]);
+
+  // Set defaults when project changes
+  useEffect(() => {
+    if (!hasBlocks) {
+      setBlock('N/A');
+    } else if (!block && projectBlocks.length > 0) {
+      setBlock(projectBlocks[0]);
+    }
+
+    if (!plotDimensions && projectDimensionOptions.length > 0) {
+      setPlotDimensions(projectDimensionOptions[0]);
+    }
+  }, [currentProject, hasBlocks, projectBlocks, projectDimensionOptions]);
+
+  // --- RESOLVE MATCHING PLOT & HISTORY ---
+  const resolvedPlotId = useMemo(() => {
+    if (!plotNo || !plotNo.trim()) return '';
+    const trimmed = plotNo.trim().toUpperCase();
+
+    // Check direct plot match
+    const directMatch = plots.find(p => p.id === trimmed || p.label === trimmed);
+    if (directMatch) return directMatch.id;
+
+    // Check with block or dimension prefix matching
+    const prefixedMatch = plots.find(p => p.id.endsWith(`-${trimmed}`) || p.id.includes(trimmed));
+    if (prefixedMatch) return prefixedMatch.id;
+
     return trimmed;
-  };
+  }, [plotNo, plots]);
 
-  const resolvedPreviewId = resolveTargetPlotId(plotIdInput, plotType);
-  const existingBooking = bookings.find(b => b.plotId === resolvedPreviewId);
-
-  useEffect(() => {
-    const targetId = selectedPlotId || resolvedPreviewId;
-    if (targetId) {
-      if (selectedPlotId && plotIdInput !== selectedPlotId) {
-        setPlotIdInput(selectedPlotId);
-      }
-      const matchedPlot = plots.find(p => p.id === targetId);
-      if (matchedPlot?.type) setPlotType(matchedPlot.type);
-
-      const existing = bookings.find(b => b.plotId === targetId);
-      if (existing) {
-        setClientName(existing.clientName || '');
-        setRelativeName(existing.relativeName || '');
-        setCnic(existing.cnic || '');
-        setPhone(existing.phone || '');
-        setEmail(existing.email || '');
-        setBlock(existing.block || '');
-        setPlotType(existing.plotType || 'Residential 120SQY');
-        setStatus(existing.status || 'Token Received');
-        setTotalPrice(existing.totalPrice || '');
-        setPaidAmount(existing.paidAmount || '');
-        setCostOfLand(existing.costOfLand || '');
-        setExtraCharges(existing.extraCharges || '');
-        setProcessingCharges(existing.processingCharges || '');
-        setBookingDate(existing.date || new Date().toISOString().substring(0, 10));
-        setTokenExpiryDate(existing.tokenExpiryDate || getDefaultExpiryDate());
-        setPaymentMode('Cash');
-        setBankName('');
-        setInstallmentMonth(getCurrentMonthYear());
-        setInstallmentAmount('');
-        setAmountInWords('');
-        if (onFormPreviewChange) onFormPreviewChange({ plotId: targetId, status: existing.status });
-      }
-    }
-  }, [selectedPlotId, resolvedPreviewId, bookings, plots]);
-
-  useEffect(() => {
-    const total = totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0);
-    let paid = parseFloat(paidAmount) || 0;
-    if (existingBooking && installmentAmount) {
-      paid += (parseFloat(installmentAmount) || 0);
-    }
-    const rem = Math.max(0, total - paid);
-    setBalance(rem);
-  }, [totalPrice, paidAmount, installmentAmount, existingBooking, totalReceivableAmount]);
-
-  useEffect(() => {
-    setBookingDate(new Date().toISOString().substring(0, 10));
-    setTokenExpiryDate(getDefaultExpiryDate());
-    setInstallmentMonth(getCurrentMonthYear());
-  }, []);
-
-  const clearFields = (clearPlotId = true) => {
-    if (clearPlotId) setPlotIdInput('');
-    setClientName(''); setRelativeName(''); setCnic(''); setPhone(''); setEmail('');
-    setBlock(''); setPaymentMode('Cash'); setBankName('');
-    setPlotType('Residential 120SQY'); setStatus('Token Received');
-    setTotalPrice(''); setPaidAmount(''); setAmountInWords('');
-    setCostOfLand(''); setExtraCharges(''); setProcessingCharges('');
-    setInstallmentMonth(getCurrentMonthYear()); setInstallmentAmount('');
-    setBookingDate(new Date().toISOString().substring(0, 10));
-    setTokenExpiryDate(getDefaultExpiryDate());
-    if (onFormPreviewChange) onFormPreviewChange(null);
-  };
-
-  const buildBookingPayload = () => {
-    const resolvedPlotId = resolveTargetPlotId(plotIdInput, plotType);
+  // Check if plot has prior booking record in Supabase / state
+  const existingBooking = useMemo(() => {
     if (!resolvedPlotId) return null;
+    return bookings.find(b => {
+      const bPlotId = (b.plotId || b.plot_no || '').toString().toUpperCase();
+      return bPlotId === resolvedPlotId.toUpperCase() || bPlotId.endsWith(`-${resolvedPlotId.toUpperCase()}`);
+    });
+  }, [resolvedPlotId, bookings]);
 
+  const isReturningPlot = Boolean(existingBooking);
+
+  // Sync when plot selected from SVG map canvas
+  useEffect(() => {
+    if (selectedPlotId) {
+      setPlotNo(selectedPlotId);
+      const matched = plots.find(p => p.id === selectedPlotId);
+      if (matched && matched.type) {
+        setPlotDimensions(matched.type);
+      }
+    }
+  }, [selectedPlotId, plots]);
+
+  // Sync existing booking data if selected or matching
+  useEffect(() => {
     if (existingBooking) {
-      const numInst = parseFloat(installmentAmount) || 0;
-      const prevPaid = parseFloat(existingBooking.paidAmount) || 0;
-      const newTotalPaid = numInst > 0 ? (prevPaid + numInst) : prevPaid;
-      const computedTotal = totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0);
-      const isFullyPaid = computedTotal > 0 && newTotalPaid >= computedTotal;
-      const newStatus = isFullyPaid ? 'Booking Received' : existingBooking.status;
+      setFullName(existingBooking.clientName || existingBooking.fullName || '');
+      setFatherName(existingBooking.fatherName || existingBooking.relativeName || '');
+      setCnic(existingBooking.cnic ? formatCNIC(existingBooking.cnic) : '');
+      setContactNo(existingBooking.phone || existingBooking.contactNo || '');
+      setEmail(existingBooking.email || '');
+      setBlock(existingBooking.block || (hasBlocks ? projectBlocks[0] : 'N/A'));
+      setPlotDimensions(existingBooking.plotDimensions || existingBooking.plotType || projectDimensionOptions[0] || '');
 
-      const updatedInstallments = numInst > 0
-        ? [...(existingBooking.installments || []), { month: installmentMonth, amount: numInst, date: bookingDate, paymentMode, bankName }]
-        : (existingBooking.installments || []);
+      // Cost fields
+      const pol = existingBooking.costOfPlot || existingBooking.costOfLand || 0;
+      const ext = existingBooking.extraCharges || 0;
+      const proc = existingBooking.processingCharges || 0;
+      const dev = existingBooking.developmentCharges || 0;
+      
+      setCostOfPlot(pol > 0 ? pol : '');
+      setExtraCharges(ext > 0 ? ext : '');
+      setProcessingCharges(proc > 0 ? proc : '');
+      setDevelopmentCharges(dev > 0 ? dev : '');
 
-      return {
-        ...existingBooking,
-        projectId: currentProject?.id || 'ahh-city',
-        plotId: resolvedPlotId,
-        clientName: clientName.trim(),
-        relativeName: relativeName.trim(),
-        cnic: cnic.trim(),
-        phone: phone.trim(),
-        email: email.trim(),
-        block: block.trim(),
-        paymentMode,
-        bankName: paymentMode !== 'Cash' ? bankName.trim() : '',
-        plotType,
-        status: newStatus,
-        costOfLand: parseFloat(costOfLand) || existingBooking.costOfLand || 0,
-        extraCharges: parseFloat(extraCharges) || existingBooking.extraCharges || 0,
-        processingCharges: parseFloat(processingCharges) || existingBooking.processingCharges || 0,
-        totalPrice: computedTotal > 0 ? computedTotal : (parseFloat(totalPrice) || 0),
-        paidAmount: newTotalPaid,
-        date: bookingDate,
-        tokenExpiryDate: newStatus === 'Token Received' ? tokenExpiryDate : '',
-        amountInWords: numInst > 0 ? numberToWords(numInst) : (amountInWords || numberToWords(newTotalPaid)),
-        installmentMonth: numInst > 0 ? installmentMonth : (existingBooking.installmentMonth || ''),
-        installments: updatedInstallments
-      };
+      // Status
+      const st = existingBooking.paymentStatus || existingBooking.status || 'Booking Received';
+      setPaymentStatus(st === 'Token Received' ? 'Booking Received' : st);
+    }
+  }, [existingBooking]);
+
+  // Adjust Payment Status options depending on first-time vs returning plot
+  useEffect(() => {
+    if (isReturningPlot) {
+      if (paymentStatus === 'Token Received') {
+        setPaymentStatus('Booking Received');
+      }
+    }
+  }, [isReturningPlot]);
+
+  // Auto-populate cost of plot from project presets if dimensions change
+  const handleDimensionsChange = (e) => {
+    const newDim = e.target.value;
+    setPlotDimensions(newDim);
+
+    if (currentProject?.plotTypes) {
+      const preset = currentProject.plotTypes.find(pt => 
+        pt.label.toLowerCase().includes(newDim.toLowerCase()) || 
+        newDim.toLowerCase().includes(pt.label.toLowerCase())
+      );
+      if (preset) {
+        if (preset.costOfLand > 0) setCostOfPlot(preset.costOfLand);
+        if (preset.extraCharges > 0) setExtraCharges(preset.extraCharges);
+        if (preset.processingCharges > 0) setProcessingCharges(preset.processingCharges);
+        if (preset.developmentCharges > 0) setDevelopmentCharges(preset.developmentCharges);
+        if (preset.paid > 0 && !amountReceived) {
+          setAmountReceived(preset.paid);
+          setAmountInWords(numberToWords(preset.paid));
+        }
+      }
     }
 
-    const numericPaid = parseFloat(paidAmount) || 0;
-    const computedTotal = totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0);
-    const isFullyPaid = computedTotal > 0 && numericPaid >= computedTotal;
-    const finalStatus = isFullyPaid ? 'Booking Received' : status;
+    if (onFormPreviewChange && resolvedPlotId) {
+      onFormPreviewChange({ plotId: resolvedPlotId, status: paymentStatus, block, dimensions: newDim });
+    }
+  };
 
-    return {
+  // --- FINANCIAL CALCULATIONS ---
+  const totalPayable = useMemo(() => {
+    const cop = parseFloat(costOfPlot) || 0;
+    const ext = parseFloat(extraCharges) || 0;
+    const proc = parseFloat(processingCharges) || 0;
+    const dev = parseFloat(developmentCharges) || 0;
+    return cop + ext + proc + dev;
+  }, [costOfPlot, extraCharges, processingCharges, developmentCharges]);
+
+  const totalReceivable = totalPayable; // Replaces old "Total Plot Price"
+
+  // Calculate prior received amounts from DB
+  const priorReceivedTotal = useMemo(() => {
+    if (!existingBooking) return 0;
+    return parseFloat(existingBooking.paidAmount || existingBooking.amountReceived) || 0;
+  }, [existingBooking]);
+
+  const currentTransactionAmount = parseFloat(amountReceived) || 0;
+  const totalReceivedToDate = priorReceivedTotal + currentTransactionAmount;
+  const remainingBalance = Math.max(0, totalReceivable - totalReceivedToDate);
+
+  // Live conversion to words
+  const handleAmountReceivedChange = (e) => {
+    const val = e.target.value;
+    setAmountReceived(val);
+    const num = parseFloat(val) || 0;
+    setAmountInWords(num > 0 ? numberToWords(num) : '');
+  };
+
+  // Live CNIC masking
+  const handleCnicChange = (e) => {
+    const raw = e.target.value;
+    setCnic(formatCNIC(raw));
+  };
+
+  // Live preview broadcast to map canvas
+  useEffect(() => {
+    if (resolvedPlotId && onFormPreviewChange) {
+      onFormPreviewChange({
+        plotId: resolvedPlotId,
+        status: paymentStatus,
+        block,
+        dimensions: plotDimensions
+      });
+    }
+  }, [resolvedPlotId, paymentStatus, block, plotDimensions]);
+
+  // Gating rule: Plot No. + Plot Dimensions required to unlock Sections 2-4
+  const isGated = !plotNo.trim() || !plotDimensions;
+
+  // Clear form helper
+  const clearForm = () => {
+    setPlotNo('');
+    setBlock(hasBlocks ? projectBlocks[0] : 'N/A');
+    setPlotDimensions(projectDimensionOptions[0] || '');
+    setFullName('');
+    setFatherName('');
+    setCnic('');
+    setContactNo('');
+    setEmail('');
+    setPaymentMode('Cash');
+    setBankName('');
+    setPaymentStatus('Token Received');
+    setCostOfPlot('');
+    setExtraCharges('');
+    setProcessingCharges('');
+    setDevelopmentCharges('');
+    setAmountReceived('');
+    setAmountInWords('');
+    setValidationError('');
+    if (onFormPreviewChange) onFormPreviewChange(null);
+    if (onClearFormSelection) onClearFormSelection();
+  };
+
+  // Submit Handler with Form Submit Guard Validation
+  const handleSubmit = (e, andPrintReceipt = false) => {
+    if (e) e.preventDefault();
+    setValidationError('');
+
+    // Validation Rules
+    if (!plotNo.trim()) { setValidationError('Please enter a plot number.'); return; }
+    if (hasBlocks && (!block || block === '')) { setValidationError('Please select a block.'); return; }
+    if (!plotDimensions) { setValidationError('Please select plot dimensions.'); return; }
+    if (!bookingDate) { setValidationError('Booking date is required.'); return; }
+    if (!fullName.trim()) { setValidationError('Full name is required.'); return; }
+    if (!fatherName.trim()) { setValidationError('Father name is required.'); return; }
+    if (!cnic.trim()) { setValidationError('CNIC is required.'); return; }
+    if (!contactNo.trim()) { setValidationError('Contact number is required.'); return; }
+    if (!paymentMode) { setValidationError('Please select a payment mode.'); return; }
+    if (!paymentStatus) { setValidationError('Please select a payment status.'); return; }
+    if (paymentStatus === 'Token Received' && !tokenExpiryDate) {
+      setValidationError('Token expiry date is required when Token Received is selected.');
+      return;
+    }
+    if (currentTransactionAmount <= 0) { setValidationError('Amount received must be greater than zero.'); return; }
+    if ((parseFloat(costOfPlot) || 0) <= 0) { setValidationError('Cost of plot is required and must be greater than zero.'); return; }
+
+    // Standardized Payload
+    const payload = {
       projectId: currentProject?.id || 'ahh-city',
-      plotId: resolvedPlotId,
-      clientName: clientName.trim(),
-      relativeName: relativeName.trim(),
+      plotId: resolvedPlotId || plotNo.trim().toUpperCase(),
+      plot_no: plotNo.trim().toUpperCase(),
+      block: hasBlocks ? block : 'N/A',
+      plotDimensions,
+      plotType: plotDimensions,
+      clientName: fullName.trim(),
+      fatherName: fatherName.trim(),
+      relativeName: fatherName.trim(),
       cnic: cnic.trim(),
-      phone: phone.trim(),
+      phone: contactNo.trim(),
       email: email.trim(),
-      block: block.trim(),
       paymentMode,
       bankName: paymentMode !== 'Cash' ? bankName.trim() : '',
-      plotType,
-      status: finalStatus,
-      costOfLand: parseFloat(costOfLand) || 0,
+      paymentStatus,
+      status: paymentStatus,
+      tokenExpiryDate: paymentStatus === 'Token Received' ? tokenExpiryDate : '',
+      costOfPlot: parseFloat(costOfPlot) || 0,
+      costOfLand: parseFloat(costOfPlot) || 0,
       extraCharges: parseFloat(extraCharges) || 0,
       processingCharges: parseFloat(processingCharges) || 0,
-      totalPrice: computedTotal > 0 ? computedTotal : (parseFloat(totalPrice) || 0),
-      paidAmount: numericPaid,
+      developmentCharges: parseFloat(developmentCharges) || 0,
+      totalPayable,
+      totalPrice: totalPayable,
+      amountReceived: currentTransactionAmount,
+      paidAmount: totalReceivedToDate,
       date: bookingDate,
-      tokenExpiryDate: finalStatus === 'Token Received' ? tokenExpiryDate : '',
-      amountInWords: amountInWords || numberToWords(numericPaid),
-      installmentMonth: '',
-      installments: []
+      amountInWords: amountInWords || numberToWords(currentTransactionAmount),
+      installmentMonth
     };
-  };
-
-  const handleFormSubmit = (e, andPrintReceipt = false) => {
-    if (e) e.preventDefault();
-    const payload = buildBookingPayload();
-    if (!payload) return;
-
-    const isMapped = plots.some(p => p.id === payload.plotId);
-    if (!isMapped) {
-      const proceed = confirm(`WARNING: Plot "${payload.plotId}" is not drawn on the site plan map. It will be added to the ledger but won't be highlighted on the SVG layout.\n\nDo you want to proceed?`);
-      if (!proceed) return;
-    }
 
     onSaveBooking(payload);
 
-    const rem = (parseFloat(payload.totalPrice) || 0) - (parseFloat(payload.paidAmount) || 0);
-    if (rem <= 0 && payload.totalPrice > 0) {
-      setShowFullPaymentModal(true);
+    if (remainingBalance <= 0 && totalPayable > 0) {
+      setShowZeroBalanceModal(true);
     }
 
-    if (andPrintReceipt && onPrintReceipt) onPrintReceipt(payload);
-    if (onFormPreviewChange) onFormPreviewChange(null);
-    clearFields(true);
-    onClearFormSelection();
-  };
-
-  const handlePlotInputChange = (e) => {
-    const val = e.target.value.toUpperCase();
-    setPlotIdInput(val);
-    const resolvedId = resolveTargetPlotId(val, plotType);
-    if (onFormPreviewChange) onFormPreviewChange(resolvedId ? { plotId: resolvedId, status } : null);
-  };
-
-  const handleStatusChange = (e) => {
-    const newStatus = e.target.value;
-    setStatus(newStatus);
-    const resolvedId = resolveTargetPlotId(plotIdInput, plotType);
-    if (onFormPreviewChange) onFormPreviewChange(resolvedId ? { plotId: resolvedId, status: newStatus } : null);
-  };
-
-  const handlePlotTypeChange = (e) => {
-    const newType = e.target.value;
-    setPlotType(newType);
-
-    const preset = currentProject?.plotTypes?.find(pt => pt.label === newType);
-    if (preset) {
-      setCostOfLand(preset.costOfLand > 0 ? preset.costOfLand : '');
-      setExtraCharges(preset.extraCharges > 0 ? preset.extraCharges : '');
-      setProcessingCharges(preset.processingCharges > 0 ? preset.processingCharges : '');
-      setTotalPrice(preset.total > 0 ? preset.total : '');
-      setPaidAmount(preset.paid > 0 ? preset.paid : '');
-      setAmountInWords(preset.paid > 0 ? numberToWords(preset.paid) : '');
-    } else {
-      if (newType === 'Residential 60SQY') { setCostOfLand(200000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(200000); setPaidAmount(50000); setAmountInWords(numberToWords(50000)); }
-      else if (newType === 'Residential 120SQY') { setCostOfLand(350000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(350000); setPaidAmount(100000); setAmountInWords(numberToWords(100000)); }
-      else if (newType === 'Commercial Shop 100SQFT') { setCostOfLand(350000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(350000); setPaidAmount(200000); setAmountInWords(numberToWords(200000)); }
-      else if (newType === 'Residential 150SQY') { setCostOfLand(1000000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(1000000); setPaidAmount(200000); setAmountInWords(numberToWords(200000)); }
-      else if (newType === 'Commercial 150SQY') { setCostOfLand(1500000); setExtraCharges(''); setProcessingCharges(''); setTotalPrice(1500000); setPaidAmount(300000); setAmountInWords(numberToWords(300000)); }
+    if (andPrintReceipt && onPrintReceipt) {
+      onPrintReceipt(payload);
     }
 
-    const resolvedId = resolveTargetPlotId(plotIdInput, newType);
-    if (onFormPreviewChange) onFormPreviewChange(resolvedId ? { plotId: resolvedId, status } : null);
+    clearForm();
   };
 
-  const handlePaidAmountChange = (e) => {
-    const amt = e.target.value;
-    setPaidAmount(amt);
-    const numAmt = parseFloat(amt) || 0;
-    setAmountInWords(numberToWords(numAmt));
-
-    const totalP = totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0);
-    if (totalP > 0 && numAmt >= totalP) {
-      setStatus('Booking Received');
-      setShowFullPaymentModal(true);
-    }
-
-    const resolvedId = resolveTargetPlotId(plotIdInput, plotType);
-    if (onFormPreviewChange && resolvedId) onFormPreviewChange({ plotId: resolvedId, status });
-  };
-
-  const handleInstallmentAmountChange = (e) => {
-    const amt = e.target.value;
-    setInstallmentAmount(amt);
-    const numInst = parseFloat(amt) || 0;
-    const prevPaid = existingBooking ? (parseFloat(existingBooking.paidAmount) || 0) : 0;
-    const totalP = totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0);
-    const newTotal = prevPaid + numInst;
-
-    setAmountInWords(numberToWords(numInst));
-
-    if (totalP > 0 && newTotal >= totalP) {
-      setStatus('Booking Received');
-      setShowFullPaymentModal(true);
-    }
-  };
-
-  const handleImportFile = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    onImportLayout(file);
-    e.target.value = '';
-  };
-
-  /* ─── shared input className helpers ─── */
-  const inputBase = 'w-full bg-slate-950 border border-slate-700/80 rounded-none px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-colors';
-  const labelBase = 'block text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-2';
+  /* ── Input Styling Tokens ── */
+  const inputBase = 'w-full bg-slate-950 border border-slate-700/80 rounded-none px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition-all font-medium';
+  const labelBase = 'block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center justify-between';
 
   return (
     <div className="w-full h-full flex flex-col gap-6">
-
-      {/* PANEL A: BOOKING DETAILS FORM */}
+      
+      {/* BOOKING DETAILS FORM CONTAINER */}
       {appMode === 'booking' && (
-        <div className="p-7 rounded-none bg-slate-900 border border-slate-800/80 shadow-2xl flex flex-col gap-0">
-
-          {/* ── Form Header ── */}
-          <header className="mb-8 pb-6 border-b border-slate-800">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h2 className="text-xl font-black text-white flex items-center gap-2.5 mb-1">
-                  <FileText className="w-6 h-6 text-blue-500 shrink-0" />
-                  {existingBooking ? 'Add Installment Entry' : 'Booking Details Form'}
-                </h2>
-                <p className="text-slate-500 text-xs">
-                  {existingBooking
-                    ? 'Record a new installment payment against an existing ledger entry.'
-                    : 'Fill in all required fields to register a new plot booking.'}
-                </p>
-              </div>
-              {existingBooking && (
-                <span className="shrink-0 text-[10px] bg-purple-950 text-purple-300 border border-purple-800/60 px-2.5 py-1 rounded-none font-bold uppercase tracking-wider">
-                  🗓️ Installment Mode
-                </span>
-              )}
+        <div className="p-6 sm:p-8 rounded-none bg-slate-900/95 border border-slate-800/90 shadow-2xl backdrop-blur-xl flex flex-col gap-0">
+          
+          {/* Header */}
+          <header className="mb-8 pb-6 border-b border-slate-800 flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-black text-white font-outfit tracking-tight flex items-center gap-2.5 mb-1">
+                <FileText className="w-6 h-6 text-amber-500 shrink-0" />
+                Booking Detail Form — {currentProject?.name || 'AHH Portal'}
+              </h2>
+              <p className="text-slate-400 text-xs font-mono">
+                {isReturningPlot 
+                  ? `Recording payment for returning plot #${resolvedPlotId} (${fullName || 'Existing Client'})`
+                  : 'Enter plot & transaction details to register booking into Supabase ledger.'}
+              </p>
             </div>
+            {isReturningPlot && (
+              <span className="shrink-0 text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800/60 px-3 py-1.5 rounded-none font-extrabold uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> Returning Plot Entry
+              </span>
+            )}
           </header>
 
-          <form onSubmit={handleFormSubmit} className="space-y-8">
+          {/* Validation Alert */}
+          {validationError && (
+            <div className="mb-6 bg-red-500/10 border border-red-500/30 p-4 rounded-none flex items-center gap-3 text-red-400 text-xs font-bold animate-in fade-in duration-200">
+              <AlertCircle className="w-5 h-5 shrink-0" />
+              <span>{validationError}</span>
+            </div>
+          )}
 
-            {/* ══ SECTION 1: TRANSACTION BASICS ══ */}
-            <section>
-              <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">
-                <span className="w-2 h-2 rounded-full bg-blue-500 inline-block"></span>
-                Transaction Basics
-              </h3>
-              <div className="grid grid-cols-2 gap-5">
+          <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-8">
+
+            {/* ════════════════════════════════════════════════════════════ */}
+            {/* 1. TRANSACTION BASICS (MANDATORY SECTION 1)                  */}
+            {/* ════════════════════════════════════════════════════════════ */}
+            <section className="space-y-5 p-5 bg-slate-950/60 border border-slate-800 rounded-none relative">
+              <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 mb-2">
+                <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-amber-400">
+                  <span className="w-2.5 h-2.5 rounded-none bg-amber-500 inline-block"></span>
+                  1. Transaction Basics
+                </h3>
+                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest font-semibold">Master Controlling Section</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                
+                {/* Booking Date */}
                 <div>
                   <label className={labelBase}>
-                    Date
-                    <span className="ml-auto float-right text-blue-400 font-mono normal-case tracking-normal font-bold">
+                    <span>Booking Date <span className="text-red-400">*</span></span>
+                    <span className="text-amber-400 font-mono text-[10px] font-bold">
                       {formatDateDDMMYY(bookingDate)}
                     </span>
                   </label>
-                  <input type="date" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)}
-                    className={inputBase} required />
+                  <div className="relative">
+                    <input 
+                      type="date" 
+                      value={bookingDate} 
+                      onChange={(e) => setBookingDate(e.target.value)}
+                      className={inputBase} 
+                      required 
+                    />
+                  </div>
                 </div>
+
+                {/* Plot No. (Free-text input) */}
                 <div>
                   <label className={labelBase}>
-                    Plot Number
-                    {resolvedPreviewId && (() => {
-                      const isMapped = plots.some(p => p.id === resolvedPreviewId);
-                      if (!isMapped) return <span className="float-right ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700 normal-case tracking-normal">⚠ Not on map</span>;
-                      if (existingBooking?.status === 'Booking Received') return <span className="float-right ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-950/70 text-emerald-400 border border-emerald-800/50 normal-case tracking-normal animate-pulse">🟢 Booked</span>;
-                      if (existingBooking?.status === 'Token Received') return <span className="float-right ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-yellow-950/70 text-yellow-400 border border-yellow-800/50 normal-case tracking-normal animate-pulse">🟡 Token</span>;
-                      return <span className="float-right ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 normal-case tracking-normal">⚪ Available</span>;
-                    })()}
+                    <span>Plot Number <span className="text-red-400">*</span></span>
+                    {resolvedPlotId && (
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                        {isReturningPlot ? '🟢 Existing Plot' : '⚪ New Entry'}
+                      </span>
+                    )}
                   </label>
-                  <input type="text" value={plotIdInput} onChange={handlePlotInputChange}
-                    className={`${inputBase} ${resolvedPreviewId && existingBooking?.status === 'Token Received' ? 'border-yellow-600/50 focus:border-yellow-500' : resolvedPreviewId && existingBooking?.status === 'Booking Received' ? 'border-emerald-600/50 focus:border-emerald-500' : ''}`}
-                    placeholder="e.g. 8, 120-8, SR-1" required />
-                </div>
-              </div>
-
-              {/* Installment mode banner */}
-              {existingBooking && (
-                <div className="mt-4 p-3.5 rounded-none bg-blue-950/70 border border-blue-500/50 text-blue-200 text-xs flex flex-col gap-1.5">
-                  <div className="font-bold flex items-center justify-between text-blue-300">
-                    <span className="flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-blue-400 shrink-0" />
-                      Existing Record — Adding Installment
-                    </span>
-                    <span className="font-mono text-[10px] bg-blue-900/60 px-2 py-0.5 rounded">
-                      Paid: Rs {parseInt(existingBooking.paidAmount || 0).toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-blue-300/80">
-                    Client: <strong>{existingBooking.clientName}</strong> &mdash; Total: <strong>Rs {parseInt(existingBooking.totalPrice || 0).toLocaleString()}</strong>
-                  </div>
-                </div>
-              )}
-            </section>
-
-            {/* ══ SECTION 2: CLIENT PROFILE ══ */}
-            <section>
-              <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">
-                <span className="w-2 h-2 rounded-full bg-violet-500 inline-block"></span>
-                Client Profile
-              </h3>
-              <div className="space-y-5">
-                <div>
-                  <label className={labelBase}>Full Name</label>
-                  <input type="text" value={clientName} onChange={(e) => setClientName(e.target.value)}
-                    className={inputBase} placeholder="e.g. Muhammad Ali Khan" required />
-                </div>
-                <div className="grid grid-cols-2 gap-5">
-                  <div>
-                    <label className={labelBase}>Father / Husband Name</label>
-                    <input type="text" value={relativeName} onChange={(e) => setRelativeName(e.target.value)}
-                      className={inputBase} placeholder="e.g. Muhammad Usman" />
-                  </div>
-                  <div>
-                    <label className={labelBase}>Block</label>
-                    <input type="text" value={block} onChange={(e) => setBlock(e.target.value)}
-                      className={inputBase} placeholder="e.g. Block A" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-5">
-                  <div>
-                    <label className={labelBase}>CNIC Number</label>
-                    <input type="text" value={cnic} onChange={(e) => setCnic(e.target.value)}
-                      className={`${inputBase} font-mono`} placeholder="42101-XXXXXXX-X" />
-                  </div>
-                  <div>
-                    <label className={labelBase}>Contact No.</label>
-                    <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-                      className={inputBase} placeholder="0300-1234567" required />
-                  </div>
-                </div>
-                <div>
-                  <label className={labelBase}>Email Address <span className="text-slate-600 normal-case tracking-normal font-normal text-[10px]">(optional)</span></label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                    className={inputBase} placeholder="client@example.com" />
-                </div>
-              </div>
-            </section>
-
-            {/* ══ SECTION 3: BOOKING CONFIGURATION ══ */}
-            <section>
-              <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">
-                <span className="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span>
-                Payment Configuration
-              </h3>
-              <div className="space-y-5">
-                <div className="grid grid-cols-2 gap-5">
-                  <div>
-                    <label className={labelBase}>Payment Mode</label>
-                    <select value={paymentMode} onChange={(e) => { setPaymentMode(e.target.value); setBankName(''); }}
-                      className={`${inputBase} cursor-pointer`}>
-                      <option value="Cash">💵 Cash</option>
-                      <option value="Cheque">🏦 Cheque</option>
-                      <option value="Online">📱 Online Transfer</option>
-                    </select>
-                  </div>
-                  {paymentMode !== 'Cash' ? (
-                    <div>
-                      <label className={labelBase}>Bank Name</label>
-                      <input type="text" value={bankName} onChange={(e) => setBankName(e.target.value)}
-                        className={inputBase}
-                        placeholder={paymentMode === 'Cheque' ? 'e.g. HBL, MCB' : 'e.g. Meezan Bank, UBL'} />
-                    </div>
-                  ) : <div />}
+                  <input 
+                    type="text" 
+                    value={plotNo} 
+                    onChange={(e) => setPlotNo(e.target.value.toUpperCase())}
+                    placeholder="e.g. A-101, 205, SR-1" 
+                    className={`${inputBase} font-bold font-mono tracking-wider ${plotNo ? 'border-amber-500/60' : ''}`}
+                    required 
+                  />
                 </div>
 
-                {existingBooking ? (
-                  <div>
-                    <label className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-blue-400 mb-2">
-                      <Calendar className="w-3.5 h-3.5" /> Installment Month
-                    </label>
-                    <input type="text" value={installmentMonth} onChange={(e) => setInstallmentMonth(e.target.value)}
-                      className={`${inputBase} border-blue-600/50 focus:border-blue-500 text-blue-300 font-semibold`}
-                      placeholder="e.g. August 2026" required />
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 gap-5">
-                    <div>
-                      <label className={labelBase}>Plot Dimension</label>
-                      <select value={plotType} onChange={handlePlotTypeChange}
-                        className={`${inputBase} cursor-pointer`}>
-                        {(currentProject?.plotTypes || [
-                          { label: 'Residential 60SQY' }, { label: 'Residential 120SQY' },
-                          { label: 'Commercial Shop 100SQFT' }, { label: 'Residential 150SQY' },
-                          { label: 'Commercial 150SQY' }, { label: 'Custom Size' }
-                        ]).map((pt, idx) => (
-                          <option key={`pt-${idx}`} value={pt.label}>
-                            {pt.label} {pt.total > 0 ? `(Rs ${pt.total.toLocaleString()})` : ''}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className={labelBase}>Plot Status</label>
-                      <select value={status} onChange={handleStatusChange}
-                        className={`${inputBase} cursor-pointer font-semibold ${
-                          status === 'Token Received'
-                            ? 'border-yellow-600/50 text-yellow-400 focus:border-yellow-500'
-                            : 'border-emerald-600/50 text-emerald-400 focus:border-emerald-500'
-                        }`}>
-                        <option value="Token Received">🟡 Token Received</option>
-                        <option value="Booking Received">🟢 Booking Received</option>
-                      </select>
-                    </div>
-                  </div>
-                )}
-
-                {!existingBooking && status === 'Token Received' && (
-                  <div>
-                    <label className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-yellow-400 mb-2">
-                      <Calendar className="w-3.5 h-3.5" /> Token Expiry Date
-                      <span className="ml-auto text-[10px] font-mono font-bold bg-yellow-950/60 border border-yellow-800/40 px-2 py-0.5 rounded normal-case tracking-normal">
-                        {formatDateDDMMYY(tokenExpiryDate)}
-                      </span>
-                    </label>
-                    <input type="date" value={tokenExpiryDate} onChange={(e) => setTokenExpiryDate(e.target.value)}
-                      className={`${inputBase} border-yellow-600/50 text-yellow-300 focus:border-yellow-500`}
-                      required />
-                  </div>
-                )}
-              </div>
-            </section>
-
-            {/* ══ SECTION 4: FINANCIAL SUMMARY ══ */}
-            <section>
-              <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 mb-5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
-                Financial Summary
-              </h3>
-              <div className="space-y-5">
-
-                {/* Cost Breakdown card */}
-                <div className="rounded-none border border-slate-800 overflow-hidden">
-                  <div className="bg-slate-800/30 px-4 py-3">
-                    <span className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-slate-500">📋 Cost Breakdown</span>
-                  </div>
-                  <div className="p-4 space-y-4">
-                    <div className="grid grid-cols-3 gap-4">
-                      {[
-                        { label: 'Cost of Land', val: costOfLand, set: setCostOfLand },
-                        { label: 'Extra Charges', val: extraCharges, set: setExtraCharges },
-                        { label: 'Processing & Doc', val: processingCharges, set: setProcessingCharges }
-                      ].map(({ label, val, set }) => (
-                        <div key={label}>
-                          <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">{label}</label>
-                          <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-medium">Rs</span>
-                            <input type="number" value={val} onChange={(e) => set(e.target.value)}
-                              className="w-full bg-slate-900 border border-slate-700/80 rounded-none pl-8 pr-2 py-2.5 text-sm text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20"
-                              placeholder="0" min="0" />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex items-center justify-between bg-emerald-950/40 border border-emerald-800/40 rounded-none px-4 py-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">Total Receivable</span>
-                      <span className="text-base font-black text-emerald-400">
-                        Rs {(totalReceivableAmount > 0 ? totalReceivableAmount : (parseFloat(totalPrice) || 0)).toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Price & Paid row */}
-                <div className="grid grid-cols-2 gap-5">
-                  <div>
-                    <label className={labelBase}>Total Plot Price</label>
-                    <div className="relative">
-                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-medium">Rs</span>
-                      <input type="number"
-                        value={totalReceivableAmount > 0 ? totalReceivableAmount : totalPrice}
-                        onChange={(e) => { if (totalReceivableAmount <= 0) setTotalPrice(e.target.value); }}
-                        className={`${inputBase} pl-9 ${totalReceivableAmount > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        placeholder="0" min="0" readOnly={totalReceivableAmount > 0} required />
-                    </div>
-                  </div>
+                {/* Block Dropdown */}
+                {hasBlocks ? (
                   <div>
                     <label className={labelBase}>
-                      {existingBooking ? 'Installment Amount' : 'Token / Paid Amount'}
+                      <span>Block <span className="text-red-400">*</span></span>
                     </label>
-                    <div className="relative">
-                      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-medium">Rs</span>
-                      {existingBooking ? (
-                        <input type="number" value={installmentAmount} onChange={handleInstallmentAmountChange}
-                          className={`${inputBase} pl-9 border-emerald-600/50 font-bold focus:border-emerald-500`}
-                          placeholder="0" min="0" required />
-                      ) : (
-                        <input type="number" value={paidAmount} onChange={handlePaidAmountChange}
-                          className={`${inputBase} pl-9`}
-                          placeholder="0" min="0" required />
-                      )}
-                    </div>
+                    <select 
+                      value={block} 
+                      onChange={(e) => setBlock(e.target.value)}
+                      className={`${inputBase} cursor-pointer`}
+                      required
+                    >
+                      {projectBlocks.map((blk, idx) => (
+                        <option key={`blk-${idx}`} value={blk}>{blk}</option>
+                      ))}
+                    </select>
                   </div>
-                </div>
+                ) : (
+                  <div>
+                    <label className={labelBase}>
+                      <span>Block</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      value="N/A (No Blocks in AHH City)" 
+                      disabled 
+                      className={`${inputBase} opacity-50 cursor-not-allowed text-slate-500`} 
+                    />
+                  </div>
+                )}
 
-                {/* Amount in words */}
+                {/* Plot Dimensions Dropdown */}
                 <div>
-                  <label className={labelBase}>Amount in Words</label>
-                  <input type="text" value={amountInWords} onChange={(e) => setAmountInWords(e.target.value)}
-                    className="w-full bg-slate-950/50 border border-slate-800/50 rounded-none px-4 py-3 text-xs text-blue-400/80 italic placeholder:text-slate-700 outline-none"
-                    placeholder="Auto-generated in words..." />
+                  <label className={labelBase}>
+                    <span>Plot Dimensions <span className="text-red-400">*</span></span>
+                  </label>
+                  <select 
+                    value={plotDimensions} 
+                    onChange={handleDimensionsChange}
+                    className={`${inputBase} cursor-pointer`}
+                    required
+                  >
+                    {projectDimensionOptions.map((dim, idx) => (
+                      <option key={`dim-${idx}`} value={dim}>{dim}</option>
+                    ))}
+                  </select>
                 </div>
 
-                {/* Remaining balance */}
-                <div className={`flex items-center justify-between rounded-none px-4 py-3.5 border ${
-                  balance <= 0
-                    ? 'bg-emerald-950/30 border-emerald-800/50'
-                    : 'bg-slate-950/40 border-slate-700/50'
-                }`}>
-                  <span className={`text-xs font-bold uppercase tracking-wider ${balance <= 0 ? 'text-emerald-400' : 'text-slate-400'}`}>
-                    Remaining Balance
-                  </span>
-                  <span className={`font-extrabold ${balance <= 0 ? 'text-emerald-400 text-sm' : 'text-slate-200 text-sm'}`}>
-                    {balance <= 0 ? '✓ Fully Paid — Rs 0' : `Rs ${balance.toLocaleString()}`}
-                  </span>
-                </div>
               </div>
             </section>
 
-            {/* ══ ACTION BUTTONS ══ */}
-            <div className="flex flex-col gap-3 pt-2">
-              <div className="grid grid-cols-2 gap-3">
-                <button type="submit"
-                  className="py-3.5 rounded-none bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-emerald-900/25 active:scale-[0.98]">
-                  <Save className="w-4 h-4" />
-                  Save Booking
-                </button>
-                <button type="button"
-                  onClick={(e) => {
-                    if (e) e.preventDefault();
-                    if (existingBooking && !installmentAmount) {
-                      if (onPrintReceipt) onPrintReceipt(existingBooking);
-                    } else {
-                      handleFormSubmit(e, true);
-                    }
-                  }}
-                  className="py-3.5 rounded-none bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-blue-900/25 active:scale-[0.98]">
-                  <Printer className="w-4 h-4" />
-                  Save & Print
-                </button>
+
+            {/* Gating Overlay for Sections 2-4 */}
+            {isGated ? (
+              <div className="p-8 bg-slate-950/80 border border-amber-500/30 rounded-none text-center space-y-3">
+                <div className="w-12 h-12 rounded-none bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <h4 className="text-sm font-bold text-white uppercase tracking-wider">Sections 2, 3 & 4 Locked</h4>
+                <p className="text-xs text-slate-400 max-w-md mx-auto">
+                  Please enter a valid <strong className="text-amber-400">Plot Number</strong> and select <strong className="text-amber-400">Plot Dimensions</strong> in Section 1 to unlock Client Profile &amp; Payment Configuration.
+                </p>
               </div>
-              <button type="button"
-                onClick={() => { clearFields(true); onClearFormSelection(); }}
-                className="w-full py-2.5 rounded-none border border-slate-700/50 bg-transparent hover:bg-slate-800/50 text-slate-500 hover:text-slate-300 text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-all">
-                <Eraser className="w-3.5 h-3.5" />
-                Clear Form
-              </button>
-            </div>
+            ) : (
+              <>
+                {/* ════════════════════════════════════════════════════════════ */}
+                {/* 2. CLIENT PROFILE (MANDATORY SECTION 2)                    */}
+                {/* ════════════════════════════════════════════════════════════ */}
+                <section className="space-y-5 p-5 bg-slate-950/40 border border-slate-800 rounded-none animate-in fade-in duration-300">
+                  <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 mb-2">
+                    <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-violet-400">
+                      <span className="w-2.5 h-2.5 rounded-none bg-violet-500 inline-block"></span>
+                      2. Client Profile
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {/* Full Name */}
+                    <div>
+                      <label className={labelBase}>Full Name <span className="text-red-400">*</span></label>
+                      <input 
+                        type="text" 
+                        value={fullName} 
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="e.g. Muhammad Ali Khan" 
+                        className={inputBase} 
+                        required 
+                      />
+                    </div>
+
+                    {/* Father Name */}
+                    <div>
+                      <label className={labelBase}>Father / Husband Name <span className="text-red-400">*</span></label>
+                      <input 
+                        type="text" 
+                        value={fatherName} 
+                        onChange={(e) => setFatherName(e.target.value)}
+                        placeholder="e.g. Muhammad Usman" 
+                        className={inputBase} 
+                        required 
+                      />
+                    </div>
+
+                    {/* CNIC */}
+                    <div>
+                      <label className={labelBase}>CNIC Number <span className="text-red-400">*</span></label>
+                      <input 
+                        type="text" 
+                        value={cnic} 
+                        onChange={handleCnicChange}
+                        placeholder="42101-1234567-1" 
+                        className={`${inputBase} font-mono`} 
+                        maxLength={15}
+                        required 
+                      />
+                    </div>
+
+                    {/* Contact No */}
+                    <div>
+                      <label className={labelBase}>Contact No. <span className="text-red-400">*</span></label>
+                      <input 
+                        type="tel" 
+                        value={contactNo} 
+                        onChange={(e) => setContactNo(e.target.value)}
+                        placeholder="0300-1234567" 
+                        className={inputBase} 
+                        required 
+                      />
+                    </div>
+
+                    {/* Email (Optional) */}
+                    <div className="sm:col-span-2">
+                      <label className={labelBase}>
+                        <span>Email Address</span>
+                        <span className="text-slate-600 normal-case tracking-normal font-normal text-[10px]">(Optional)</span>
+                      </label>
+                      <input 
+                        type="email" 
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="client@example.com" 
+                        className={inputBase} 
+                      />
+                    </div>
+                  </div>
+                </section>
+
+                {/* ════════════════════════════════════════════════════════════ */}
+                {/* 3. PAYMENT CONFIGURATION (MANDATORY SECTION 3)              */}
+                {/* ════════════════════════════════════════════════════════════ */}
+                <section className="space-y-5 p-5 bg-slate-950/40 border border-slate-800 rounded-none animate-in fade-in duration-300">
+                  <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 mb-2">
+                    <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-yellow-400">
+                      <span className="w-2.5 h-2.5 rounded-none bg-yellow-500 inline-block"></span>
+                      3. Payment Configuration
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {/* Payment Mode */}
+                    <div>
+                      <label className={labelBase}>Payment Mode <span className="text-red-400">*</span></label>
+                      <select 
+                        value={paymentMode} 
+                        onChange={(e) => { setPaymentMode(e.target.value); setBankName(''); }}
+                        className={`${inputBase} cursor-pointer`}
+                        required
+                      >
+                        <option value="Cash">💵 Cash</option>
+                        <option value="Cheque">🏦 Cheque</option>
+                        <option value="Bank Transfer">🏛️ Bank Transfer</option>
+                        <option value="Online Transfer">📱 Online Transfer</option>
+                      </select>
+                    </div>
+
+                    {/* Bank Name if non-cash */}
+                    {paymentMode !== 'Cash' ? (
+                      <div>
+                        <label className={labelBase}>Bank Name</label>
+                        <input 
+                          type="text" 
+                          value={bankName} 
+                          onChange={(e) => setBankName(e.target.value)}
+                          placeholder="e.g. Meezan Bank, HBL, MCB" 
+                          className={inputBase} 
+                        />
+                      </div>
+                    ) : <div />}
+
+                    {/* Payment Status Dropdown (Smart Dropdown Logic) */}
+                    <div className="sm:col-span-2">
+                      <label className={labelBase}>
+                        <span>Payment Status <span className="text-red-400">*</span></span>
+                        <span className="text-[10px] font-mono text-slate-500 font-semibold">
+                          {isReturningPlot ? 'Returning Plot Mode' : 'First-time Entry Mode'}
+                        </span>
+                      </label>
+                      
+                      <select 
+                        value={paymentStatus} 
+                        onChange={(e) => setPaymentStatus(e.target.value)}
+                        className={`${inputBase} cursor-pointer font-bold ${
+                          paymentStatus === 'Token Received' 
+                            ? 'border-yellow-500 text-yellow-400' 
+                            : 'border-emerald-500 text-emerald-400'
+                        }`}
+                        required
+                      >
+                        {!isReturningPlot && (
+                          <option value="Token Received">🟡 Token Received</option>
+                        )}
+                        <option value="Booking Received">🟢 Booking Received</option>
+                        {isReturningPlot && (
+                          <option value="Installment Received">🟢 Installment Received</option>
+                        )}
+                        <option value="Full Amount Received">🟢 Full Amount Received</option>
+                      </select>
+                    </div>
+
+                    {/* Conditional Token Expiry Date */}
+                    {!isReturningPlot && paymentStatus === 'Token Received' && (
+                      <div className="sm:col-span-2 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-none transition-all duration-300">
+                        <label className={labelBase}>
+                          <span className="text-yellow-400 flex items-center gap-1.5">
+                            <Calendar className="w-4 h-4" /> Token Expiry Date <span className="text-red-400">*</span>
+                          </span>
+                          <span className="text-yellow-300 font-mono text-[10px] font-bold">
+                            {formatDateDDMMYY(tokenExpiryDate)}
+                          </span>
+                        </label>
+                        <input 
+                          type="date" 
+                          value={tokenExpiryDate} 
+                          onChange={(e) => setTokenExpiryDate(e.target.value)}
+                          className={`${inputBase} border-yellow-500/50 text-yellow-300 focus:border-yellow-400 mt-2`}
+                          required 
+                        />
+                      </div>
+                    )}
+
+                  </div>
+                </section>
+
+                {/* ════════════════════════════════════════════════════════════ */}
+                {/* 4. FINANCIAL SUMMARY (MANDATORY SECTION 4)                   */}
+                {/* ════════════════════════════════════════════════════════════ */}
+                <section className="space-y-5 p-5 bg-slate-950/40 border border-slate-800 rounded-none animate-in fade-in duration-300">
+                  <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 mb-2">
+                    <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-emerald-400">
+                      <span className="w-2.5 h-2.5 rounded-none bg-emerald-500 inline-block"></span>
+                      4. Financial Summary
+                    </h3>
+                  </div>
+
+                  <div className="space-y-5">
+                    
+                    {/* Cost Breakdown Inputs */}
+                    <div className="border border-slate-800 bg-slate-950/80 p-4 space-y-4">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block border-b border-slate-800 pb-2">
+                        📋 Cost Breakdown (Inputs)
+                      </span>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {/* Cost of Plot */}
+                        <div>
+                          <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                            Cost of Plot <span className="text-red-400">*</span>
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">Rs</span>
+                            <input 
+                              type="number" 
+                              value={costOfPlot} 
+                              onChange={(e) => setCostOfPlot(e.target.value)}
+                              placeholder="0" 
+                              min="0"
+                              className="w-full bg-slate-900 border border-slate-700 rounded-none pl-9 pr-3 py-2.5 text-sm text-white focus:border-emerald-500 outline-none font-mono"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        {/* Extra Charges */}
+                        <div>
+                          <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Extra Charges</label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">Rs</span>
+                            <input 
+                              type="number" 
+                              value={extraCharges} 
+                              onChange={(e) => setExtraCharges(e.target.value)}
+                              placeholder="0" 
+                              min="0"
+                              className="w-full bg-slate-900 border border-slate-700 rounded-none pl-9 pr-3 py-2.5 text-sm text-white focus:border-emerald-500 outline-none font-mono"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Processing & Doc */}
+                        <div>
+                          <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Processing &amp; Doc</label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">Rs</span>
+                            <input 
+                              type="number" 
+                              value={processingCharges} 
+                              onChange={(e) => setProcessingCharges(e.target.value)}
+                              placeholder="0" 
+                              min="0"
+                              className="w-full bg-slate-900 border border-slate-700 rounded-none pl-9 pr-3 py-2.5 text-sm text-white focus:border-emerald-500 outline-none font-mono"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Development Charges (NEW FIELD) */}
+                        <div>
+                          <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Development Charges</label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">Rs</span>
+                            <input 
+                              type="number" 
+                              value={developmentCharges} 
+                              onChange={(e) => setDevelopmentCharges(e.target.value)}
+                              placeholder="0" 
+                              min="0"
+                              className="w-full bg-slate-900 border border-slate-700 rounded-none pl-9 pr-3 py-2.5 text-sm text-white focus:border-emerald-500 outline-none font-mono"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Calculated Fields & Totals */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      
+                      {/* Total Receivable */}
+                      <div>
+                        <label className={labelBase}>Total Receivable (Total Payable)</label>
+                        <div className="relative">
+                          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-400 text-sm font-bold">Rs</span>
+                          <input 
+                            type="text" 
+                            value={totalReceivable.toLocaleString()} 
+                            readOnly 
+                            className={`${inputBase} pl-9 bg-emerald-950/30 border-emerald-800/60 text-emerald-400 font-black text-base cursor-not-allowed`} 
+                          />
+                        </div>
+                      </div>
+
+                      {/* Amount Received */}
+                      <div>
+                        <label className={labelBase}>Amount Received (Current Entry) <span className="text-red-400">*</span></label>
+                        <div className="relative">
+                          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-bold">Rs</span>
+                          <input 
+                            type="number" 
+                            value={amountReceived} 
+                            onChange={handleAmountReceivedChange}
+                            placeholder="0" 
+                            min="0"
+                            className={`${inputBase} pl-9 border-emerald-500/60 font-black text-base text-white focus:border-emerald-400`} 
+                            required 
+                          />
+                        </div>
+                      </div>
+
+                    </div>
+
+                    {/* Amount in Words */}
+                    <div>
+                      <label className={labelBase}>Amount in Words</label>
+                      <input 
+                        type="text" 
+                        value={amountInWords} 
+                        readOnly
+                        placeholder="Auto-generated in words..." 
+                        className="w-full bg-slate-950/60 border border-slate-800 rounded-none px-4 py-3 text-xs text-amber-300 font-mono italic outline-none cursor-not-allowed" 
+                      />
+                    </div>
+
+                    {/* Total Received To Date & Remaining Balance */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                      <div className="p-4 bg-slate-950 border border-slate-800 rounded-none space-y-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Total Received (All Transactions)</span>
+                        <span className="text-lg font-black text-emerald-400 font-mono">
+                          Rs {totalReceivedToDate.toLocaleString()}
+                        </span>
+                      </div>
+
+                      <div className={`p-4 rounded-none border space-y-1 ${
+                        remainingBalance <= 0 
+                          ? 'bg-emerald-950/40 border-emerald-500/60' 
+                          : 'bg-slate-950 border-slate-800'
+                      }`}>
+                        <span className={`text-[10px] font-bold uppercase tracking-wider block ${
+                          remainingBalance <= 0 ? 'text-emerald-400' : 'text-slate-500'
+                        }`}>
+                          Remaining Balance
+                        </span>
+                        <span className={`text-lg font-black font-mono ${
+                          remainingBalance <= 0 ? 'text-emerald-400' : 'text-slate-200'
+                        }`}>
+                          Rs {remainingBalance.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Inline Zero Balance Message */}
+                    {remainingBalance <= 0 && totalReceivable > 0 && (
+                      <div className="p-4 bg-emerald-950/60 border border-emerald-500/60 rounded-none flex items-center gap-3 text-emerald-400 animate-in fade-in duration-300">
+                        <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                        <span className="text-xs font-black uppercase tracking-wider">
+                          ✅ All dues cleared — Full amount received.
+                        </span>
+                      </div>
+                    )}
+
+                  </div>
+                </section>
+
+                {/* ════════════════════════════════════════════════════════════ */}
+                {/* ACTION BUTTONS                                               */}
+                {/* ════════════════════════════════════════════════════════════ */}
+                <div className="flex flex-col gap-3 pt-4 border-t border-slate-800">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button 
+                      type="submit"
+                      className="py-4 px-6 rounded-none bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xl shadow-emerald-950/40 min-h-[48px]"
+                    >
+                      <Save className="w-4 h-4" />
+                      Save Booking Entry
+                    </button>
+
+                    <button 
+                      type="button"
+                      onClick={(e) => handleSubmit(e, true)}
+                      className="py-4 px-6 rounded-none bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xl shadow-amber-950/40 min-h-[48px]"
+                    >
+                      <Printer className="w-4 h-4" />
+                      Save &amp; Print Receipt
+                    </button>
+                  </div>
+
+                  <button 
+                    type="button"
+                    onClick={clearForm}
+                    className="w-full py-3 rounded-none border border-slate-800 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  >
+                    <Eraser className="w-4 h-4 text-amber-500/80" />
+                    Clear Form Fields
+                  </button>
+                </div>
+              </>
+            )}
 
           </form>
         </div>
       )}
 
-      {/* POPUP MODAL: FULL AMOUNT RECEIVED (BALANCE ZERO) */}
-      {showFullPaymentModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
-          <div className="bg-slate-900 border-2 border-emerald-500 rounded-none max-w-md w-full p-6 shadow-2xl text-center space-y-4 relative animate-bounce-short">
-            <div className="w-16 h-16 rounded-full bg-emerald-950 border-2 border-emerald-500 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">
-              <CheckCircle2 className="w-10 h-10 animate-pulse" />
+      {/* ZERO BALANCE POPUP MODAL */}
+      {showZeroBalanceModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl animate-in fade-in duration-200">
+          <div className="relative z-10 w-full max-w-md bg-slate-900 border-2 border-emerald-500 rounded-none shadow-2xl p-6 sm:p-8 space-y-5 text-center">
+            <div className="w-16 h-16 rounded-full bg-emerald-950 border-2 border-emerald-500 text-emerald-400 flex items-center justify-center mx-auto shadow-xl shadow-emerald-500/20">
+              <CheckCircle2 className="w-8 h-8 animate-pulse" />
             </div>
+            
             <div>
-              <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 px-3 py-1 rounded-none">
+              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-950 border border-emerald-800 px-3 py-1 rounded-none inline-block mb-2">
                 🎉 Full Amount Received
               </span>
-              <h3 className="text-xl font-black text-white mt-3 font-outfit">Total Plot Amount Received</h3>
-              <p className="text-xs text-slate-300 mt-1">
-                Plot <strong className="text-emerald-400">#{resolvedPreviewId || plotIdInput}</strong> is now completely paid off! The remaining balance is <strong>Rs 0</strong> and plot status color is set to <strong>Booking Received (Green)</strong>.
+              <h3 className="text-xl font-black text-white font-outfit">All Dues Cleared!</h3>
+              <p className="text-xs text-slate-300 mt-2">
+                Plot <strong className="text-emerald-400">#{resolvedPlotId || plotNo}</strong> has been completely paid off. Total receivable of <strong>Rs {totalReceivable.toLocaleString()}</strong> is fully cleared!
               </p>
             </div>
-            <div className="p-3 bg-slate-950 border border-slate-800 rounded-none text-xs space-y-1 text-left">
-              <div className="flex justify-between text-slate-400"><span>Client Name:</span> <strong className="text-white">{clientName}</strong></div>
-              <div className="flex justify-between text-slate-400"><span>Total Receivable Amount:</span> <strong className="text-white">Rs {(totalReceivableAmount > 0 ? totalReceivableAmount : parseInt(totalPrice || 0)).toLocaleString()}</strong></div>
-              <div className="flex justify-between text-slate-400"><span>Total Amount Received:</span> <strong className="text-emerald-400">Rs {(totalReceivableAmount > 0 ? totalReceivableAmount : parseInt(totalPrice || 0)).toLocaleString()}</strong></div>
-              <div className="flex justify-between text-slate-400"><span>Remaining Balance:</span> <strong className="text-emerald-400">Rs 0 (FULL AMOUNT RECEIVED)</strong></div>
+
+            <div className="p-4 bg-slate-950 border border-slate-800 rounded-none text-xs space-y-2 text-left font-mono">
+              <div className="flex justify-between text-slate-400"><span>Client Name:</span> <strong className="text-white">{fullName}</strong></div>
+              <div className="flex justify-between text-slate-400"><span>Total Receivable:</span> <strong className="text-white">Rs {totalReceivable.toLocaleString()}</strong></div>
+              <div className="flex justify-between text-slate-400"><span>Total Received:</span> <strong className="text-emerald-400">Rs {totalReceivedToDate.toLocaleString()}</strong></div>
+              <div className="flex justify-between text-slate-400"><span>Remaining Balance:</span> <strong className="text-emerald-400">Rs 0 (FULLY PAID)</strong></div>
             </div>
+
             <button
-              onClick={() => setShowFullPaymentModal(false)}
-              className="w-full py-2.5 rounded-none bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all cursor-pointer shadow-lg shadow-emerald-600/30"
+              onClick={() => setShowZeroBalanceModal(false)}
+              className="w-full py-3.5 rounded-none bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-lg cursor-pointer"
             >
               Dismiss &amp; Continue
             </button>
           </div>
         </div>
       )}
+
     </div>
   );
 }

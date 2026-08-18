@@ -947,20 +947,32 @@ export default function MapCanvas({
             {/* INTERACTIVE PLOTS OVERLAY */}
             <g className="mapped-plots-group">
               {plots.map((plot, idx) => {
-                const booking = bookings.find(b => b.plotId === plot.id || b.plotId === plot.label);
-                const isPreviewPlot = formPreview && formPreview.plotId === plot.id && !booking;
+                const booking = bookings.find(b => 
+                  b.plotId === plot.id || 
+                  b.plotId === plot.label || 
+                  (b.plot_no && b.plot_no.toUpperCase() === plot.id.toUpperCase())
+                );
+                const isPreviewPlot = formPreview && (formPreview.plotId === plot.id || formPreview.plotId === plot.label) && !booking;
 
                 let plotClass = 'plot-shape';
                 let customStyle = {};
 
+                const checkStatus = (statusStr) => {
+                  if (!statusStr) return '';
+                  const s = statusStr.toLowerCase();
+                  if (s.includes('token')) return 'token';
+                  if (s.includes('booking') || s.includes('installment') || s.includes('full')) return 'booked';
+                  return '';
+                };
+
                 if (isPreviewPlot) {
-                  plotClass += formPreview.status === 'Token Received'
-                    ? ' plot-preview-token'
-                    : ' plot-preview-booked';
+                  const pStatus = checkStatus(formPreview.status);
+                  plotClass += pStatus === 'token' ? ' plot-preview-token' : ' plot-preview-booked';
                 } else if (booking) {
-                  if (booking.status === 'Token Received') {
+                  const bStatus = checkStatus(booking.paymentStatus || booking.status);
+                  if (bStatus === 'token') {
                     plotClass += ' token-received';
-                  } else if (booking.status === 'Booking Received') {
+                  } else if (bStatus === 'booked') {
                     plotClass += ' fully-booked';
                   }
                 }
@@ -983,6 +995,9 @@ export default function MapCanvas({
                       points={plot.rawCoords}
                       className={plotClass}
                       style={customStyle}
+                      data-plot-no={plot.id || plot.label}
+                      data-block={plot.block || 'N/A'}
+                      data-dimensions={plot.type || plot.dimensions || ''}
                       onMouseEnter={(e) => handlePlotMouseEnter(e, plot)}
                       onMouseMove={handlePlotMouseMove}
                       onMouseLeave={handlePlotMouseLeave}
