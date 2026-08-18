@@ -5,7 +5,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Save, Eraser, Printer, Calendar, AlertCircle, CheckCircle2, 
-  Lock, FileText, ShieldCheck, Tag, DollarSign, User, Phone, 
+  FileText, ShieldCheck, Tag, DollarSign, User, Phone, 
   CreditCard, Sparkles, Building2, MapPin
 } from 'lucide-react';
 import { formatDateDDMMYY } from '@/lib/dateUtils';
@@ -246,8 +246,7 @@ export default function BookingForm({
     }
   }, [resolvedPlotId, paymentStatus, block, plotDimensions]);
 
-  // Gating rule: Plot No. + Plot Dimensions required to unlock Sections 2-4
-  const isGated = !plotNo.trim() || !plotDimensions;
+  // No gating — all sections always visible per user requirement
 
   // Clear form helper
   const clearForm = () => {
@@ -286,6 +285,11 @@ export default function BookingForm({
     if (!fullName.trim()) { setValidationError('Full name is required.'); return; }
     if (!fatherName.trim()) { setValidationError('Father name is required.'); return; }
     if (!cnic.trim()) { setValidationError('CNIC is required.'); return; }
+    // Validate CNIC format: XXXXX-XXXXXXX-X (13 digits)
+    const cnicDigits = cnic.replace(/\D/g, '');
+    if (cnicDigits.length !== 13) {
+      setValidationError('CNIC must be exactly 13 digits in format XXXXX-XXXXXXX-X'); return;
+    }
     if (!contactNo.trim()) { setValidationError('Contact number is required.'); return; }
     if (!paymentMode) { setValidationError('Please select a payment mode.'); return; }
     if (!paymentStatus) { setValidationError('Please select a payment status.'); return; }
@@ -488,19 +492,6 @@ export default function BookingForm({
             </section>
 
 
-            {/* Gating Overlay for Sections 2-4 */}
-            {isGated ? (
-              <div className="p-8 bg-slate-950/80 border border-amber-500/30 rounded-none text-center space-y-3">
-                <div className="w-12 h-12 rounded-none bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
-                  <Lock className="w-6 h-6" />
-                </div>
-                <h4 className="text-sm font-bold text-white uppercase tracking-wider">Sections 2, 3 & 4 Locked</h4>
-                <p className="text-xs text-slate-400 max-w-md mx-auto">
-                  Please enter a valid <strong className="text-amber-400">Plot Number</strong> and select <strong className="text-amber-400">Plot Dimensions</strong> in Section 1 to unlock Client Profile &amp; Payment Configuration.
-                </p>
-              </div>
-            ) : (
-              <>
                 {/* ════════════════════════════════════════════════════════════ */}
                 {/* 2. CLIENT PROFILE (MANDATORY SECTION 2)                    */}
                 {/* ════════════════════════════════════════════════════════════ */}
@@ -888,8 +879,7 @@ export default function BookingForm({
                     Clear Form Fields
                   </button>
                 </div>
-              </>
-            )}
+
 
           </form>
         </div>
