@@ -35,16 +35,31 @@ export async function GET() {
       }
     }
 
-    // Fetch all activity logs via SECURITY DEFINER function (bypasses all RLS)
-    const { data, error: fetchError } = await supabase
-      .rpc('get_all_activity_logs')
+    // Fetch all activity logs from very beginning — try RPC first, fallback to direct table select
+    let logs: any[] = []
+    const { data: rpcData, error: rpcError } = await supabase.rpc('get_all_activity_logs')
 
-    if (fetchError) {
-      console.error('Activity logs fetch error:', fetchError)
-      return NextResponse.json({ error: fetchError.message }, { status: 500 })
+    if (!rpcError && Array.isArray(rpcData) && rpcData.length > 0) {
+      logs = rpcData
+    } else {
+      // Direct table query fallback for complete history from very beginning
+      const { data: tableData, error: tableError } = await supabase
+        .from('user_activity_logs')
+        .select('*')
+        .order('timestamp', { ascending: false })
+        .limit(10000)
+
+      if (!tableError && tableData) {
+        logs = tableData
+      } else if (Array.isArray(rpcData)) {
+        logs = rpcData
+      } else if (tableError && rpcError) {
+        console.error('Activity logs fetch error:', rpcError, tableError)
+        return NextResponse.json({ error: rpcError?.message || tableError?.message }, { status: 500 })
+      }
     }
 
-    return NextResponse.json({ data: data || [] })
+    return NextResponse.json({ data: logs || [] })
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Internal server error'
     console.error('Activity logs API error:', err)

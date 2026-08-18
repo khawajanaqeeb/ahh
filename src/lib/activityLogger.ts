@@ -34,22 +34,31 @@ export async function recordUserActivityLog(
     // Extract User Agent
     const userAgent = headerList.get('user-agent') || 'Unknown Device'
 
-    // Determine user role — use email check first to avoid hitting profiles RLS
+    // Determine user role
     let role = 'user'
     if (isEmailAdmin(user.email)) {
       role = 'admin'
     } else {
-      // Use SECURITY DEFINER function to bypass profiles RLS recursion
-      const { data: roleData } = await supabase
-        .rpc('get_user_role', { lookup_user_id: user.id })
-        
-      if (roleData) {
-        role = roleData as string
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .maybeSingle()
+        if (profile?.role) {
+          role = profile.role
+        } else {
+          const { data: roleData } = await supabase.rpc('get_user_role', { lookup_user_id: user.id })
+          if (roleData) role = roleData as string
+        }
+      } catch {
+        const { data: roleData } = await supabase.rpc('get_user_role', { lookup_user_id: user.id })
+        if (roleData) role = roleData as string
       }
     }
 
-    // Use SECURITY DEFINER function to insert the log (bypasses RLS)
-    const { error } = await supabase.rpc('insert_activity_log', {
+    // 1. Try RPC insert first (bypasses RLS)
+    const { error: rpcError } = await supabase.rpc('insert_activity_log', {
       p_user_id: user.id,
       p_user_email: user.email || 'Unknown',
       p_user_role: role,
@@ -58,8 +67,23 @@ export async function recordUserActivityLog(
       p_user_agent: userAgent,
     })
 
-    if (error) {
-      console.warn('Supabase activity log record notice:', error.message)
+    // 2. Fallback to direct table insertion if RPC is missing or fails
+    if (rpcError) {
+      const { error: tableError } = await supabase
+        .from('user_activity_logs')
+        .insert({
+          user_id: user.id,
+          user_email: user.email || 'Unknown',
+          user_role: role,
+          event_type: eventType,
+          ip_address: ipAddress,
+          user_agent: userAgent,
+          timestamp: new Date().toISOString(),
+        })
+
+      if (tableError) {
+        console.warn('Direct insert into user_activity_logs notice:', tableError.message)
+      }
     }
   } catch (err) {
     console.error('Failed to record user activity log:', err)

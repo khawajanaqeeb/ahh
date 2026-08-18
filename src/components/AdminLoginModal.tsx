@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -65,7 +65,14 @@ export default function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProp
         return
       }
 
-      // 3. Success -> Close modal and navigate to /admin
+      // 3. Record login activity event
+      fetch('/api/log-activity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ eventType: 'login' }),
+      }).catch(err => console.error('Log activity call error:', err))
+
+      // 4. Success -> Close modal and navigate to /admin
       onClose()
       router.push('/admin')
       router.refresh()

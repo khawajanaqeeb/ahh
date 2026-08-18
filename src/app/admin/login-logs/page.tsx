@@ -33,6 +33,7 @@ export default function AdminLoginLogsPage() {
   const [eventFilter, setEventFilter] = useState('ALL')
   const [dateFilter, setDateFilter] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(50)
 
   const fetchLogs = async () => {
     setLoading(true)
@@ -92,17 +93,21 @@ export default function AdminLoginLogsPage() {
     })
   }, [logs, searchQuery, roleFilter, eventFilter, dateFilter])
 
+  // Summary statistics
+  const totalLogins = useMemo(() => logs.filter(l => l.event_type === 'login').length, [logs])
+  const totalLogouts = useMemo(() => logs.filter(l => l.event_type === 'logout').length, [logs])
+
   // Pagination calculation
-  const totalPages = Math.ceil(filteredLogs.length / ITEMS_PER_PAGE) || 1
+  const totalPages = Math.ceil(filteredLogs.length / itemsPerPage) || 1
   const paginatedLogs = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE
-    return filteredLogs.slice(start, start + ITEMS_PER_PAGE)
-  }, [filteredLogs, currentPage])
+    const start = (currentPage - 1) * itemsPerPage
+    return filteredLogs.slice(start, start + itemsPerPage)
+  }, [filteredLogs, currentPage, itemsPerPage])
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1)
-  }, [searchQuery, roleFilter, eventFilter, dateFilter])
+  }, [searchQuery, roleFilter, eventFilter, dateFilter, itemsPerPage])
 
   // Format PKT timestamp
   const formatTimestampPKT = (isoString?: string) => {
@@ -216,9 +221,42 @@ export default function AdminLoginLogsPage() {
         </div>
       </div>
 
+      {/* Summary Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="p-4 bg-slate-900/80 border border-slate-800 rounded-none flex items-center justify-between shadow-lg">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total Recorded Entries</span>
+            <span className="text-2xl font-black text-white font-outfit">{logs.length}</span>
+          </div>
+          <div className="p-3 bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <Clock className="w-5 h-5" />
+          </div>
+        </div>
+
+        <div className="p-4 bg-slate-900/80 border border-slate-800 rounded-none flex items-center justify-between shadow-lg">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total Logins</span>
+            <span className="text-2xl font-black text-emerald-400 font-outfit">{totalLogins}</span>
+          </div>
+          <div className="p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <LogIn className="w-5 h-5" />
+          </div>
+        </div>
+
+        <div className="p-4 bg-slate-900/80 border border-slate-800 rounded-none flex items-center justify-between shadow-lg">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total Logouts</span>
+            <span className="text-2xl font-black text-slate-300 font-outfit">{totalLogouts}</span>
+          </div>
+          <div className="p-3 bg-slate-800 text-slate-400 border border-slate-700">
+            <LogOut className="w-5 h-5" />
+          </div>
+        </div>
+      </div>
+
       {/* Filter Controls Card */}
       <div className="bg-slate-900/60 border border-slate-800/80 rounded-none p-5 sm:p-6 backdrop-blur-lg space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           
           {/* Search Input */}
           <div className="relative">
@@ -280,12 +318,28 @@ export default function AdminLoginLogsPage() {
             )}
           </div>
 
+          {/* Items Per Page Selector */}
+          <div className="relative">
+            <select
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+              className="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-none text-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 transition-all appearance-none cursor-pointer"
+            >
+              <option value={50}>Show 50 per page</option>
+              <option value={100}>Show 100 per page</option>
+              <option value={250}>Show 250 per page</option>
+              <option value={500}>Show 500 per page</option>
+              <option value={10000}>Show All Entries</option>
+            </select>
+            <Filter className="absolute right-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
+          </div>
+
         </div>
 
         {/* Counter Bar */}
-        <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800/60">
+        <div className="flex flex-wrap items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800/60 gap-2">
           <span>
-            Showing <strong className="text-white">{filteredLogs.length}</strong> activity record{filteredLogs.length === 1 ? '' : 's'}
+            Showing <strong className="text-white">{filteredLogs.length}</strong> of <strong className="text-amber-400">{logs.length}</strong> total activity record{logs.length === 1 ? '' : 's'} from beginning
           </span>
           {(searchQuery || roleFilter !== 'ALL' || eventFilter !== 'ALL' || dateFilter) && (
             <button

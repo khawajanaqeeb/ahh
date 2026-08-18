@@ -142,7 +142,13 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess, initialTab =
         .eq('id', data.user.id)
         .maybeSingle()
 
-      // Fire-and-forget login notification
+      // Fire-and-forget login activity log & notification
+      fetch('/api/log-activity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ eventType: 'login' }),
+      }).catch(() => {/* fire-and-forget */ })
+
       const loginTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Karachi' }) + ' (PKT)'
       fetch('/api/notify-login', {
         method: 'POST',
