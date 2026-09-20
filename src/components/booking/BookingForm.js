@@ -1,12 +1,8 @@
-// src/components/booking/BookingForm.js
-// Comprehensive Rebuilt Booking Detail Form for All 4 Projects
-// Enforces Section Order: 1. Transaction Basics -> 2. Client Profile -> 3. Payment Configuration -> 4. Financial Summary
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Save, Eraser, Printer, Calendar, AlertCircle, CheckCircle2, 
   FileText, ShieldCheck, Tag, DollarSign, User, Phone, 
-  CreditCard, Sparkles, Building2, MapPin
+  CreditCard, Sparkles, Building2, MapPin, Edit, RefreshCw
 } from 'lucide-react';
 import { formatDateDDMMYY } from '@/lib/dateUtils';
 import { numberToWords } from '@/lib/numberToWords';
@@ -60,6 +56,9 @@ export default function BookingForm({
   const [installmentMonth, setInstallmentMonth] = useState(() => {
     return new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
   });
+
+  // Mode for handling existing bookings: 'edit' (overwrites record details/total paid) or 'installment' (adds new payment)
+  const [formMode, setFormMode] = useState('edit');
 
   // UI / Validation State
   const [validationError, setValidationError] = useState('');
@@ -145,6 +144,18 @@ export default function BookingForm({
       setEmail(existingBooking.email || '');
       setBlock(existingBooking.block || (hasBlocks ? projectBlocks[0] : 'N/A'));
       setPlotDimensions(existingBooking.plotDimensions || existingBooking.plotType || projectDimensionOptions[0] || '');
+      if (existingBooking.date) {
+        setBookingDate(existingBooking.date);
+      }
+      if (existingBooking.paymentMode) {
+        setPaymentMode(existingBooking.paymentMode);
+      }
+      if (existingBooking.bankName) {
+        setBankName(existingBooking.bankName);
+      }
+      if (existingBooking.tokenExpiryDate) {
+        setTokenExpiryDate(existingBooking.tokenExpiryDate);
+      }
 
       // Cost fields
       const pol = existingBooking.costOfPlot || existingBooking.costOfLand || 0;
@@ -159,18 +170,25 @@ export default function BookingForm({
 
       // Status
       const st = existingBooking.paymentStatus || existingBooking.status || 'Booking Received';
-      setPaymentStatus(st === 'Token Received' ? 'Booking Received' : st);
+      setPaymentStatus(st);
+
+      // Amount field initialization
+      const paid = parseFloat(existingBooking.paidAmount || existingBooking.amountReceived) || 0;
+      if (formMode === 'edit') {
+        setAmountReceived(paid > 0 ? paid.toString() : '');
+        setAmountInWords(paid > 0 ? numberToWords(paid) : '');
+      }
     }
   }, [existingBooking]);
 
-  // Adjust Payment Status options depending on first-time vs returning plot
+  // Adjust Payment Status default if needed
   useEffect(() => {
-    if (isReturningPlot) {
+    if (isReturningPlot && formMode === 'installment') {
       if (paymentStatus === 'Token Received') {
-        setPaymentStatus('Booking Received');
+        setPaymentStatus('Installment Received');
       }
     }
-  }, [isReturningPlot]);
+  }, [isReturningPlot, formMode]);
 
   // Auto-populate cost of plot from project presets if dimensions change
   const handleDimensionsChange = (e) => {
@@ -217,7 +235,14 @@ export default function BookingForm({
   }, [existingBooking]);
 
   const currentTransactionAmount = parseFloat(amountReceived) || 0;
-  const totalReceivedToDate = priorReceivedTotal + currentTransactionAmount;
+  
+  const totalReceivedToDate = useMemo(() => {
+    if (isReturningPlot && formMode === 'edit') {
+      return currentTransactionAmount;
+    }
+    return priorReceivedTotal + currentTransactionAmount;
+  }, [isReturningPlot, formMode, currentTransactionAmount, priorReceivedTotal]);
+
   const remainingBalance = Math.max(0, totalReceivable - totalReceivedToDate);
 
   // Live conversion to words
@@ -268,6 +293,7 @@ export default function BookingForm({
     setAmountReceived('');
     setAmountInWords('');
     setValidationError('');
+    setFormMode('edit');
     if (onFormPreviewChange) onFormPreviewChange(null);
     if (onClearFormSelection) onClearFormSelection();
   };
@@ -300,6 +326,10 @@ export default function BookingForm({
     if (currentTransactionAmount <= 0) { setValidationError('Amount received must be greater than zero.'); return; }
     if ((parseFloat(costOfPlot) || 0) <= 0) { setValidationError('Cost of plot is required and must be greater than zero.'); return; }
 
+    const paidAmountToSave = (isReturningPlot && formMode === 'edit')
+      ? currentTransactionAmount
+      : totalReceivedToDate;
+
     // Standardized Payload
     const payload = {
       projectId: currentProject?.id || 'ahh-city',
@@ -327,9 +357,9 @@ export default function BookingForm({
       totalPayable,
       totalPrice: totalPayable,
       amountReceived: currentTransactionAmount,
-      paidAmount: totalReceivedToDate,
+      paidAmount: paidAmountToSave,
       date: bookingDate,
-      amountInWords: amountInWords || numberToWords(currentTransactionAmount),
+      amountInWords: amountInWords || numberToWords(paidAmountToSave),
       installmentMonth
     };
 
@@ -366,16 +396,68 @@ export default function BookingForm({
               </h2>
               <p className="text-slate-400 text-xs font-mono">
                 {isReturningPlot 
-                  ? `Recording payment for returning plot #${resolvedPlotId} (${fullName || 'Existing Client'})`
+                  ? formMode === 'edit'
+                    ? `Editing record & master details for Plot #${resolvedPlotId} (${fullName || 'Client'})`
+                    : `Adding installment payment for Plot #${resolvedPlotId} (${fullName || 'Client'})`
                   : 'Enter plot & transaction details to register booking into Supabase ledger.'}
               </p>
             </div>
             {isReturningPlot && (
-              <span className="shrink-0 text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800/60 px-3 py-1.5 rounded-none font-extrabold uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> Returning Plot Entry
+              <span className={`shrink-0 text-[10px] border px-3 py-1.5 rounded-none font-extrabold uppercase tracking-wider flex items-center gap-1.5 ${
+                formMode === 'edit' 
+                  ? 'bg-amber-950 text-amber-300 border-amber-800/60' 
+                  : 'bg-emerald-950 text-emerald-300 border-emerald-800/60'
+              }`}>
+                {formMode === 'edit' ? <Edit className="w-3.5 h-3.5 text-amber-400" /> : <Sparkles className="w-3.5 h-3.5 text-emerald-400" />}
+                {formMode === 'edit' ? 'Edit Record Mode' : 'Installment Mode'}
               </span>
             )}
           </header>
+
+          {/* EDIT MODE TOGGLE BANNER FOR EXISTING PLOTS */}
+          {isReturningPlot && (
+            <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in duration-200">
+              <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
+                <Edit className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Existing Record Loaded for Plot #{resolvedPlotId} ({fullName || 'Client'})</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormMode('edit');
+                    if (existingBooking) {
+                      const paid = parseFloat(existingBooking.paidAmount || existingBooking.amountReceived) || 0;
+                      setAmountReceived(paid > 0 ? paid.toString() : '');
+                      setAmountInWords(paid > 0 ? numberToWords(paid) : '');
+                    }
+                  }}
+                  className={`px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider rounded-none cursor-pointer transition-all border ${
+                    formMode === 'edit'
+                      ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md'
+                      : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                  }`}
+                >
+                  ✏️ Edit Master Record
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormMode('installment');
+                    setAmountReceived('');
+                    setAmountInWords('');
+                  }}
+                  className={`px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider rounded-none cursor-pointer transition-all border ${
+                    formMode === 'installment'
+                      ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md'
+                      : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                  }`}
+                >
+                  ➕ Add Installment
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Validation Alert */}
           {validationError && (
@@ -778,7 +860,13 @@ export default function BookingForm({
 
                       {/* Amount Received */}
                       <div>
-                        <label className={labelBase}>Amount Received (Current Entry) <span className="text-red-400">*</span></label>
+                        <label className={labelBase}>
+                          <span>
+                            {isReturningPlot && formMode === 'edit' 
+                              ? 'Total Paid Amount (Edit Record)' 
+                              : 'Amount Received (Current Entry)'} <span className="text-red-400">*</span>
+                          </span>
+                        </label>
                         <div className="relative">
                           <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-bold">Rs</span>
                           <input 
@@ -857,7 +945,7 @@ export default function BookingForm({
                       className="py-4 px-6 rounded-none bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xl shadow-emerald-950/40 min-h-[48px]"
                     >
                       <Save className="w-4 h-4" />
-                      Save Booking Entry
+                      {isReturningPlot && formMode === 'edit' ? `Update Record #${resolvedPlotId}` : 'Save Booking Entry'}
                     </button>
 
                     <button 
@@ -866,7 +954,7 @@ export default function BookingForm({
                       className="py-4 px-6 rounded-none bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xl shadow-amber-950/40 min-h-[48px]"
                     >
                       <Printer className="w-4 h-4" />
-                      Save &amp; Print Receipt
+                      {isReturningPlot && formMode === 'edit' ? 'Update & Print Receipt' : 'Save & Print Receipt'}
                     </button>
                   </div>
 

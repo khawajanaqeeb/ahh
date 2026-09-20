@@ -582,6 +582,17 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
                         <td className="px-4 py-3 text-center">
                           <div className="flex items-center justify-center gap-1.5">
                             <button
+                              onClick={() => {
+                                setSelectedPlotId(b.plotId);
+                                window.scrollTo({ top: 300, behavior: 'smooth' });
+                                triggerToast(`Loaded Plot ${b.plotId} into form for editing.`);
+                              }}
+                              className="p-1.5 rounded-none bg-amber-950 border border-amber-800/60 hover:bg-amber-900 text-amber-400 transition-colors cursor-pointer"
+                              title="Edit Booking & Installment Details"
+                            >
+                              <Edit className="w-3.5 h-3.5" />
+                            </button>
+                            <button
                               onClick={() => setActiveReceiptBooking(b)}
                               className="p-1.5 rounded-none bg-blue-950 border border-blue-800/60 hover:bg-blue-900 text-blue-400 transition-colors cursor-pointer"
                               title="Print A4 Receipt Voucher"
@@ -613,6 +624,11 @@ export default function BookingPage({ projectId = 'ahh-city' }) {
             currentProject={activeProject}
             onSaveBooking={handleSaveBooking}
             onDeleteBooking={handleDeleteBooking}
+            onEditBooking={(b) => {
+              setSelectedPlotId(b.plotId);
+              window.scrollTo({ top: 300, behavior: 'smooth' });
+              triggerToast(`Loaded Plot ${b.plotId} into form for editing.`);
+            }}
             onClose={() => setActiveReceiptBooking(null)}
           />
         )}

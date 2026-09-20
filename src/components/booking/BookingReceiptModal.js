@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ArrowLeft, X, Printer, Calendar, AlertTriangle, AlertOctagon, CheckCircle2, Trash2 } from 'lucide-react';
+import { ArrowLeft, X, Printer, Calendar, AlertTriangle, AlertOctagon, CheckCircle2, Trash2, Edit } from 'lucide-react';
 import { formatDateDDMMYY } from '@/lib/dateUtils';
 import { numberToWords } from '@/lib/numberToWords';
 import { getProjectById } from '@/lib/projectsData';
@@ -632,6 +632,12 @@ export default function BookingReceiptModal({ booking, currentProject: propProje
             <ArrowLeft className="w-4 h-4" /><span>Return to Dashboard</span>
           </button>
           <div className="flex items-center gap-2">
+            {onEditBooking && (
+              <button type="button" onClick={() => { onEditBooking(booking); onClose(); }}
+                className="flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-none transition-all shadow-md cursor-pointer">
+                <Edit className="w-3.5 h-3.5" /><span>Edit Record</span>
+              </button>
+            )}
             <button type="button" onClick={handlePrint}
               className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-none transition-all shadow-md cursor-pointer">
               <Printer className="w-4 h-4" /><span>Print A4 (2 Copies)</span>
