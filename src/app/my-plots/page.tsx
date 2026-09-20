@@ -19,8 +19,6 @@ interface BookingRecord {
   nominee: string
   booking_date: string
   status?: string
-  total_price?: number
-  paid_amount?: number
 }
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
@@ -46,7 +44,20 @@ export default function MyPlotsPage() {
     setSearchError(null)
     try {
       const data = await fetchMasterBookings(cnic)
-      setResults(data || [])
+      // Sanitize: strip any financial attributes from results to guarantee no financial info is exposed
+      const sanitized = (data || []).map((item: any) => ({
+        id: item.id,
+        project_name: item.project_name,
+        client_name: item.client_name,
+        cnic: item.cnic,
+        phone: item.phone,
+        plot_no: item.plot_no,
+        block: item.block,
+        nominee: item.nominee,
+        booking_date: item.booking_date,
+        status: item.status
+      }))
+      setResults(sanitized)
       setSearched(true)
     } catch (err) {
       console.error('Search error:', err)
@@ -154,6 +165,14 @@ export default function MyPlotsPage() {
           {/* Results */}
           {searched && (
             <div className="space-y-6 animate-in fade-in duration-300">
+              {/* Privacy Notice Banner */}
+              <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-none flex items-center justify-between gap-3 text-[11px] font-mono text-amber-300">
+                <span className="font-bold flex items-center gap-1.5">
+                  🔒 Privacy Security Active:
+                </span>
+                <span>Financial transaction data &amp; payment amounts are excluded from public CNIC search.</span>
+              </div>
+
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-black text-white font-outfit">
