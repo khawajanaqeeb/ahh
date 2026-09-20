@@ -41,16 +41,19 @@ export default function MyPlotsPage() {
     setSearchError(null)
     try {
       const data = await fetchMasterBookings(cnic)
-      // Strict Sanitization: Return ONLY Client Name, Father/Husband Name, Plot No, Block, Project Name, and Nominee
-      const sanitized = (data || []).map((item: any) => ({
-        id: item.id,
-        client_name: item.client_name || item.clientName || 'N/A',
-        father_name: item.father_name || item.fatherName || item.relative_name || item.relativeName || 'N/A',
-        plot_no: item.plot_no || item.plotId || 'N/A',
-        block: item.block || 'Main',
-        project_name: item.project_name || item.projectName || 'N/A',
-        nominee: item.nominee || item.relative_name || item.relativeName || 'N/A'
-      }))
+      const sanitized = (data || []).map((item: any) => {
+        const fatherVal = item.father_name || item.fatherName || item.relative_name || item.relativeName || '';
+        const nomineeVal = item.nominee || item.relative_name || item.relativeName || fatherVal || '';
+        return {
+          id: item.id,
+          client_name: item.client_name || item.clientName || 'N/A',
+          father_name: fatherVal || 'N/A',
+          plot_no: item.plot_no || item.plotId || 'N/A',
+          block: item.block || 'Main',
+          project_name: item.project_name || item.projectName || 'N/A',
+          nominee: nomineeVal || 'N/A'
+        }
+      })
       setResults(sanitized)
       setSearched(true)
     } catch (err) {

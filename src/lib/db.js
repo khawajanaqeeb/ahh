@@ -353,15 +353,19 @@ export const PROJECT_NAME_MAP = {
 export async function syncBookingToMaster(booking) {
   const formattedCnic = formatCNIC(booking.cnic);
   const projName = PROJECT_NAME_MAP[booking.projectId] || booking.projectName || 'AHH City';
+  const fatherNameVal = booking.fatherName || booking.father_name || booking.relativeName || booking.relative_name || '';
+  const nomineeVal = booking.nominee || booking.relativeName || booking.relative_name || booking.fatherName || booking.father_name || '';
 
   const payload = {
     project_name: projName,
-    client_name: booking.clientName || '',
+    client_name: booking.clientName || booking.client_name || '',
     cnic: formattedCnic,
     phone: booking.phone || '',
     plot_no: booking.plotId || booking.plot_no || '',
     block: booking.block || '',
-    nominee: booking.relativeName || booking.nominee || '',
+    father_name: fatherNameVal,
+    relative_name: fatherNameVal,
+    nominee: nomineeVal,
     booking_date: booking.date || booking.booking_date || new Date().toISOString().split('T')[0]
   };
 
@@ -401,6 +405,8 @@ export async function fetchMasterBookings(cnicSearch = null) {
     if (!plot) return;
 
     const formattedCnic = formatCNIC(item.cnic);
+    const fatherNameVal = item.father_name || item.fatherName || item.relative_name || item.relativeName || '';
+    const nomineeVal = item.nominee || item.relative_name || item.relativeName || fatherNameVal;
 
     const record = {
       id: item.id || `rec-${key}`,
@@ -410,8 +416,9 @@ export async function fetchMasterBookings(cnicSearch = null) {
       phone: item.phone || '',
       plot_no: plot,
       block: item.block || 'Main',
-      father_name: item.father_name || item.fatherName || item.relative_name || item.relativeName || '',
-      nominee: item.nominee || item.relative_name || item.relativeName || '',
+      father_name: fatherNameVal,
+      relative_name: fatherNameVal,
+      nominee: nomineeVal,
       booking_date: item.booking_date || item.date || (item.created_at ? item.created_at.split('T')[0] : new Date().toISOString().split('T')[0]),
       status: item.status || 'Booked',
       total_price: item.total_price || item.totalPrice || 0,
@@ -422,9 +429,19 @@ export async function fetchMasterBookings(cnicSearch = null) {
     if (!recordMap.has(key)) {
       recordMap.set(key, record);
     } else {
-      // Merge extra details if available
+      // Merge extra details cleanly without overwriting valid data with empty strings
       const existing = recordMap.get(key);
-      recordMap.set(key, { ...existing, ...record, cnic: record.cnic || existing.cnic });
+      recordMap.set(key, {
+        ...existing,
+        ...record,
+        client_name: record.client_name || existing.client_name,
+        father_name: record.father_name || existing.father_name,
+        relative_name: record.relative_name || existing.relative_name,
+        nominee: record.nominee || existing.nominee,
+        cnic: record.cnic || existing.cnic,
+        phone: record.phone || existing.phone,
+        block: (record.block && record.block !== 'Main') ? record.block : existing.block
+      });
     }
   };
 
