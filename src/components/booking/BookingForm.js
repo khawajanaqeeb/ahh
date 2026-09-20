@@ -137,49 +137,41 @@ export default function BookingForm({
   // Sync existing booking data if selected or matching
   useEffect(() => {
     if (existingBooking) {
-      setFullName(existingBooking.clientName || existingBooking.fullName || '');
-      setFatherName(existingBooking.fatherName || existingBooking.relativeName || '');
+      setFullName(existingBooking.clientName || existingBooking.fullName || existingBooking.client_name || '');
+      setFatherName(existingBooking.fatherName || existingBooking.father_name || existingBooking.relativeName || existingBooking.relative_name || '');
       setCnic(existingBooking.cnic ? formatCNIC(existingBooking.cnic) : '');
-      setContactNo(existingBooking.phone || existingBooking.contactNo || '');
+      setContactNo(existingBooking.phone || existingBooking.contactNo || existingBooking.contact_no || '');
       setEmail(existingBooking.email || '');
       setBlock(existingBooking.block || (hasBlocks ? projectBlocks[0] : 'N/A'));
-      setPlotDimensions(existingBooking.plotDimensions || existingBooking.plotType || projectDimensionOptions[0] || '');
-      if (existingBooking.date) {
-        setBookingDate(existingBooking.date);
-      }
-      if (existingBooking.paymentMode) {
-        setPaymentMode(existingBooking.paymentMode);
-      }
-      if (existingBooking.bankName) {
-        setBankName(existingBooking.bankName);
-      }
-      if (existingBooking.tokenExpiryDate) {
-        setTokenExpiryDate(existingBooking.tokenExpiryDate);
-      }
+      setPlotDimensions(existingBooking.plotDimensions || existingBooking.plotType || existingBooking.plot_dimensions || existingBooking.plot_type || projectDimensionOptions[0] || '');
+      setBookingDate(existingBooking.date || existingBooking.bookingDate || existingBooking.booking_date || new Date().toISOString().substring(0, 10));
+      setPaymentMode(existingBooking.paymentMode || existingBooking.payment_mode || 'Cash');
+      setBankName(existingBooking.bankName || existingBooking.bank_name || '');
+      setTokenExpiryDate(existingBooking.tokenExpiryDate || existingBooking.token_expiry_date || '');
 
       // Cost fields
-      const pol = existingBooking.costOfPlot || existingBooking.costOfLand || 0;
-      const ext = existingBooking.extraCharges || 0;
-      const proc = existingBooking.processingCharges || 0;
-      const dev = existingBooking.developmentCharges || 0;
+      const pol = parseFloat(existingBooking.costOfPlot || existingBooking.costOfLand || existingBooking.cost_of_land || existingBooking.cost_of_plot) || 0;
+      const ext = parseFloat(existingBooking.extraCharges || existingBooking.extra_charges) || 0;
+      const proc = parseFloat(existingBooking.processingCharges || existingBooking.processing_charges) || 0;
+      const dev = parseFloat(existingBooking.developmentCharges || existingBooking.development_charges) || 0;
       
-      setCostOfPlot(pol > 0 ? pol : '');
-      setExtraCharges(ext > 0 ? ext : '');
-      setProcessingCharges(proc > 0 ? proc : '');
-      setDevelopmentCharges(dev > 0 ? dev : '');
+      setCostOfPlot(pol > 0 ? pol.toString() : '');
+      setExtraCharges(ext > 0 ? ext.toString() : '');
+      setProcessingCharges(proc > 0 ? proc.toString() : '');
+      setDevelopmentCharges(dev > 0 ? dev.toString() : '');
 
       // Status
-      const st = existingBooking.paymentStatus || existingBooking.status || 'Booking Received';
+      const st = existingBooking.paymentStatus || existingBooking.status || existingBooking.payment_status || 'Booking Received';
       setPaymentStatus(st);
 
       // Amount field initialization
-      const paid = parseFloat(existingBooking.paidAmount || existingBooking.amountReceived) || 0;
+      const paid = parseFloat(existingBooking.paidAmount || existingBooking.paid_amount || existingBooking.amountReceived || existingBooking.amount_received) || 0;
       if (formMode === 'edit') {
         setAmountReceived(paid > 0 ? paid.toString() : '');
         setAmountInWords(paid > 0 ? numberToWords(paid) : '');
       }
     }
-  }, [existingBooking]);
+  }, [existingBooking, formMode]);
 
   // Adjust Payment Status default if needed
   useEffect(() => {

@@ -206,11 +206,14 @@ export async function fetchBookings() {
       // Map database schema to app model
       return data.map(item => ({
         plotId: item.plot_id,
+        plot_no: item.plot_id,
         clientName: item.client_name,
+        fullName: item.client_name,
         fatherName: item.father_name || item.relative_name || '',
         relativeName: item.father_name || item.relative_name || '',
         cnic: item.cnic || '',
         phone: item.phone,
+        contactNo: item.phone,
         email: item.email || '',
         block: item.block || '',
         plotDimensions: item.plot_dimensions || item.plot_type || '',
@@ -221,7 +224,7 @@ export async function fetchBookings() {
         paymentStatus: item.payment_status || item.status || 'token_received',
         totalPrice: parseFloat(item.total_payable) || parseFloat(item.total_price) || 0,
         totalPayable: parseFloat(item.total_payable) || parseFloat(item.total_price) || 0,
-        paidAmount: parseFloat(item.amount_received) || parseFloat(item.paid_amount) || 0,
+        paidAmount: parseFloat(item.paid_amount) || parseFloat(item.amount_received) || 0,
         amountReceived: parseFloat(item.amount_received) || parseFloat(item.paid_amount) || 0,
         costOfLand: parseFloat(item.cost_of_land) || 0,
         costOfPlot: parseFloat(item.cost_of_land) || 0,
@@ -252,8 +255,8 @@ export async function saveBookingToDb(booking) {
   if (typeof window !== 'undefined') {
     const local = localStorage.getItem('ahh_city_bookings_data');
     const bookingsList = local ? JSON.parse(local) : [];
-    const idx = bookingsList.findIndex(b => b.plotId === booking.plotId);
-    if (idx > -1) bookingsList[idx] = booking;
+    const idx = bookingsList.findIndex(b => (b.plotId || b.plot_no) === (booking.plotId || booking.plot_no));
+    if (idx > -1) bookingsList[idx] = { ...bookingsList[idx], ...booking };
     else bookingsList.push(booking);
     localStorage.setItem('ahh_city_bookings_data', JSON.stringify(bookingsList));
   }
