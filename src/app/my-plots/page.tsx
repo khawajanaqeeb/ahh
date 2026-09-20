@@ -10,15 +10,12 @@ import { fetchMasterBookings, formatCNIC } from '@/lib/db'
 
 interface BookingRecord {
   id: string
-  project_name: string
   client_name: string
-  cnic: string
-  phone: string
+  father_name: string
   plot_no: string
   block: string
+  project_name: string
   nominee: string
-  booking_date: string
-  status?: string
 }
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
@@ -44,18 +41,15 @@ export default function MyPlotsPage() {
     setSearchError(null)
     try {
       const data = await fetchMasterBookings(cnic)
-      // Sanitize: strip any financial attributes from results to guarantee no financial info is exposed
+      // Strict Sanitization: Return ONLY Client Name, Father/Husband Name, Plot No, Block, Project Name, and Nominee
       const sanitized = (data || []).map((item: any) => ({
         id: item.id,
-        project_name: item.project_name,
-        client_name: item.client_name,
-        cnic: item.cnic,
-        phone: item.phone,
-        plot_no: item.plot_no,
-        block: item.block,
-        nominee: item.nominee,
-        booking_date: item.booking_date,
-        status: item.status
+        client_name: item.client_name || item.clientName || 'N/A',
+        father_name: item.father_name || item.fatherName || item.relative_name || item.relativeName || 'N/A',
+        plot_no: item.plot_no || item.plotId || 'N/A',
+        block: item.block || 'Main',
+        project_name: item.project_name || item.projectName || 'N/A',
+        nominee: item.nominee || item.relative_name || item.relativeName || 'N/A'
       }))
       setResults(sanitized)
       setSearched(true)
@@ -165,14 +159,6 @@ export default function MyPlotsPage() {
           {/* Results */}
           {searched && (
             <div className="space-y-6 animate-in fade-in duration-300">
-              {/* Privacy Notice Banner */}
-              <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-none flex items-center justify-between gap-3 text-[11px] font-mono text-amber-300">
-                <span className="font-bold flex items-center gap-1.5">
-                  🔒 Privacy Security Active:
-                </span>
-                <span>Financial transaction data &amp; payment amounts are excluded from public CNIC search.</span>
-              </div>
-
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-black text-white font-outfit">
@@ -224,13 +210,11 @@ export default function MyPlotsPage() {
                         <tr>
                           <th className="py-4 px-5 font-bold">#</th>
                           <th className="py-4 px-5 font-bold">Client Name</th>
-                          <th className="py-4 px-5 font-bold">Phone</th>
-                          <th className="py-4 px-5 font-bold">Project</th>
+                          <th className="py-4 px-5 font-bold">Father / Husband Name</th>
                           <th className="py-4 px-5 font-bold">Plot No.</th>
                           <th className="py-4 px-5 font-bold">Block</th>
+                          <th className="py-4 px-5 font-bold">Project Name</th>
                           <th className="py-4 px-5 font-bold">Nominee</th>
-                          <th className="py-4 px-5 font-bold">Date</th>
-                          <th className="py-4 px-5 font-bold">Status</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-800/60">
@@ -238,21 +222,15 @@ export default function MyPlotsPage() {
                           <tr key={item.id || idx} className="hover:bg-slate-800/30 transition-colors">
                             <td className="py-4 px-5 font-bold text-slate-500 font-mono">{idx + 1}</td>
                             <td className="py-4 px-5 font-bold text-white font-outfit">{item.client_name}</td>
-                            <td className="py-4 px-5 text-slate-300 font-mono">{item.phone || 'N/A'}</td>
+                            <td className="py-4 px-5 text-slate-300">{item.father_name}</td>
+                            <td className="py-4 px-5 font-extrabold text-amber-400 font-outfit">{item.plot_no}</td>
+                            <td className="py-4 px-5 text-slate-300">{item.block || 'Main'}</td>
                             <td className="py-4 px-5">
                               <span className="px-2.5 py-1 text-[11px] font-bold bg-amber-500/10 border border-amber-500/30 text-amber-300">
                                 {item.project_name}
                               </span>
                             </td>
-                            <td className="py-4 px-5 font-extrabold text-amber-400 font-outfit">{item.plot_no}</td>
-                            <td className="py-4 px-5 text-slate-300">{item.block || 'Main'}</td>
                             <td className="py-4 px-5 text-slate-300">{item.nominee || 'N/A'}</td>
-                            <td className="py-4 px-5 text-slate-400 font-mono text-xs">{item.booking_date || 'N/A'}</td>
-                            <td className="py-4 px-5">
-                              <span className="px-2 py-0.5 text-[10px] font-bold bg-slate-800 text-emerald-400 border border-emerald-500/30">
-                                {item.status || 'Booked'}
-                              </span>
-                            </td>
                           </tr>
                         ))}
                       </tbody>

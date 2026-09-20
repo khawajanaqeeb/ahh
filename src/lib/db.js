@@ -410,6 +410,7 @@ export async function fetchMasterBookings(cnicSearch = null) {
       phone: item.phone || '',
       plot_no: plot,
       block: item.block || 'Main',
+      father_name: item.father_name || item.fatherName || item.relative_name || item.relativeName || '',
       nominee: item.nominee || item.relative_name || item.relativeName || '',
       booking_date: item.booking_date || item.date || (item.created_at ? item.created_at.split('T')[0] : new Date().toISOString().split('T')[0]),
       status: item.status || 'Booked',
