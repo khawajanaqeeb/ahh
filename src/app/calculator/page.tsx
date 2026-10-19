@@ -7,9 +7,9 @@ const projects = [
   {
     id: "ahh-city-60",
     name: "AHH-City (60 Yds)",
-    basePrice: 350000,
-    todayMarketRate: 350000,
-    minDown: 28, // 100k booking
+    basePrice: 450000,
+    todayMarketRate: 450000,
+    minDown: 22, // 100k booking
     maxDown: 50,
     tenures: [12, 20],
     defaultTenure: 20,
@@ -20,9 +20,9 @@ const projects = [
   {
     id: "ahh-city-120",
     name: "AHH-City (120 Yds)",
-    basePrice: 500000,
-    todayMarketRate: 500000,
-    minDown: 30, // 150k booking
+    basePrice: 800000,
+    todayMarketRate: 800000,
+    minDown: 19, // 150k booking
     maxDown: 50,
     tenures: [12, 20],
     defaultTenure: 20,
