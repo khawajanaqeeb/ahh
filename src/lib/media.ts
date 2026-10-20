@@ -51,5 +51,5 @@ export const MEDIA = {
   posterLabourCity: `${SUPABASE_STORAGE_BASE}/projects/posters/labour-city-poster.webp`,
   posterLabourCityPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/labour-city-payment-plan.webp`,
   posterSummerFarmhousesPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/summer-farmhouses-payment-plan.webp`,
-  posterAhhCityPaymentPlan: `${SUPABASE_STORAGE_BASE}/projects/posters/ahh-city-payment-plan.webp`,
+  posterAhhCityPaymentPlan: `${SUPABASE_STORAGE_BASE}/posters/AHH_City_Payment_Plan_updated.jpg`,
 };
